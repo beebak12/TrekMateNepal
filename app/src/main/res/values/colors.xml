@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="lightpurple">#800080</color>
+
+    <!-- Vibrant Material Purple -->
+    <color name="material_purple">#9C27B0</color>
+
+    <color name="purple">#6A1B9A</color>
+
+    <color name="background">#F5F7FA</color>
+
+    <color name="lightGray">#EAEAEA</color>
+
+    <color name="darkGray">#666666</color>
+
+    <color name="green">#34A853</color>
+
+    <color name="orange">#FF9800</color>
+
+    <color name="cardColor">#FFFFFF</color>
+
+    <color name="hintColor">#9E9E9E</color>
+
+    <color name="searchBg">#F1F3F6</color>
+    <color name="vividred">#CC050E15</color>
+
+    <color name="darkvividred">#020609</color>
+
+
+    <color name="darkGreen">#22863A</color>
+    <color name="lightBackground">#F7FAF7</color>
+    <color name="editBorder">#D8D8D8</color>
+
+    <color name="textBlack">#222222</color>
+
+
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_homeicon"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/nav_gear"
+        android:icon="@drawable/ic_gear"
+        android:title="Gears"/>
+
+    <!-- Placeholder for center FAB - no icon needed here -->
+    <item
+        android:id="@+id/nav_add_placeholder"
+        android:enabled="false"
+        android:title=""/>
+
+    <item
+        android:id="@+id/nav_partner"
+        android:icon="@drawable/ic_partnericon"
+        android:title="Partners"/>
+
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/ic_menu"
+        android:title="Menu"/>
+
+</menu>

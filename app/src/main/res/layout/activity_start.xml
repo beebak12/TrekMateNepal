@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Background Image -->
+    <ImageView
+        android:id="@+id/imgBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/login"
+        android:scaleType="centerCrop"/>
+
+    <!-- Dark Overlay -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#55000000"/>
+
+    <!-- Content -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+
+
+
+
+        <Button
+            android:id="@+id/btnGetStarted"
+            android:layout_width="320dp"
+            android:layout_height="55dp"
+            android:text="Get Started"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#5E35F1"
+            android:layout_marginTop="25dp"/>
+
+        <Button
+            android:id="@+id/btnSignin"
+            android:layout_width="320dp"
+            android:layout_height="55dp"
+            android:text="Login / Sign Up"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#000000"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="40dp"/>
+
+    </LinearLayout>
+
+</FrameLayout>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="top"
+    android:orientation="horizontal"
+    android:paddingStart="4dp"
+    android:paddingTop="6dp"
+    android:paddingEnd="48dp"
+    android:paddingBottom="6dp">
+
+    <!-- Sender profile image -->
+
+    <ImageView
+        android:id="@+id/imageSender"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="18dp"
+        android:contentDescription="Sender profile image"
+        android:scaleType="centerCrop"
+        android:src="@drawable/partner1" />
+
+    <!-- Sender name, message and time -->
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textSenderName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textColor="@color/darkGray"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            tools:text="Sam" />
+
+        <TextView
+            android:id="@+id/textReceivedMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/bg_message_received"
+            android:maxWidth="260dp"
+            android:textColor="@color/textBlack"
+            android:textSize="15sp"
+            tools:text="What time should we meet tomorrow?" />
+
+        <TextView
+            android:id="@+id/textReceivedTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/hintColor"
+            android:textSize="11sp"
+            tools:text="10:30 AM" />
+
+    </LinearLayout>
+
+</LinearLayout>

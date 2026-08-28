@@ -38,6 +38,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     private ImageView profileImage;
     private ImageButton notificationBtn;
+    private ImageButton chatBtn;
 
     private Button exploreBtn;
 
@@ -71,8 +72,6 @@ public class DashboardActivity extends AppCompatActivity {
 
         setupPartnerRecyclerView();
 
-        clickListeners();
-
         setupPostRecyclerView();
 
         setupBottomNavigation();
@@ -88,6 +87,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         profileImage = findViewById(R.id.profileImage);
         notificationBtn = findViewById(R.id.notificationBtn);
+        chatBtn = findViewById(R.id.chatBtn);
 
         exploreBtn = findViewById(R.id.exploreBtn);
 
@@ -246,6 +246,11 @@ public class DashboardActivity extends AppCompatActivity {
                 startActivity(new Intent(
                         DashboardActivity.this,
                         NotificationActivity.class)));
+
+        chatBtn.setOnClickListener(v ->
+                startActivity(new Intent(
+                        DashboardActivity.this,
+                        ChatListActivity.class)));
 
         profileImage.setOnClickListener(v ->
                 startActivity(new Intent(

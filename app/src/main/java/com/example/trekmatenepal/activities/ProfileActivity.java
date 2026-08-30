@@ -1,94 +1,87 @@
 package com.example.trekmatenepal.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.widget.Button;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trekmatenepal.R;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.trekmatenepal.database.DatabaseHelpher;
+import com.example.trekmatenepal.models.UserModel;
 
-/**
- * ProfileActivity — shows the current user's profile.
- * Placeholder implementation; full backend integration pending.
- */
 public class ProfileActivity extends AppCompatActivity {
+
+    private View layoutTreks, layoutEdit, layoutGear, layoutPosts, layoutTreksActivity;
+    private TextView tvProfileName, tvProfileLocation, tvTrekCountSummary, tvProfileAge, tvProfileGender, tvProfileBio;
+    private ImageView profileImage;
+    private DatabaseHelpher dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        dbHelper = new DatabaseHelpher(this);
+        initializeViews();
+        setupListeners();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadUserData();
+    }
+
+    private void initializeViews() {
+        layoutTreks = findViewById(R.id.layoutTreks);
+        layoutEdit = findViewById(R.id.layoutEdit);
+        layoutGear = findViewById(R.id.layoutGear);
+        layoutPosts = findViewById(R.id.layoutPosts);
+        layoutTreksActivity = findViewById(R.id.layoutTreksActivity);
+
+        tvProfileName = findViewById(R.id.tvProfileName);
+        tvProfileLocation = findViewById(R.id.tvProfileLocation);
+        tvTrekCountSummary = findViewById(R.id.tvTrekCountSummary);
+        tvProfileAge = findViewById(R.id.tvProfileAge);
+        tvProfileGender = findViewById(R.id.tvProfileGender);
+        tvProfileBio = findViewById(R.id.tvProfileBio);
+        profileImage = findViewById(R.id.profileImage);
+    }
+
+    private void loadUserData() {
+        UserModel user = dbHelper.getUserProfile();
+        if (user != null) {
+            tvProfileName.setText(user.getFullName());
+            tvProfileLocation.setText(user.getLocation());
+            tvTrekCountSummary.setText(String.valueOf(user.getTrekCount()));
+            tvProfileAge.setText(user.getAge());
+            tvProfileGender.setText(user.getGender());
+            tvProfileBio.setText(user.getBio());
+
+            if (user.getImagePath() != null && !user.getImagePath().isEmpty()) {
+                profileImage.setImageURI(Uri.parse(user.getImagePath()));
+            }
+        }
+    }
+
+    private void setupListeners() {
         ImageView btnBack = findViewById(R.id.btnBack);
-        if (btnBack != null) btnBack.setOnClickListener(v -> finish());
+        ImageView btnNotification = findViewById(R.id.btnNotification);
+        ImageView btnSettings = findViewById(R.id.btnSettings);
 
-        Button btnEditProfile = findViewById(R.id.btnEditProfile);
-        if (btnEditProfile != null) {
-            btnEditProfile.setOnClickListener(v ->
-                android.widget.Toast.makeText(this,
-                    "Edit profile coming soon", android.widget.Toast.LENGTH_SHORT).show());
-        }
+        btnBack.setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
-        Button btnMyBookings = findViewById(R.id.btnMyBookings);
-        if (btnMyBookings != null) {
-            btnMyBookings.setOnClickListener(v -> {
-                try {
-                    startActivity(new Intent(this, MyBookingsActivity.class));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
-        }
+        layoutTreks.setOnClickListener(v -> startActivity(new Intent(this, TreksCompletedActivity.class)));
+        layoutEdit.setOnClickListener(v -> startActivity(new Intent(this, EditProfileActivity.class)));
+        layoutGear.setOnClickListener(v -> startActivity(new Intent(this, PostedGearActivity.class)));
+        layoutPosts.setOnClickListener(v -> startActivity(new Intent(this, PostedGearActivity.class)));
+        layoutTreksActivity.setOnClickListener(v -> startActivity(new Intent(this, TreksCompletedActivity.class)));
 
-        Button btnMyRequests = findViewById(R.id.btnMyRequests);
-        if (btnMyRequests != null) {
-            btnMyRequests.setOnClickListener(v -> {
-                try {
-                    startActivity(new Intent(this, MyRequestsActivity.class));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
-        }
-
-        // Bottom nav
-        BottomNavigationView bottomNav = findViewById(R.id.bottomNavigation);
-        if (bottomNav != null) {
-            bottomNav.setSelectedItemId(R.id.nav_profile);
-            bottomNav.setOnItemSelectedListener(item -> {
-                int id = item.getItemId();
-                if (id == R.id.nav_home) {
-                    try {
-                        startActivity(new Intent(this, DashboardActivity.class));
-                        finish();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return true;
-                } else if (id == R.id.nav_gear) {
-                    try {
-                        startActivity(new Intent(this, GearRentalActivity.class));
-                        finish();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return true;
-                } else if (id == R.id.nav_partner) {
-                    try {
-                        startActivity(new Intent(this, PartnerFinderActivity.class));
-                        finish();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return true;
-                } else if (id == R.id.nav_profile) {
-                    return true;
-                }
-                return false;
-            });
-        }
+        btnNotification.setOnClickListener(v -> startActivity(new Intent(this, NotificationActivity.class)));
+        btnSettings.setOnClickListener(v -> startActivity(new Intent(this, SettingsActivity.class)));
     }
 }

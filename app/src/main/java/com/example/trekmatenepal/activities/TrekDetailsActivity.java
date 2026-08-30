@@ -79,7 +79,7 @@ public class TrekDetailsActivity extends AppCompatActivity {
     private void setupGuidesRecycler() {
         List<PartnerModel> guideList = new ArrayList<>();
         guideList.add(new PartnerModel("Lhakpa Sherpa", "5.0", "(45)", "Available", R.drawable.partner1));
-        guideList.add(new PartnerModel("Mingma Tamang", "4.9", "(38)", "Available", R.drawable.partner2));
+        guideList.add(new PartnerModel("Mingma Tamang", "4.9", "(38)", "Available", R.drawable.profile_photo));
         guideList.add(new PartnerModel("Pasang Rai", "4.8", "(29)", "Available", R.drawable.partner3));
 
         PartnerAdapter adapter = new PartnerAdapter(guideList);

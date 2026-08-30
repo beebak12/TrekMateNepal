@@ -78,6 +78,16 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
+            android:name=".activities.EditProfileActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activities.TreksCompletedActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.PostedGearActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".activities.NotificationActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+<!-- Purple color with transparency -->
+<solid android:color="#B32E1A72" />
+
+</shape>

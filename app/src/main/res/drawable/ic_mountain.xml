@@ -1,0 +1,22 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="40dp"
+    android:height="40dp"
+    android:viewportWidth="40"
+    android:viewportHeight="40">
+
+    <!-- Main Mountain -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M2,31L16,10L30,31Z" />
+
+    <!-- Second Mountain -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M14,31L26,15L39,31Z" />
+
+    <!-- Snow/Trail Shape -->
+    <path
+        android:fillColor="#6A42B8"
+        android:pathData="M10,22L16,13L21,20L18,20L16,17L13,22Z" />
+
+</vector>

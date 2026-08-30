@@ -16,6 +16,23 @@ public class TrekModel implements Serializable {
     private String description;
     private String fee;
 
+    private String status;
+
+    public TrekModel(int image, String trekName, String location, String duration, String status) {
+        this.image = image;
+        this.trekName = trekName;
+        this.location = location;
+        this.duration = duration;
+        this.status = status;
+        this.rating = "0.0";
+        this.reviews = 0;
+        this.difficulty = "Unknown";
+        this.altitude = "Unknown";
+        this.distance = "Unknown";
+        this.description = "";
+        this.fee = "";
+    }
+
     public TrekModel(String trekName, String location, String duration, int image, String rating, int reviews, 
                      String difficulty, String altitude, String distance, String description, String fee) {
         this.trekName = trekName;
@@ -73,5 +90,9 @@ public class TrekModel implements Serializable {
 
     public String getFee() {
         return fee;
+    }
+
+    public String getStatus() {
+        return status;
     }
 }

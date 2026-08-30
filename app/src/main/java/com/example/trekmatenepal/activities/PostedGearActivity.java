@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trekmatenepal.R;
 import com.example.trekmatenepal.adapters.GearAdapter;
-import com.example.trekmatenepal.models.Gear;
+import com.example.trekmatenepal.models.GearModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class PostedGearActivity extends AppCompatActivity {
 
     RecyclerView recyclerGear;
     GearAdapter gearAdapter;
-    List<Gear> gearList;
+    List<GearModel> gearList;
 
     ImageView btnBack;
 
@@ -34,44 +34,32 @@ public class PostedGearActivity extends AppCompatActivity {
 
         gearList = new ArrayList<>();
 
-        gearList.add(new Gear(
-                R.drawable.jacket,
+        gearList.add(new GearModel(
                 "The North Face Down Jacket",
-                "Rs. 500 / day",
-                "Available",
-                "Pokhara, Nepal",
-                "",
-                ""
+                "Rs. 500",
+                "/ day",
+                R.drawable.jacket
         ));
 
-        gearList.add(new Gear(
-                R.drawable.backpack,
+        gearList.add(new GearModel(
                 "Osprey Atmos 50 Backpack",
-                "Rs. 300 / day",
-                "Booked",
-                "Pokhara, Nepal",
-                "10 May 2024",
-                "20 May 2024"
+                "Rs. 300",
+                "/ day",
+                R.drawable.backpack
         ));
 
-        gearList.add(new Gear(
-                R.drawable.boots,
+        gearList.add(new GearModel(
                 "Trekking Boots (High Ankle)",
-                "Rs. 400 / day",
-                "Available",
-                "Pokhara, Nepal",
-                "",
-                ""
+                "Rs. 400",
+                "/ day",
+                R.drawable.boots
         ));
 
-        gearList.add(new Gear(
-                R.drawable.sleepingbag,
+        gearList.add(new GearModel(
                 "Sleeping Bag (-10°C)",
-                "Rs. 350 / day",
-                "Booked",
-                "Pokhara, Nepal",
-                "01 Jun 2024",
-                "05 Jun 2024"
+                "Rs. 350",
+                "/ day",
+                R.drawable.sleepingbag
         ));
 
         recyclerGear.setLayoutManager(

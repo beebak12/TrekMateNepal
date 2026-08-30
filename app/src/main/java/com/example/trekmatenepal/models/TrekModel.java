@@ -1,6 +1,8 @@
 package com.example.trekmatenepal.models;
 
-public class TrekModel {
+import java.io.Serializable;
+
+public class TrekModel implements Serializable {
 
     private String trekName;
     private String location;

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="end"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Profile Header -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/profileHeader"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:background="@drawable/bg_menu_header">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/signupbackground"
+                    android:scaleType="centerCrop"
+                    android:alpha="0.8"
+                    android:contentDescription="Background" />
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/menuProfileImage"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="40dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/partner1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearanceOverlay="@style/CircleImageStyle"
+                    app:strokeColor="@color/white"
+                    app:strokeWidth="2dp" />
+
+                <TextView
+                    android:id="@+id/menuUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Bibek Paudel"
+                    android:textColor="@color/purple_primary"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/menuUserHandle"
+                    app:layout_constraintStart_toEndOf="@id/menuProfileImage"
+                    app:layout_constraintTop_toTopOf="@id/menuProfileImage"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <TextView
+                    android:id="@+id/menuUserHandle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="&#64;bibek"
+                    android:textColor="@color/purple_primary"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@id/menuProfileImage"
+                    app:layout_constraintStart_toStartOf="@id/menuUserName"
+                    app:layout_constraintTop_toBottomOf="@id/menuUserName" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:src="@drawable/ic_chevron_right"
+                    app:layout_constraintBottom_toBottomOf="@id/menuProfileImage"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/menuProfileImage"
+                    android:contentDescription="View Profile" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- ACCOUNT SECTION -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="0dp"
+                android:text="ACCOUNT"
+                android:textColor="@color/purple_primary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <include
+                android:id="@+id/optionProfile"
+                layout="@layout/item_menu_option" />
+
+            <include
+                android:id="@+id/optionAccountInfo"
+                layout="@layout/item_menu_option" />
+
+            <include
+                android:id="@+id/optionSettings"
+                layout="@layout/item_menu_option" />
+
+            <!-- MY ACTIVITIES SECTION -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="0dp"
+                android:text="MY ACTIVITIES"
+                android:textColor="@color/purple_primary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <include
+                android:id="@+id/optionMyBookings"
+                layout="@layout/item_menu_option" />
+
+            <include
+                android:id="@+id/optionMyGears"
+                layout="@layout/item_menu_option" />
+
+            <include
+                android:id="@+id/optionMyPostedGears"
+                layout="@layout/item_menu_option" />
+
+            <include
+                android:id="@+id/optionRecentPosts"
+                layout="@layout/item_menu_option" />
+
+            <include
+                android:id="@+id/optionMyTrekPosts"
+                layout="@layout/item_menu_option" />
+
+            <include
+                android:id="@+id/optionMyTrekPartners"
+                layout="@layout/item_menu_option" />
+
+            <include
+                android:id="@+id/optionMyTrekRequests"
+                layout="@layout/item_menu_option" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="24dp"
+                android:background="@color/light_gray_border" />
+
+            <!-- LOGOUT SECTION -->
+            <include
+                android:id="@+id/optionLogout"
+                layout="@layout/item_menu_option" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

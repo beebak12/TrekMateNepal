@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="12dp">
+
+    <FrameLayout
+        android:id="@+id/iconContainer"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:background="@drawable/bg_light_purple_rounded">
+
+        <ImageView
+            android:id="@+id/menuIcon"
+            android:layout_width="29dp"
+            android:layout_height="29dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_person"
+            android:contentDescription="Icon" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/menuTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Menu Title"
+            android:textColor="@color/purple_primary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/menuDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Short description here"
+            android:textColor="@color/purple_primary"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:tint="@color/purple"
+        android:src="@drawable/ic_chevron_right"
+        android:contentDescription="Chevron" />
+
+</LinearLayout>

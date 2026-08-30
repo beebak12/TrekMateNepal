@@ -137,14 +137,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:text="5,364m"
-                        android:textColor="#333333"
+                        android:textColor="@color/purple_primary"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Altitude"
-                        android:textColor="#777777"
+                        android:textColor="@color/purple_primary"
                         android:textSize="11sp" />
                 </LinearLayout>
 
@@ -167,14 +167,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:text="14 days"
-                        android:textColor="#333333"
+                        android:textColor="@color/purple_primary"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Duration"
-                        android:textColor="#777777"
+                        android:textColor="@color/purple_primary"
                         android:textSize="11sp" />
                 </LinearLayout>
 
@@ -197,14 +197,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:text="130 km"
-                        android:textColor="#333333"
+                        android:textColor="@color/purple_primary"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Distance"
-                        android:textColor="#777777"
+                        android:textColor="@color/purple_primary"
                         android:textSize="11sp" />
                 </LinearLayout>
 
@@ -241,7 +241,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:text="4.9 (287)"
-                        android:textColor="#777777"
+                        android:textColor="@color/purple_primary"
                         android:textSize="13sp" />
 
                     <View
@@ -284,7 +284,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="About this Trek"
-                        android:textColor="#333333"
+                        android:textColor="@color/purple_primary"
                         android:textStyle="bold" />
 
                     <TextView
@@ -294,7 +294,7 @@
                         android:layout_marginTop="8dp"
                         android:lineSpacingExtra="4dp"
                         android:text="The ultimate Himalayan adventure — stand at the foot of the world's highest peak. Trek through the legendary Khumbu Valley, visiting ancient monasteries and Sherpa villages along the route."
-                        android:textColor="#777777"
+                        android:textColor="@color/purple_primary"
                         android:textSize="13sp" />
 
                 </LinearLayout>
@@ -316,7 +316,7 @@
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="8dp"
                     android:text="Adventure"
-                    android:textColor="#5E35B1"
+                    android:textColor="@color/purple_primary"
                     android:textStyle="bold" />
 
                 <TextView
@@ -327,7 +327,7 @@
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="8dp"
                     android:text="High Altitude"
-                    android:textColor="#5E35B1"
+                    android:textColor="@color/purple_primary"
                     android:textStyle="bold" />
 
                 <TextView
@@ -338,7 +338,7 @@
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="8dp"
                     android:text="Iconic"
-                    android:textColor="#5E35B1"
+                    android:textColor="@color/purple_primary"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -379,21 +379,21 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Organized by"
-                            android:textColor="#777777"
+                            android:textColor="@color/purple_primary"
                             android:textSize="12sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Priya M."
-                            android:textColor="#333333"
+                            android:textColor="@color/purple_primary"
                             android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="View Profile →"
-                            android:textColor="#5E35B1"
+                            android:textColor="@color/purple_primary"
                             android:textSize="12sp" />
                     </LinearLayout>
 
@@ -430,7 +430,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Schedule"
-                        android:textColor="#333333"
+                        android:textColor="@color/purple_primary"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -452,14 +452,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Start date"
-                                android:textColor="#777777"
+                                android:textColor="@color/purple_primary"
                                 android:textSize="11sp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Nov 25, 2025"
-                                android:textColor="#333333"
+                                android:textColor="@color/purple_primary"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
@@ -481,14 +481,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="End date"
-                                android:textColor="#777777"
+                                android:textColor="@color/purple_primary"
                                 android:textSize="11sp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Dec 10, 2025"
-                                android:textColor="#333333"
+                                android:textColor="@color/purple_primary"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
@@ -526,7 +526,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Trek Fee"
-                    android:textColor="#777777"
+                    android:textColor="@color/purple_primary"
                     android:textSize="14sp" />
 
                 <TextView
@@ -534,7 +534,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Rs. 25,000"
-                    android:textColor="#1A237E"
+                    android:textColor="@color/purple_primary"
                     android:textSize="20sp"
                     android:textStyle="bold" />
             </LinearLayout>

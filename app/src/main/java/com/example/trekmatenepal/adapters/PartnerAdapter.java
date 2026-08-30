@@ -25,24 +25,32 @@ public class PartnerAdapter extends RecyclerView.Adapter<PartnerAdapter.ViewHold
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_partner, parent, false);
-
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_partner, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
         PartnerModel partner = partnerList.get(position);
+        holder.tvPartnerName.setText(partner.getName());
+        holder.tvRating.setText(partner.getRating());
 
-        holder.image.setImageResource(partner.getImage());
-        holder.name.setText(partner.getName());
-        holder.rating.setText(partner.getRating());
-        holder.reviews.setText(partner.getReviews());
-        holder.status.setText(partner.getStatus());
+        int imageRes = partner.getImage();
+        if (isValidDrawable(holder.itemView, imageRes)) {
+            holder.ivPartnerImage.setImageResource(imageRes);
+        } else {
+            holder.ivPartnerImage.setImageResource(R.drawable.ic_person);
+        }
+    }
 
+    private boolean isValidDrawable(View v, int resourceId) {
+        if (resourceId <= 0) return false;
+        try {
+            String type = v.getContext().getResources().getResourceTypeName(resourceId);
+            return "drawable".equals(type) || "mipmap".equals(type);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
@@ -51,18 +59,14 @@ public class PartnerAdapter extends RecyclerView.Adapter<PartnerAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
-        ImageView image;
-        TextView name, rating, reviews, status;
+        ImageView ivPartnerImage;
+        TextView tvPartnerName, tvRating;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            image = itemView.findViewById(R.id.imgPartner);
-            name = itemView.findViewById(R.id.txtPartnerName);
-            rating = itemView.findViewById(R.id.txtPartnerRating);
-            reviews = itemView.findViewById(R.id.txtPartnerReviews);
-            status = itemView.findViewById(R.id.txtStatus);
+            ivPartnerImage = itemView.findViewById(R.id.ivPartnerImage);
+            tvPartnerName = itemView.findViewById(R.id.tvPartnerName);
+            tvRating = itemView.findViewById(R.id.tvRating);
         }
     }
 }

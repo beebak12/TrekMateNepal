@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Hero Image Section -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="300dp">
+
+                <ImageView
+                    android:id="@+id/imgTrekHero"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/everest"
+                    android:contentDescription="Trek Image" />
+
+                <!-- Dark overlay -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/item_gradient_overlay" />
+
+                <!-- Header Controls -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="16dp">
+
+                    <ImageView
+                        android:id="@+id/btnBack"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:contentDescription="Back"
+                        android:padding="4dp"
+                        android:src="@drawable/ic_back"
+                        app:tint="@color/white" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+
+                    <ImageView
+                        android:id="@+id/btnMore"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:contentDescription="More"
+                        android:padding="4dp"
+                        android:src="@drawable/ic_menu"
+                        app:tint="@color/white" />
+
+                </LinearLayout>
+
+                <!-- Image Counter -->
+                <TextView
+                    android:id="@+id/tvImageCounter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1/10"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="6dp"
+                    android:background="@drawable/bg_purple_rounded"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="16dp" />
+
+            </FrameLayout>
+
+            <!-- Trek Information Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:background="@color/white">
+
+                <!-- Title and Rating Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:id="@+id/tvTrekName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Everest Base Camp Trek"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/purple_primary" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Challenging"
+                            android:textSize="13sp"
+                            android:textColor="@color/red"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="16dp"
+                            android:background="@color/lightGray"
+                            android:layout_marginHorizontal="8dp" />
+
+                        <TextView
+                            android:id="@+id/tvDuration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="12 Days"
+                            android:textSize="13sp"
+                            android:textColor="@color/secondary_gray" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="16dp"
+                            android:background="@color/lightGray"
+                            android:layout_marginHorizontal="8dp" />
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_star"
+                            android:contentDescription="Rating"
+                            app:tint="@color/orange" />
+
+                        <TextView
+                            android:id="@+id/tvRating"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="4.8"
+                            android:textSize="13sp"
+                            android:textColor="@color/purple_primary"
+                            android:textStyle="bold"
+                            android:layout_marginStart="4dp" />
+
+                        <TextView
+                            android:id="@+id/tvReviews"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="(287 reviews)"
+                            android:textSize="13sp"
+                            android:textColor="@color/secondary_gray"
+                            android:layout_marginStart="4dp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Price Section -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="From"
+                        android:textSize="13sp"
+                        android:textColor="@color/secondary_gray" />
+
+                    <TextView
+                        android:id="@+id/tvPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rs. 25,000"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/purple_primary"
+                        android:layout_marginHorizontal="4dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="/ person"
+                        android:textSize="13sp"
+                        android:textColor="@color/secondary_gray"
+                        android:layout_marginStart="4dp" />
+
+                </LinearLayout>
+
+                <!-- Information Cards -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginBottom="16dp">
+
+                    <!-- Altitude Card -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="12dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Max Altitude"
+                            android:textSize="12sp"
+                            android:textColor="@color/secondary_gray" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="5,364m"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/purple_primary"
+                            android:layout_marginTop="4dp" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="40dp"
+                        android:background="@color/lightGray" />
+
+                    <!-- Season Card -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="12dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Best Season"
+                            android:textSize="12sp"
+                            android:textColor="@color/secondary_gray" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mar-May, Sep-Nov"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/purple_primary"
+                            android:layout_marginTop="4dp" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="40dp"
+                        android:background="@color/lightGray" />
+
+                    <!-- Group Size Card -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="12dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Group Size"
+                            android:textSize="12sp"
+                            android:textColor="@color/secondary_gray" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2-12 People"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/purple_primary"
+                            android:layout_marginTop="4dp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Tabs Section -->
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:tabIndicatorColor="@color/purple_primary"
+                app:tabSelectedTextColor="@color/purple_primary"
+                app:tabTextColor="@color/secondary_gray">
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Overview" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Itinerary" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Inclusions" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Exclusions" />
+
+            </com.google.android.material.tabs.TabLayout>
+
+            <!-- Tab Content -->
+            <FrameLayout
+                android:id="@+id/tabContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:background="@color/white">
+
+                <TextView
+                    android:id="@+id/tvOverview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Experience the majestic Everest region and stand at the base of the world's highest peak.\n\n• Stunning mountain views\n• Traditional Sherpa culture\n• Best trekking experience\n• Professional guides included"
+                    android:textSize="14sp"
+                    android:textColor="@color/secondary_gray"
+                    android:lineSpacingExtra="6dp"
+                    android:visibility="visible" />
+
+            </FrameLayout>
+
+            <!-- Bottom Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:spacing="12dp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="16dp"
+                android:background="@color/white">
+
+                <Button
+                    android:id="@+id/btnSave"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="Save"
+                    android:textColor="@color/purple_primary"
+                    android:backgroundTint="@color/white"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_marginEnd="8dp" />
+
+                <Button
+                    android:id="@+id/btnBookGuide"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="Book a Guide"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/purple_primary"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_marginStart="8dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

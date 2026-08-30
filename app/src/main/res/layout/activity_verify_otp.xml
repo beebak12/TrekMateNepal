@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Mountain Header -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                android:background="@drawable/bg_mountain_header">
+
+                <ImageView
+                    android:id="@+id/imgMountainBackground"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="Himalayan Mountains"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/everest" />
+
+                <!-- Dark Overlay -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_purple_gradient_overlay" />
+
+                <!-- Header Content -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingBottom="40dp">
+
+                    <!-- Mountain Logo -->
+                    <ImageView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:contentDescription="TrekMate Nepal Logo"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_trek"
+                        app:tint="@color/white"
+                        android:layout_marginBottom="8dp" />
+
+                    <!-- App Name -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TrekMate Nepal"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:layout_marginBottom="4dp" />
+
+                    <!-- Tagline -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Explore • Connect • Trek"
+                        android:textSize="12sp"
+                        android:textColor="@color/white"
+                        android:alpha="0.9" />
+
+                </LinearLayout>
+
+                <!-- Back Button -->
+                <ImageView
+                    android:id="@+id/btnBack"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="Back"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_back"
+                    app:tint="@color/white"
+                    android:layout_gravity="top|start"
+                    android:layout_margin="12dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:scaleType="centerInside" />
+
+            </FrameLayout>
+
+            <!-- Main Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="-20dp"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="24dp">
+
+                    <!-- Screen Title -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Verify Your Code"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/purple_primary"
+                        android:layout_marginBottom="4dp" />
+
+                    <!-- Screen Subtitle -->
+                    <TextView
+                        android:id="@+id/tvSubtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="We've sent a 6-digit verification code to your email."
+                        android:textSize="13sp"
+                        android:textColor="@color/secondary_gray"
+                        android:layout_marginBottom="20dp" />
+
+                    <!-- Info Card -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="12dp"
+                        android:background="@color/light_background"
+                        android:layout_marginBottom="24dp">
+
+                        <ImageView
+                            android:id="@+id/imgMethodIcon"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:contentDescription="Method"
+                            android:src="@drawable/ic_email"
+                            app:tint="@color/purple_primary"
+                            android:layout_marginEnd="12dp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Check your inbox or messages for the verification code."
+                            android:textSize="12sp"
+                            android:textColor="@color/secondary_gray" />
+
+                    </LinearLayout>
+
+                    <!-- OTP Input Label -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Verification Code"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/secondary_gray"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- OTP Input Boxes -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:spacing="8dp"
+                        android:layout_marginBottom="24dp">
+
+                        <EditText
+                            android:id="@+id/etOtp1"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:inputType="number"
+                            android:maxLength="1"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            android:textColor="@color/purple_primary"
+                            android:background="@drawable/bg_otp_box" />
+
+                        <EditText
+                            android:id="@+id/etOtp2"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:inputType="number"
+                            android:maxLength="1"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            android:textColor="@color/purple_primary"
+                            android:background="@drawable/bg_otp_box" />
+
+                        <EditText
+                            android:id="@+id/etOtp3"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:inputType="number"
+                            android:maxLength="1"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            android:textColor="@color/purple_primary"
+                            android:background="@drawable/bg_otp_box" />
+
+                        <EditText
+                            android:id="@+id/etOtp4"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:inputType="number"
+                            android:maxLength="1"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            android:textColor="@color/purple_primary"
+                            android:background="@drawable/bg_otp_box" />
+
+                        <EditText
+                            android:id="@+id/etOtp5"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:inputType="number"
+                            android:maxLength="1"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            android:textColor="@color/purple_primary"
+                            android:background="@drawable/bg_otp_box" />
+
+                        <EditText
+                            android:id="@+id/etOtp6"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:inputType="number"
+                            android:maxLength="1"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            android:textColor="@color/purple_primary"
+                            android:background="@drawable/bg_otp_box" />
+
+                    </LinearLayout>
+
+                    <!-- Error Message -->
+                    <TextView
+                        android:id="@+id/tvError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:textColor="@color/error_red"
+                        android:visibility="gone"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Resend Code Section -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_marginBottom="24dp">
+
+                        <TextView
+                            android:id="@+id/tvResendTimer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="00:45"
+                            android:textSize="12sp"
+                            android:textColor="@color/secondary_gray"
+                            android:layout_marginEnd="8dp" />
+
+                        <TextView
+                            android:id="@+id/tvResendCode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Resend Code"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/purple_primary"
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:alpha="0.5" />
+
+                    </LinearLayout>
+
+                    <!-- Verify Button -->
+                    <Button
+                        android:id="@+id/btnVerifyCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:text="Verify Code"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:backgroundTint="@color/purple_primary"
+                        android:drawableStart="@drawable/ic_check_circle"
+                        android:drawablePadding="8dp"
+                        android:gravity="center"
+                        android:layout_marginBottom="12dp"
+                        style="@style/Widget.MaterialComponents.Button" />
+
+                    <!-- Didn't Receive Code -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Didn't receive the code? "
+                            android:textSize="12sp"
+                            android:textColor="@color/secondary_gray" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Resend code after 45 seconds"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/secondary_gray" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Bottom Spacing -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

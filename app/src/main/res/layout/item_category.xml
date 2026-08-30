@@ -6,13 +6,13 @@
 
     android:id="@+id/categoryCard"
 
-    android:layout_width="95dp"
-    android:layout_height="95dp"
-    android:layout_margin="8dp"
+    android:layout_width="65dp"
+    android:layout_height="65dp"
+    android:layout_margin="4dp"
 
-    app:cardCornerRadius="18dp"
+    app:cardCornerRadius="28dp"
     app:cardElevation="4dp"
-    app:cardBackgroundColor="@android:color/white">
+    app:cardBackgroundColor="#CCCCFF">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,18 +22,20 @@
 
         <ImageView
             android:id="@+id/imgCategory"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:tint="@color/purple_primary"
             android:src="@drawable/ic_trekking"/>
 
         <TextView
             android:id="@+id/txtCategoryName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="3dp"
             android:text="Trekking"
+            android:textColor="@color/purple_primary"
             android:textStyle="bold"
-            android:textSize="13sp"/>
+            android:textSize="10sp"/>
 
     </LinearLayout>
 

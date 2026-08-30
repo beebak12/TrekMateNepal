@@ -1,0 +1,270 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (mmap) failed to map 255852544 bytes. Error detail: G1 virtual space
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   This process is running with CompressedOops enabled, and the Java Heap may be blocking the growth of the native heap
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+#   JVM is running with Unscaled Compressed Oops mode in which the Java heap is
+#     placed in the first 4GB address space. The Java Heap base address is the
+#     maximum limit for the native heap growth. Please use -XX:HeapBaseMinAddress
+#     to set the Java Heap base and to place the Java Heap above 4GB virtual address.
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (os_windows.cpp:3686), pid=31648, tid=34220
+#
+# JRE version:  (21.0.7+6) (build )
+# Java VM: OpenJDK 64-Bit Server VM (21.0.7+6-LTS, mixed mode, sharing, tiered, compressed oops, compressed class ptrs, g1 gc, windows-amd64)
+# No core dump will be written. Minidumps are not enabled by default on client versions of Windows
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: -Djava.awt.headless=true -Djava.library.path=D:\Gradle\jdks\eclipse_adoptium-21-amd64-windows.2\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;D:\Android\Sdk\platform-tools;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\dotnet\;D:\ProgramFiles\nodejs\;D:\Android\Android studio\jbr\bin;C:\Program Files\Git\cmd;C:\Users\paude\AppData\Local\Microsoft\WindowsApps;D:\vscode\Microsoft VS Code\bin;C:\Users\paude\AppData\Roaming\npm;D:\ProgramFiles\Kiro\Kiro\bin;C:\Users\paude\AppData\Local\Programs\Antigravity IDE\bin;.;D:\AndroidProjects\TrekMateNepal\app\src\testDebug\jniLibs;D:\AndroidProjects\TrekMateNepal\app\src\test\jniLibs -Dorg.gradle.internal.worker.tmpdir=D:\AndroidProjects\TrekMateNepal\app\build\tmp\testDebugUnitTest\work --add-opens=java.base/java.io=ALL-UNNAMED -Xmx512m -Dfile.encoding=UTF-8 -Duser.country=US -Duser.language=en -Duser.variant -ea worker.org.gradle.process.internal.worker.GradleWorkerMain 'Gradle Test Executor 3'
+
+Host: AMD Ryzen 7 6800H with Radeon Graphics         , 16 cores, 15G,  Windows 11 , 64 bit Build 26100 (10.0.26100.9168)
+Time: Sun Aug 30 12:29:40 2026 Nepal Standard Time elapsed time: 1.601986 seconds (0d 0h 0m 1s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x000001c58a906cd0):  JavaThread "Unknown thread" [_thread_in_vm, id=34220, stack(0x000000bc8af00000,0x000000bc8b000000) (1024K)]
+
+Stack: [0x000000bc8af00000,0x000000bc8b000000]
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [jvm.dll+0x6ce119]
+V  [jvm.dll+0x8a84a1]
+V  [jvm.dll+0x8aa9ce]
+V  [jvm.dll+0x8ab0b3]
+V  [jvm.dll+0x27f8a6]
+V  [jvm.dll+0x6ca945]
+V  [jvm.dll+0x6bebea]
+V  [jvm.dll+0x355eca]
+V  [jvm.dll+0x35da96]
+V  [jvm.dll+0x3af72e]
+V  [jvm.dll+0x3af9d8]
+V  [jvm.dll+0x32a05c]
+V  [jvm.dll+0x32abbb]
+V  [jvm.dll+0x871719]
+V  [jvm.dll+0x3bc501]
+V  [jvm.dll+0x85a743]
+V  [jvm.dll+0x45080e]
+V  [jvm.dll+0x452451]
+C  [jli.dll+0x5278]
+C  [ucrtbase.dll+0x2cd30]
+C  [KERNEL32.DLL+0x2ccb7]
+C  [ntdll.dll+0xaad6c]
+
+
+---------------  P R O C E S S  ---------------
+
+Threads class SMR info:
+_java_thread_list=0x00007ffb56fba0c8, length=0, elements={
+}
+
+Java Threads: ( => current thread )
+Total: 0
+
+Other Threads:
+  0x000001c58a931ac0 WorkerThread "GC Thread#0"                     [id=25368, stack(0x000000bc8b000000,0x000000bc8b100000) (1024K)]
+  0x000001c58a937830 ConcurrentGCThread "G1 Main Marker"            [id=34268, stack(0x000000bc8b100000,0x000000bc8b200000) (1024K)]
+  0x000001c58a938240 WorkerThread "G1 Conc#0"                       [id=30904, stack(0x000000bc8b200000,0x000000bc8b300000) (1024K)]
+
+[error occurred during error reporting (printing all threads), id 0xc0000005, EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x00007ffb566bc987]
+VM state: not at safepoint (not fully initialized)
+
+VM Mutex/Monitor currently owned by a thread:  ([mutex/lock_event])
+[0x00007ffb5702e408] Heap_lock - owner thread: 0x000001c58a906cd0
+
+Heap address: 0x00000000e0000000, size: 512 MB, Compressed Oops mode: 32-bit
+
+CDS archive(s) mapped at: [0x0000000000000000-0x0000000000000000-0x0000000000000000), size 0, SharedBaseAddress: 0x0000000800000000, ArchiveRelocationMode: 1.
+Narrow klass base: 0x0000000000000000, Narrow klass shift: 0, Narrow klass range: 0x0
+
+GC Precious Log:
+ CardTable entry size: 512
+ Card Set container configuration: InlinePtr #cards 5 size 8 Array Of Cards #cards 12 size 40 Howl #buckets 4 coarsen threshold 1843 Howl Bitmap #cards 512 size 80 coarsen threshold 460 Card regions per heap region 1 cards per card region 2048
+
+Heap:
+ garbage-first heap   total 0K, used 0K [0x00000000e0000000, 0x0000000100000000)
+  region size 1024K, 0 young (0K), 0 survivors (0K)
+
+[error occurred during error reporting (printing heap information), id 0xc0000005, EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x00007ffb56aa7949]
+GC Heap History (0 events):
+No events
+
+Dll operation events (1 events):
+Event: 0.018 Loaded shared library D:\Gradle\jdks\eclipse_adoptium-21-amd64-windows.2\bin\java.dll
+
+Deoptimization events (0 events):
+No events
+
+Classes loaded (0 events):
+No events
+
+Classes unloaded (0 events):
+No events
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+ZGC Phase Switch (0 events):
+No events
+
+VM Operations (0 events):
+No events
+
+Memory protections (0 events):
+No events
+
+Nmethod flushes (0 events):
+No events
+
+Events (0 events):
+No events
+
+
+Dynamic libraries:
+0x00007ff65b7a0000 - 0x00007ff65b7ae000 	D:\Gradle\jdks\eclipse_adoptium-21-amd64-windows.2\bin\java.exe
+0x00007ffc1cb20000 - 0x00007ffc1cd86000 	C:\WINDOWS\SYSTEM32\ntdll.dll
+0x00007ffc1aad0000 - 0x00007ffc1ab99000 	C:\WINDOWS\System32\KERNEL32.DLL
+0x00007ffc19f20000 - 0x00007ffc1a31f000 	C:\WINDOWS\System32\KERNELBASE.dll
+0x00007ffc1a640000 - 0x00007ffc1a78c000 	C:\WINDOWS\System32\ucrtbase.dll
+0x00007ffc090f0000 - 0x00007ffc09108000 	D:\Gradle\jdks\eclipse_adoptium-21-amd64-windows.2\bin\jli.dll
+0x00007ffbf4ca0000 - 0x00007ffbf4cbe000 	D:\Gradle\jdks\eclipse_adoptium-21-amd64-windows.2\bin\VCRUNTIME140.dll
+0x00007ffc1a900000 - 0x00007ffc1aac6000 	C:\WINDOWS\System32\USER32.dll
+0x00007ffc06e20000 - 0x00007ffc070b1000 	C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.26100.8972_none_3e0da176e32f9d4b\COMCTL32.dll
+0x00007ffc1ba10000 - 0x00007ffc1bab9000 	C:\WINDOWS\System32\msvcrt.dll
+0x00007ffc1a580000 - 0x00007ffc1a5a7000 	C:\WINDOWS\System32\win32u.dll
+0x00007ffc1b600000 - 0x00007ffc1b62b000 	C:\WINDOWS\System32\GDI32.dll
+0x00007ffc19df0000 - 0x00007ffc19f19000 	C:\WINDOWS\System32\gdi32full.dll
+0x00007ffc1a7a0000 - 0x00007ffc1a843000 	C:\WINDOWS\System32\msvcp_win.dll
+0x00007ffc1c6c0000 - 0x00007ffc1c6f2000 	C:\WINDOWS\System32\IMM32.DLL
+0x00007ffc161d0000 - 0x00007ffc161dc000 	D:\Gradle\jdks\eclipse_adoptium-21-amd64-windows.2\bin\vcruntime140_1.dll
+0x00007ffba69c0000 - 0x00007ffba6a4d000 	D:\Gradle\jdks\eclipse_adoptium-21-amd64-windows.2\bin\msvcp140.dll
+0x00007ffb56380000 - 0x00007ffb57110000 	D:\Gradle\jdks\eclipse_adoptium-21-amd64-windows.2\bin\server\jvm.dll
+0x00007ffc1b880000 - 0x00007ffc1b93c000 	C:\WINDOWS\System32\ADVAPI32.dll
+0x00007ffc1b6f0000 - 0x00007ffc1b79a000 	C:\WINDOWS\System32\sechost.dll
+0x00007ffc1c130000 - 0x00007ffc1c248000 	C:\WINDOWS\System32\RPCRT4.dll
+0x00007ffc1b950000 - 0x00007ffc1b9d2000 	C:\WINDOWS\System32\WS2_32.dll
+0x00007ffc18860000 - 0x00007ffc188be000 	C:\WINDOWS\SYSTEM32\POWRPROF.dll
+0x00007ffc11d40000 - 0x00007ffc11d4b000 	C:\WINDOWS\SYSTEM32\VERSION.dll
+0x00007ffc0bc80000 - 0x00007ffc0bcb6000 	C:\WINDOWS\SYSTEM32\WINMM.dll
+0x00007ffc18820000 - 0x00007ffc18835000 	C:\WINDOWS\SYSTEM32\UMPDC.dll
+0x00007ffc18b10000 - 0x00007ffc18b2b000 	C:\WINDOWS\SYSTEM32\kernel.appcore.dll
+0x00007ffbf99b0000 - 0x00007ffbf99ba000 	D:\Gradle\jdks\eclipse_adoptium-21-amd64-windows.2\bin\jimage.dll
+0x00007ffc0f650000 - 0x00007ffc0f892000 	C:\WINDOWS\SYSTEM32\DBGHELP.DLL
+0x00007ffc1c750000 - 0x00007ffc1cad5000 	C:\WINDOWS\System32\combase.dll
+0x00007ffc1b7a0000 - 0x00007ffc1b879000 	C:\WINDOWS\System32\OLEAUT32.dll
+0x00007ffbfbca0000 - 0x00007ffbfbcdb000 	C:\WINDOWS\SYSTEM32\dbgcore.DLL
+0x00007ffc1a330000 - 0x00007ffc1a3dc000 	C:\WINDOWS\System32\bcryptPrimitives.dll
+0x00007ffbf3eb0000 - 0x00007ffbf3ecf000 	D:\Gradle\jdks\eclipse_adoptium-21-amd64-windows.2\bin\java.dll
+
+dbghelp: loaded successfully - version: 4.0.5 - missing functions: none
+symbol engine: initialized successfully - sym options: 0x614 - pdb path: .;D:\Gradle\jdks\eclipse_adoptium-21-amd64-windows.2\bin;C:\WINDOWS\SYSTEM32;C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.26100.8972_none_3e0da176e32f9d4b;D:\Gradle\jdks\eclipse_adoptium-21-amd64-windows.2\bin\server
+
+VM Arguments:
+jvm_args: -Djava.awt.headless=true -Djava.library.path=D:\Gradle\jdks\eclipse_adoptium-21-amd64-windows.2\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;D:\Android\Sdk\platform-tools;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\dotnet\;D:\ProgramFiles\nodejs\;D:\Android\Android studio\jbr\bin;C:\Program Files\Git\cmd;C:\Users\paude\AppData\Local\Microsoft\WindowsApps;D:\vscode\Microsoft VS Code\bin;C:\Users\paude\AppData\Roaming\npm;D:\ProgramFiles\Kiro\Kiro\bin;C:\Users\paude\AppData\Local\Programs\Antigravity IDE\bin;.;D:\AndroidProjects\TrekMateNepal\app\src\testDebug\jniLibs;D:\AndroidProjects\TrekMateNepal\app\src\test\jniLibs -Dorg.gradle.internal.worker.tmpdir=D:\AndroidProjects\TrekMateNepal\app\build\tmp\testDebugUnitTest\work --add-opens=java.base/java.io=ALL-UNNAMED -Xmx512m -Dfile.encoding=UTF-8 -Duser.country=US -Duser.language=en -Duser.variant -ea 
+java_command: worker.org.gradle.process.internal.worker.GradleWorkerMain 'Gradle Test Executor 3'
+java_class_path (initial): D:\\Gradle\\caches\\9.4.1\\workerMain\\gradle-worker.jar;D:\\AndroidProjects\\TrekMateNepal\\app\\build\\intermediates\\javac\\debugUnitTest\\compileDebugUnitTestJavaWithJavac\\classes;D:\\AndroidProjects\\TrekMateNepal\\app\\build\\intermediates\\runtime_app_classes_jar\\debug\\bundleDebugClassesToRuntimeJar\\classes.jar;D:\\Gradle\\caches\\modules-2\\files-2.1\\junit\\junit\\4.13.2\\8ac9e16d933b6fb43bc7f576336b8f4d7eb5ba12\\junit-4.13.2.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\d5dd3e4806dd58d1ee3beaefecdf132a\\transformed\\viewbinding-9.2.1-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\0df3ffc49f24dd110adeeb3506e5e40e\\transformed\\material-1.14.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\9d40fc2e24d0dceeadbdc4ca557ddff5\\transformed\\appcompat-resources-1.7.1-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\7677cdb3a2ef28357b86fcf78bdf0fd7\\transformed\\constraintlayout-2.2.1-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\05d6b0fc29fc4ab2db39c36667cdd759\\transformed\\appcompat-1.7.1-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\e5a533db0a6a5a385cc137876f80253a\\transformed\\viewpager2-1.0.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\b0dcc2e80f076f01bb5df315cea4c319\\transformed\\fragment-1.5.4-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\313d0672e65e0d142cd2be993c0674e6\\transformed\\activity-1.13.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\0da6987494854c118cf6c2b4d709d1c6\\transformed\\activity-ktx-1.13.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\240f0b996bbc9871ef1950c4c8a9bb47\\transformed\\emoji2-views-helper-1.3.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\c2a23dc16dcc8ff7a631d49fd48d74e7\\transformed\\emoji2-1.3.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\c9b365bc094e7b9b276b81d54fc6f987\\transformed\\loader-1.0.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\51fbc31adf10c7084305a49bb60e0aa8\\transformed\\drawerlayout-1.1.1-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\8898d712527eec3d01764cdfdd90f56c\\transformed\\coordinatorlayout-1.1.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\d27d6e7a66e55c0bcd064b448b89aa54\\transformed\\recyclerview-1.2.1-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\d56ed430b605866ae30b6940e415e2c6\\transformed\\viewpager-1.0.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\22e6f3b035eb991b2a82d29516dd319e\\transformed\\customview-1.2.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\9c7cedf382d0210e34b206ebe928a4b3\\transformed\\transition-1.5.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\a91147c84b046902e39d63b340488ffb\\transformed\\dynamicanimation-1.1.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\a7c6ed502dfe75c3cccf01ad3bcfc937\\transformed\\vectordrawable-animated-1.1.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\b57329a1ae52415c9716fc87dc4f40f4\\transformed\\vectordrawable-1.1.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\a4c31789f212cbc40be09a29d57abdd4\\transformed\\graphics-shapes-release-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\560a4beb872116825b0c4e31c9919dad\\transformed\\lifecycle-viewmodel-savedstate-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\2a527a61da648a7b20a6a341ac1934ac\\transformed\\savedstate-ktx-1.4.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\6bd9b0b566e0ba0afb74d316b9375cac\\transformed\\savedstate-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\7ed8ca9d86cfb97f1607af0e88b5be11\\transformed\\core-ktx-1.18.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\12295bc6d43d0af249ec571e1d6f322a\\transformed\\core-1.18.0-runtime.jar;D:\\Gradle\\caches\\modules-2\\files-2.1\\androidx.lifecycle\\lifecycle-common-jvm\\2.11.0\\2c4f7d92f1fd723121d394c93455f50158403ad9\\lifecycle-common-jvm-2.11.0.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\37dc21a5e3aa9257fa49794947e698a9\\transformed\\lifecycle-viewmodel-2.11.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\61f91410c49505126c810ad31dfb80f5\\transformed\\lifecycle-viewmodel-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\54651bd8d2d2e7f649e4cb8778e15cc4\\transformed\\lifecycle-runtime-ktx-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\42b306581f66fb12438914da79b345d7\\transformed\\lifecycle-runtime-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\50af735669f8a68013b34a4285d951e4\\transformed\\lifecycle-livedata-core-2.11.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\efa41a34966eb8d18fd1f7829f899c8e\\transformed\\lifecycle-process-2.11.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\8faee7707ab2e4666db84b6a6d2c2888\\transformed\\lifecycle-livedata-core-ktx-2.11.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\4a42a073cc422f03748e79d63008cc65\\transformed\\lifecycle-livedata-2.11.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\be6b938cdda5b9e64a884c47a054c9b9\\transformed\\lifecycle-viewmodel-ktx-2.11.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\ae22c855991bea871dd7d72db901a1bd\\transformed\\lifecycle-livedata-ktx-2.11.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\37f204603f10c83982bbaabf67372fdc\\transformed\\navigationevent-runtime.jar;D:\\Gradle\\caches\\modules-2\\files-2.1\\org.jetbrains.kotlinx\\kotlinx-coroutines-core-jvm\\1.9.0\\9beade4c1c1569e4f36cbd2c37e02e3e41502601\\kotlinx-coroutines-core-jvm-1.9.0.jar;D:\\Gradle\\caches\\modules-2\\files-2.1\\org.jetbrains.kotlinx\\kotlinx-coroutines-android\\1.9.0\\6cf3b8df5a2ce8c6b0dffe55657a827c405ee2fe\\kotlinx-coroutines-android-1.9.0.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\94e3d52b5bc22637e5df9e8e8ac1af60\\transformed\\core-viewtree-1.0.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\9c74aa4b0b6a7ea824fe2fe96d72476c\\transformed\\annotation-experimental-1.4.1-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\4faf516a4f70386203d24119b1310760\\transformed\\cursoradapter-1.0.0-runtime.jar;D:\\Gradle\\caches\\modules-2\\files-2.1\\androidx.resourceinspection\\resourceinspection-annotation\\1.0.1\\8c21f8ff5d96d5d52c948707f7e4d6ca6773feef\\resourceinspection-annotation-1.0.1.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\55e0110a0d8314eb5798800cc5f5e89e\\transformed\\cardview-1.0.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\3faf3854cf8fa5f2a0011e7bb8b41847\\transformed\\profileinstaller-1.4.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\49252f044fb6ce57d78c858c0f001c2d\\transformed\\core-runtime-2.2.0-runtime.jar;D:\\Gradle\\caches\\modules-2\\files-2.1\\androidx.arch.core\\core-common\\2.2.0\\5e1b8b81dfd5f52c56a8d53b18ca759c19a301f3\\core-common-2.2.0.jar;D:\\Gradle\\caches\\modules-2\\files-2.1\\androidx.constraintlayout\\constraintlayout-core\\1.1.1\\f7ab6170b99b9421bd4942846426ff820b552f7d\\constraintlayout-core-1.1.1.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\5a75fc1795f12fca4b1953fade69b6e6\\transformed\\interpolator-1.0.0-runtime.jar;D:\\Gradle\\caches\\modules-2\\files-2.1\\androidx.concurrent\\concurrent-futures\\1.1.0\\50b7fb98350d5f42a4e49704b03278542293ba48\\concurrent-futures-1.1.0.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\ec686e3223933ec6826c4f41eeabee52\\transformed\\startup-runtime-1.1.1-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\0a8506b949deaff6d2d923fbef3568d5\\transformed\\tracing-1.2.0-runtime.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\1ba72d1ea1c39b5104f6d56d7d987395\\transformed\\versionedparcelable-1.1.1-runtime.jar;D:\\Gradle\\caches\\modules-2\\files-2.1\\androidx.collection\\collection-jvm\\1.5.0\\7ba2c69414d46ebc2dd76598bdd0a75c54281a57\\collection-jvm-1.5.0.jar;D:\\Gradle\\caches\\modules-2\\files-2.1\\androidx.annotation\\annotation-jvm\\1.9.1\\b17951747e38bf3986a24431b9ba0d039958aa5f\\annotation-jvm-1.9.1.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\727c8f3b76c12b6bd36a63eb54d49832\\transformed\\runtime-annotation-runtime.jar;D:\\Gradle\\caches\\modules-2\\files-2.1\\org.jetbrains.kotlinx\\kotlinx-serialization-core-jvm\\1.7.3\\1f226780b845ff9206474c05159245d861556249\\kotlinx-serialization-core-jvm-1.7.3.jar;D:\\Gradle\\caches\\modules-2\\files-2.1\\org.jetbrains.kotlin\\kotlin-stdlib\\2.2.10\\30de6faa127a4a012db8e71bf1b9c0a99b1402b2\\kotlin-stdlib-2.2.10.jar;D:\\Gradle\\caches\\modules-2\\files-2.1\\org.hamcrest\\hamcrest-core\\1.3\\42a25dc3219429f0e5d060061f71acb49bf010a0\\hamcrest-core-1.3.jar;D:\\Gradle\\caches\\modules-2\\files-2.1\\org.jetbrains\\annotations\\23.0.0\\8cc20c07506ec18e0834947b84a864bfc094484e\\annotations-23.0.0.jar;D:\\Gradle\\caches\\modules-2\\files-2.1\\com.google.errorprone\\error_prone_annotations\\2.15.0\\38c8485a652f808c8c149150da4e5c2b0bd17f9a\\error_prone_annotations-2.15.0.jar;D:\\Gradle\\caches\\modules-2\\files-2.1\\org.jspecify\\jspecify\\1.0.0\\7425a601c1c7ec76645a78d22b8c6a627edee507\\jspecify-1.0.0.jar;D:\\Gradle\\caches\\modules-2\\files-2.1\\com.google.guava\\listenablefuture\\1.0\\c949a840a6acbc5268d088e47b04177bf90b3cad\\listenablefuture-1.0.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\30557dbe7ca7de4c7f04d594f29e65c8\\transformed\\viewbinding-9.2.1\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\19da67be4e30c0f9b8d961fed6004404\\transformed\\material-1.14.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\fd638c7285ac51ea3f5b26b8cdb00808\\transformed\\appcompat-resources-1.7.1\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\6bc99fe943a6f51d853c801f26d9795a\\transformed\\constraintlayout-2.2.1\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\fadb205083a622ae908b9fc44ccbb664\\transformed\\appcompat-1.7.1\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\74f754aa89167f863492522e22337917\\transformed\\viewpager2-1.0.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\1b1c3c2ca9e140119c654dce4d7867e9\\transformed\\fragment-1.5.4\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\d588555acceb02370bdcc5c440ef5290\\transformed\\activity-1.13.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\874b272582e0108602a27fd83d237eb7\\transformed\\activity-ktx-1.13.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\be631fa24740ff81795b849dee50d177\\transformed\\emoji2-views-helper-1.3.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\f04ff82fa3b48dc9d4e9e6b6df3214e9\\transformed\\emoji2-1.3.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\f04ff82fa3b48dc9d4e9e6b6df3214e9\\transformed\\emoji2-1.3.0\\jars\\libs\\repackaged.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\f096d7e366d30be164c4e6c5e0e2fda8\\transformed\\loader-1.0.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\10af4e264e61d972f3270ba1b5d2e6b7\\transformed\\drawerlayout-1.1.1\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\7e75ff096e26b148aaf43a80b7aaf085\\transformed\\coordinatorlayout-1.1.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\ed50aeff9bcd3408008940b356203ffa\\transformed\\recyclerview-1.2.1\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\c40d7ca69fa77459bded49ec32be7277\\transformed\\viewpager-1.0.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\ace4c08e8da1102f4dcd9b9ccd670364\\transformed\\customview-1.2.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\c01aed2c942ffd8bf7d85f8d6a819d64\\transformed\\transition-1.5.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\d73278213e9c20c6c967232f76397c16\\transformed\\dynamicanimation-1.1.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\cd1bfe33bf2047b9596c09dbd76b7d54\\transformed\\vectordrawable-animated-1.1.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\c9968276de02465810d0bcceb28688a1\\transformed\\vectordrawable-1.1.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\d42d12ad051b661e32a314997a311fdf\\transformed\\graphics-shapes-release\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\0e7abf47b7647df1890115ab626486e8\\transformed\\lifecycle-viewmodel-savedstate\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\7ae7679df93f5530f8a9644d37412a3e\\transformed\\savedstate-ktx-1.4.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\dd8076cc3aa3b827062e334148218f6a\\transformed\\savedstate\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\df67aac9e996b41bfbe227726650e60a\\transformed\\core-ktx-1.18.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\d1236ddad24c0baf9bafad19b8b93c91\\transformed\\core-1.18.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\80c030c7a710e9e3750bfcfdbbc6dd0c\\transformed\\lifecycle-viewmodel-2.11.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\c19bd4157bd76ec11217ac8021bbdd39\\transformed\\lifecycle-viewmodel\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\f3d33b5e572782e22a1090ca0d6e7f32\\transformed\\lifecycle-runtime-ktx\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\8335d0e924c929fb436cca4e33009cb1\\transformed\\lifecycle-runtime\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\1b840f060b8ebb4a9fdea722a9ebf002\\transformed\\lifecycle-livedata-core-2.11.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\a315cb432e91b0c32b881b77b0d1ebda\\transformed\\lifecycle-process-2.11.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\1039933df878a9dde9618930114c7b3d\\transformed\\lifecycle-livedata-core-ktx-2.11.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\becad58f89bcf10e9453b9758e7204cc\\transformed\\lifecycle-livedata-2.11.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\755e694d5e0780ce997efaf80badcbb0\\transformed\\lifecycle-viewmodel-ktx-2.11.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\56fc285232b3780e70f192e8de9c38bb\\transformed\\lifecycle-livedata-ktx-2.11.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\ad4483237f47015dac89a80d2aea59a2\\transformed\\navigationevent\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\96ec1eb5bdad7c81a1702652ff2e2039\\transformed\\core-viewtree-1.0.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\34340f3d7d3c7f59170aff1785838a0c\\transformed\\annotation-experimental-1.4.1\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\cb7158008bc242343649f406c4b3b0de\\transformed\\cursoradapter-1.0.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\56ded4b9e1f0cd81d225973ff567d174\\transformed\\cardview-1.0.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\8a0f334f42affd12f604978477238785\\transformed\\profileinstaller-1.4.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\87d0858b89ba8c8d81a0d9d678571d11\\transformed\\core-runtime-2.2.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\6f37ed1d668cebe96aa383ebd6c3cb8e\\transformed\\interpolator-1.0.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\f7d1fe6945017b79eb56a3e980262f4f\\transformed\\startup-runtime-1.1.1\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\e8d688243fa086bb1fbf00b06f8c6ece\\transformed\\tracing-1.2.0\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\d1ac784f83f30f965c782a585239f66e\\transformed\\versionedparcelable-1.1.1\\jars\\classes.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\70016e16361bddb1dc381f301cd020a1\\transformed\\runtime-annotation\\jars\\classes.jar;D:\\AndroidProjects\\TrekMateNepal\\app\\build\\intermediates\\compile_and_runtime_r_class_jar\\debug\\processDebugResources\\R.jar;D:\\Gradle\\caches\\9.4.1\\transforms\\336e6a26b5da3364cf6dcc935fc05af7\\transformed\\android.jar
+Launcher Type: SUN_STANDARD
+
+[Global flags]
+     intx CICompilerCount                          = 12                                        {product} {ergonomic}
+     uint ConcGCThreads                            = 3                                         {product} {ergonomic}
+     uint G1ConcRefinementThreads                  = 13                                        {product} {ergonomic}
+   size_t G1HeapRegionSize                         = 1048576                                   {product} {ergonomic}
+    uintx GCDrainStackTargetSize                   = 64                                        {product} {ergonomic}
+   size_t InitialHeapSize                          = 255852544                                 {product} {ergonomic}
+   size_t MarkStackSize                            = 4194304                                   {product} {ergonomic}
+   size_t MaxHeapSize                              = 536870912                                 {product} {command line}
+   size_t MinHeapDeltaBytes                        = 1048576                                   {product} {ergonomic}
+   size_t MinHeapSize                              = 8388608                                   {product} {ergonomic}
+    uintx NonNMethodCodeHeapSize                   = 7602480                                {pd product} {ergonomic}
+    uintx NonProfiledCodeHeapSize                  = 122027880                              {pd product} {ergonomic}
+    uintx ProfiledCodeHeapSize                     = 122027880                              {pd product} {ergonomic}
+    uintx ReservedCodeCacheSize                    = 251658240                              {pd product} {ergonomic}
+     bool SegmentedCodeCache                       = true                                      {product} {ergonomic}
+   size_t SoftMaxHeapSize                          = 536870912                              {manageable} {ergonomic}
+     bool UseCompressedOops                        = true                           {product lp64_product} {ergonomic}
+     bool UseG1GC                                  = true                                      {product} {ergonomic}
+     bool UseLargePagesIndividualAllocation        = false                                  {pd product} {ergonomic}
+
+Logging:
+Log output configuration:
+ #0: stdout all=warning uptime,level,tags foldmultilines=false
+ #1: stderr all=off uptime,level,tags foldmultilines=false
+
+Environment Variables:
+JAVA_HOME=D:\Android\Android studio\jbr
+PATH=D:\Android\Sdk\platform-tools;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\dotnet\;D:\ProgramFiles\nodejs\;D:\Android\Android studio\jbr\bin;C:\Program Files\Git\cmd;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\paude\AppData\Local\Microsoft\WindowsApps;D:\vscode\Microsoft VS Code\bin;C:\Users\paude\AppData\Roaming\npm;D:\ProgramFiles\Kiro\Kiro\bin;C:\Users\paude\AppData\Local\Programs\Antigravity IDE\bin
+USERNAME=paude
+LANG=en_US.UTF-8
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD
+TMP=C:\Users\paude\AppData\Local\Temp
+TEMP=C:\Users\paude\AppData\Local\Temp
+
+
+
+
+Periodic native trim disabled
+
+---------------  S Y S T E M  ---------------
+
+OS:
+ Windows 11 , 64 bit Build 26100 (10.0.26100.9168)
+OS uptime: 4 days 1:15 hours
+Hyper-V role detected
+
+CPU: total 16 (initial active 16) (16 cores per cpu, 2 threads per core) family 25 model 68 stepping 1 microcode 0xa404105, cx8, cmov, fxsr, ht, mmx, 3dnowpref, sse, sse2, sse3, ssse3, sse4a, sse4.1, sse4.2, popcnt, lzcnt, tsc, tscinvbit, avx, avx2, aes, erms, clmul, bmi1, bmi2, adx, sha, fma, vzeroupper, clflush, clflushopt, hv, rdtscp, rdpid, fsrm, f16c, cet_ss
+Processor Information for processor 0
+  Max Mhz: 3201, Current Mhz: 3201, Mhz Limit: 3201
+Processor Information for processor 1
+  Max Mhz: 3201, Current Mhz: 1989, Mhz Limit: 3201
+Processor Information for processor 2
+  Max Mhz: 3201, Current Mhz: 1989, Mhz Limit: 3201
+Processor Information for processor 3
+  Max Mhz: 3201, Current Mhz: 1989, Mhz Limit: 3201
+Processor Information for processor 4
+  Max Mhz: 3201, Current Mhz: 3201, Mhz Limit: 3201
+Processor Information for processor 5
+  Max Mhz: 3201, Current Mhz: 1989, Mhz Limit: 3201
+Processor Information for processor 6
+  Max Mhz: 3201, Current Mhz: 1989, Mhz Limit: 3201
+Processor Information for processor 7
+  Max Mhz: 3201, Current Mhz: 1989, Mhz Limit: 3201
+Processor Information for processor 8
+  Max Mhz: 3201, Current Mhz: 1989, Mhz Limit: 3201
+Processor Information for processor 9
+  Max Mhz: 3201, Current Mhz: 1989, Mhz Limit: 3201
+Processor Information for processor 10
+  Max Mhz: 3201, Current Mhz: 3201, Mhz Limit: 3201
+Processor Information for processor 11
+  Max Mhz: 3201, Current Mhz: 1989, Mhz Limit: 3201
+Processor Information for processor 12
+  Max Mhz: 3201, Current Mhz: 3201, Mhz Limit: 3201
+Processor Information for processor 13
+  Max Mhz: 3201, Current Mhz: 1989, Mhz Limit: 3201
+Processor Information for processor 14
+  Max Mhz: 3201, Current Mhz: 3201, Mhz Limit: 3201
+Processor Information for processor 15
+  Max Mhz: 3201, Current Mhz: 1989, Mhz Limit: 3201
+
+Memory: 4k page, system-wide physical 15557M (875M free)
+TotalPageFile size 34182M (AvailPageFile size 6M)
+current process WorkingSet (physical memory assigned to process): 12M, peak: 12M
+current process commit charge ("private bytes"): 70M, peak: 314M
+
+vm_info: OpenJDK 64-Bit Server VM (21.0.7+6-LTS) for windows-amd64 JRE (21.0.7+6-LTS), built on 2025-04-15T00:00:00Z by "admin" with MS VC++ 17.7 (VS2022)
+
+END.

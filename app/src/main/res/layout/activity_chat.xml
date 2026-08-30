@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <!-- Top bar -->
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@color/white"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="Back"
+            android:padding="4dp"
+            android:src="@drawable/ic_back" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="8dp"
+            app:cardCornerRadius="22dp"
+            app:cardElevation="0dp">
+
+            <ImageView
+                android:id="@+id/imgPartner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/partner1"
+                android:contentDescription="Partner" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:id="@+id/partnerHeaderInfo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvPartnerName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sujan Karki"
+                android:textColor="@color/purple_primary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvOnlineStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🟢 Online"
+                android:textColor="@color/success_green"
+                android:textSize="11sp" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/btnCall"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/ic_call_purple"
+            android:contentDescription="Call" />
+
+        <ImageView
+            android:id="@+id/btnMore"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_more_vert"
+            android:contentDescription="More" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerMessages"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingVertical="8dp"
+        android:clipToPadding="false"
+        android:background="@color/lightpurple"
+        app:layout_constraintBottom_toTopOf="@id/attachmentPreview"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout" />
+
+    <LinearLayout
+        android:id="@+id/attachmentPreview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/inputLayout">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgPreview"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/RoundedSquare8" />
+
+        <TextView
+            android:id="@+id/txtPreviewName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:ellipsize="middle"
+            android:maxLines="1"
+            android:textColor="@color/purple_primary"
+            android:textSize="13sp"
+            tools:text="filename.jpg" />
+
+        <ImageView
+            android:id="@+id/btnRemovePreview"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="Remove"
+            android:padding="6dp"
+            android:src="@drawable/ic_cancel" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/inputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:elevation="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/btnAttach"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="4dp"
+            android:src="@drawable/ic_addicon"
+            android:contentDescription="Attach" />
+
+        <ImageView
+            android:id="@+id/btnCamera"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="6dp"
+            android:padding="2dp"
+            android:src="@drawable/ic_camera"
+            android:contentDescription="Camera" />
+
+        <EditText
+            android:id="@+id/etMessage"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_marginHorizontal="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_edittext"
+            android:hint="Type a message..."
+            android:paddingHorizontal="12dp"
+            android:textSize="14sp"
+            android:importantForAutofill="no"
+            android:inputType="textCapSentences" />
+
+        <ImageView
+            android:id="@+id/btnSend"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:background="@color/purple_primary"
+            android:padding="14dp"
+            android:src="@drawable/ic_send"
+            android:contentDescription="Send" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

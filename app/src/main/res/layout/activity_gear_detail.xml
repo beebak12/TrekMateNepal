@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="@color/white">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -17,17 +16,20 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- Hero image + back/fav overlay -->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="350dp">
+                android:layout_height="300dp">
 
                 <ImageView
                     android:id="@+id/imgGear"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:contentDescription="Gear image"
                     android:scaleType="centerCrop"
                     android:src="@drawable/jacket" />
 
+                <!-- Back button -->
                 <ImageView
                     android:id="@+id/btnBack"
                     android:layout_width="40dp"
@@ -35,245 +37,409 @@
                     android:layout_margin="16dp"
                     android:background="@drawable/bg_circle_blue"
                     android:backgroundTint="#80FFFFFF"
-                    android:padding="10dp"
+                    android:contentDescription="Back"
+                    android:padding="0dp"
                     android:src="@drawable/ic_back"
-                    app:tint="#333333" />
+                     />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_margin="16dp"
-                    android:orientation="horizontal">
+                <!-- Fav button -->
+                <ImageView
+                    android:id="@+id/btnFav"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="end|top"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/bg_circle_blue"
 
-                    <ImageView
-                        android:id="@+id/btnFav"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/bg_circle_blue"
-                        android:backgroundTint="#80FFFFFF"
-                        android:padding="10dp"
-                        android:src="@drawable/ic_favorite"
-                        app:tint="#333333" />
-
-                    <ImageView
-                        android:id="@+id/btnShare"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginStart="12dp"
-                        android:background="@drawable/bg_circle_blue"
-                        android:backgroundTint="#80FFFFFF"
-                        android:padding="10dp"
-                        android:src="@drawable/ic_addicon"
-                        app:tint="#333333" />
-                </LinearLayout>
+                    android:contentDescription="Favourite"
+                    android:padding="1dp"
+                    android:src="@drawable/ic_favourite"
+                     />
 
             </FrameLayout>
 
+            <!-- Detail content -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="10dp">
 
+                <!-- Name -->
                 <TextView
                     android:id="@+id/txtGearName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Down Jacket"
-                    android:textColor="#333333"
-                    android:textSize="24sp"
+                    android:textColor="@color/purple_primary"
+                    android:textSize="22sp"
                     android:textStyle="bold" />
 
+                <!-- Rating -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center_vertical">
+                    android:layout_marginTop="2dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="16dp"
                         android:layout_height="16dp"
-                        android:src="@drawable/ic_star"
-                        app:tint="#FFC107" />
+                        android:contentDescription="Star"
+                        android:src="@drawable/ic_star1"
+                         />
 
                     <TextView
                         android:id="@+id/txtRating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-                        android:text="4.8 (120 reviews)"
-                        android:textColor="#777777"
+                        android:text="4.8"
+                        android:textColor="@color/secondary_gray"
                         android:textSize="14sp" />
+
                 </LinearLayout>
 
+                <!-- Price -->
                 <TextView
                     android:id="@+id/txtPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="Rs. 300 / day"
-                    android:textColor="#5E35B1"
+                    android:layout_marginTop="10dp"
+                    android:text="Rs. 2,000 / week"
+                    android:textColor="@color/purple"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
+                <!-- Seller Info -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/lightpurple"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/imgSeller"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:src="@drawable/partner1"
+                        app:shapeAppearanceOverlay="@style/CircleImageStyle" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/txtAuthorName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="TrekMate User"
+                            android:textColor="@color/purple_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Verified Seller"
+                            android:textColor="@color/purple_primary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chat"
+                         />
+
+                </LinearLayout>
+
+                <!-- Description section -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:text="Description"
-                    android:textColor="#333333"
-                    android:textSize="18sp"
+                    android:textColor="@color/purple_primary"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txtDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="6dp"
                     android:lineSpacingExtra="4dp"
-                    android:text="High quality down jacket suitable for extreme cold weather and high altitude trekking. Lightweight, warm and water-resistant."
-                    android:textColor="#666666"
+                    android:text="High quality trekking gear."
+                    android:textColor="@color/darkGray"
                     android:textSize="14sp" />
 
-                <!-- Details Rows -->
+                <!-- Divider -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="16dp"
+                    android:background="@color/light_gray_border" />
+
+                <!-- Gear Information section -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Gear Information"
+                    android:textColor="@color/purple_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <!-- Category row -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:orientation="vertical">
+                    android:layout_marginTop="4dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="6dp">
 
-                    <!-- Category -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:contentDescription="Category"
+                        android:src="@drawable/baseline_apps_24"
+                        app:tint="@color/purple_primary" />
+
+                    <TextView
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:paddingVertical="8dp">
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:text="Category"
+                        android:textColor="@color/purple_primary"
+                        android:textSize="14sp" />
 
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/baseline_apps_24"
-                            app:tint="#777777" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:text="Category"
-                            android:textColor="#777777" />
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/detailCategory"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Trekking"
-                            android:textColor="#333333"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <!-- Brand -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/detailCategory"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingVertical="8dp">
+                        android:text="Clothing"
+                        android:textColor="@color/purple"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_profile"
-                            app:tint="#777777" />
+                </LinearLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:text="Brand"
-                            android:textColor="#777777" />
+                <!-- Size row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="6dp">
 
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:contentDescription="Size"
+                        android:src="@drawable/ic_all"
+                        app:tint="@color/purple_primary" />
 
-                        <TextView
-                            android:id="@+id/detailBrand"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="The North Face"
-                            android:textColor="#333333"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <!-- Availability -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:paddingVertical="8dp">
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:text="Size"
+                        android:textColor="@color/purple_primary"
+                        android:textSize="14sp" />
 
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_favourite"
-                            app:tint="#777777" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:text="Availability"
-                            android:textColor="#777777" />
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/detailAvailability"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="In Stock (12 available)"
-                            android:textColor="#333333"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <!-- Delivery -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/detailSize"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingVertical="8dp">
+                        android:text="Multiple Size"
+                        android:textColor="@color/purple"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_location"
-                            app:tint="#777777" />
+                </LinearLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:text="Delivery"
-                            android:textColor="#777777" />
+                <!-- Size row (using id detailBrand for backward compat) -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="6dp">
 
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:contentDescription="Size"
+                        android:src="@drawable/ic_profile"
+                         />
 
-                        <TextView
-                            android:id="@+id/detailDelivery"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Free delivery in Kathmandu"
-                            android:textColor="#333333"
-                            android:textStyle="bold" />
-                    </LinearLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:text="Size"
+                        android:textColor="@color/purple"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/detailBrand"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="M / L / XL"
+                        android:textColor="@color/purple"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <!-- Condition row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="6dp">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:contentDescription="Condition"
+                        android:src="@drawable/ic_star"
+                        app:tint="@color/secondary_gray" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:text="Condition"
+                        android:textColor="@color/purple_primary"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/detailCondition"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Excellent"
+                        android:textColor="@color/purple"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <!-- Availability row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="6dp">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:contentDescription="Availability"
+                        android:src="@drawable/ic_favorite"
+                        app:tint="@color/secondary_gray" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:text="Availability"
+                        android:textColor="@color/purple_primary"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/detailAvailability"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Available"
+                        android:textColor="@color/success_green"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <!-- Seller row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="6dp">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:contentDescription="Seller"
+                        android:src="@drawable/ic_profile"
+                         />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:text="Seller"
+                        android:textColor="@color/purple_primary"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/detailSeller"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Trek Gear Nepal"
+                        android:textColor="@color/purple"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <!-- Location row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="6dp">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:contentDescription="Location"
+                        android:src="@drawable/ic_location"
+                         />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:text="Location"
+                        android:textColor="@color/purple_primary"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/detailDelivery"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Kathmandu"
+                        android:textColor="@color/purple"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -281,11 +447,12 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
+    <!-- Bottom Rent Now button -->
     <LinearLayout
         android:id="@+id/bottomLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
+        android:background="@color/white"
         android:elevation="12dp"
         android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -293,14 +460,15 @@
         <Button
             android:id="@+id/btnRentNow"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:backgroundTint="#5E35B1"
+            android:layout_height="52dp"
+            android:backgroundTint="@color/purple"
             android:text="Rent Now"
             android:textAllCaps="false"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"
             app:cornerRadius="12dp" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

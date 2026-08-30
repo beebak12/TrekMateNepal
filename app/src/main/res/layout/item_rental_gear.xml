@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="6dp"
     app:cardCornerRadius="14dp"
     app:cardElevation="3dp">
 
@@ -12,43 +12,49 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <!-- Gear Image -->
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="140dp">
+            android:layout_height="100dp">
 
             <ImageView
                 android:id="@+id/imgGear"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:contentDescription="Gear image"
                 android:scaleType="centerCrop"
                 android:src="@drawable/jacket" />
 
+            <!-- Favourite icon -->
             <ImageView
                 android:id="@+id/btnFav"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="end|top"
-                android:layout_margin="10dp"
+                android:layout_margin="4dp"
+                android:contentDescription="Favourite"
                 android:src="@drawable/ic_favorite"
-                app:tint="#777777" />
+                 />
 
         </FrameLayout>
 
+        <!-- Text content -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/lightpurple"
             android:orientation="vertical"
             android:padding="10dp">
 
             <TextView
                 android:id="@+id/txtGearName"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="Down Jacket"
-                android:textColor="#333333"
-                android:textSize="14sp"
+                android:textColor="@color/purple_primary"
+                android:textSize="13sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -56,11 +62,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Rs. 300 / day"
-                android:textColor="#5E35B1"
-                android:textSize="13sp"
+                android:text="Rs. 2,000 / week"
+                android:textColor="@color/purple"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
+            <!-- Rating row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -69,24 +76,48 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
-                    android:src="@drawable/ic_star"
-                    app:tint="#FFC107" />
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:contentDescription="Star"
+                    android:src="@drawable/ic_star1"
+                    />
 
                 <TextView
                     android:id="@+id/txtGearRating"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_weight="1"
+                    android:text="4.8"
+                    android:textColor="@color/purple_primary"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/txtAvailability"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:text="4.8 (120)"
-                    android:textColor="#777777"
-                    android:textSize="12sp" />
+                    android:text="Available"
+                    android:textColor="@color/success_green"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
-        </LinearLayout>
+            <!-- Rent Now button -->
+            <Button
+                android:id="@+id/btnRentNow"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/purple"
+                android:text="Rent Now"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:cornerRadius="8dp" />
 
+        </LinearLayout>
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

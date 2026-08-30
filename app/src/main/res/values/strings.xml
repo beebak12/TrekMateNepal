@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">TrekMate Nepal</string>
     <string name="title_activity_login">LoginActivity</string>
@@ -5,16 +6,16 @@
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
+    <string name="welcome">Welcome!</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
+    <string name="login_failed">Login failed</string>
     <string name="hello_bibek">Hello, Bibek</string>
-    <string name="kathmandu_nepal">📍 Kathmandu, Nepal</string>
+    <string name="kathmandu_nepal">Kathmandu, Nepal</string>
     <string name="todo">TODO</string>
     <string name="search_trek_gear">Search Trek, Gear...</string>
     <string name="explore_nepal">Explore Nepal</string>
-    <string name="gear_up_team_up_trek_together">Gear Up • Team Up • Trek Together</string>
+    <string name="gear_up_team_up_trek_together">Gear Up Team Up Trek Together</string>
     <string name="explore_now">Explore Now</string>
     <string name="services">Services</string>
     <string name="rent_gear">Rent Gear</string>
@@ -28,9 +29,9 @@
     <string name="popular_treks">Popular Treks</string>
     <string name="view_all">View All</string>
     <string name="string">TODO</string>
-    <string name="profile_image" />
-    <string name="notifications" />
-    <string name="banner_image" />
+    <string name="profile_image"></string>
+    <string name="notifications"></string>
+    <string name="banner_image"></string>
     <string name="categories">Categories</string>
     <string name="Viewall">View all</string>
     <string name="trekking">Trekking</string>
@@ -50,4 +51,100 @@
     <string name="search_trekking_gear">Search trekking gear...</string>
     <string name="categorie">Categories</string>
     <string name="popular_rentals">Popular Rentals</string>
+
+    <!-- Gear Rental module strings -->
+    <string name="gear_details">Gear Details</string>
+    <string name="book_gear">Book Gear</string>
+    <string name="booking_summary">Booking Summary</string>
+    <string name="booking_confirmed">Booking Confirmed!</string>
+    <string name="my_bookings">My Bookings</string>
+    <string name="booking_details">Booking Details</string>
+    <string name="confirm_booking">Confirm Booking</string>
+    <string name="rent_now">Rent Now</string>
+    <string name="view_my_bookings">View My Bookings</string>
+    <string name="back_to_dashboard">Back to Dashboard</string>
+    <string name="no_gear_found">No gear matches your search.</string>
+    <string name="no_bookings_yet">You don\'t have any bookings yet.</string>
+    <string name="pickup_location_required">Pickup location is required</string>
+    <string name="end_date_error">End date must be after start date</string>
+
+    <!-- Partner Finder module strings -->
+    <string name="find_trek_partners">Find Trek Partners</string>
+    <string name="find_amazing_people">Find amazing people to trek together</string>
+    <string name="popular_destinations">Popular Destinations</string>
+    <string name="filters">Filters</string>
+    <string name="apply_filters">Apply Filters</string>
+    <string name="trek_partners">Trek Partners</string>
+    <string name="view_profile">View Profile</string>
+    <string name="partner_profile">Partner Profile</string>
+    <string name="send_trek_request">Send Trek Request</string>
+    <string name="send_request">Send Request</string>
+    <string name="request_sent">Request Sent!</string>
+    <string name="go_to_my_requests">Go to My Requests</string>
+    <string name="back_to_partners">Back to Partners</string>
+    <string name="my_requests">My Requests</string>
+    <string name="message_optional">Message (Optional)</string>
+    <string name="my_details">My Details</string>
+    <string name="no_partners_found">No partners found.</string>
+    <string name="no_requests_yet">No requests yet. Find a trek partner to send a request!</string>
+
+    <!-- Trek Packages and Guide Booking strings -->
+    <string name="available_guides">Available Guides</string>
+    <string name="guides_for">Guides for</string>
+    <string name="guides_found">Guides Found</string>
+    <string name="book_guide">Book a Guide</string>
+    <string name="guide_profile">Guide Profile</string>
+    <string name="select_dates">Select Dates</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="continue_text">Continue</string>
+    <string name="select_payment_method">Select Payment Method</string>
+    <string name="pay_now">Pay Now</string>
+    <string name="chat_with_guide">Chat with Guide</string>
+    <string name="licensed_guide">Licensed Guide</string>
+    <string name="years_experience">Years Experience</string>
+    <string name="verified">Verified</string>
+    <string name="about">About</string>
+    <string name="languages">Languages</string>
+    <string name="specializations">Specializations</string>
+    <string name="reviews">Reviews</string>
+    <string name="book_now">Book Now</string>
+    <string name="special_requests">Special Requests</string>
+    <string name="number_of_trekkers">Number of Trekkers</string>
+    <string name="total_amount">Total Amount</string>
+
+    <!-- Partner Finding - Spinner Options -->
+    <string-array name="trek_categories">
+        <item>All</item>
+        <item>Everest</item>
+        <item>Annapurna</item>
+        <item>Kilimanjaro</item>
+        <item>Manaslu</item>
+        <item>Langtang</item>
+        <item>Dhaulagiri</item>
+    </string-array>
+
+    <string-array name="experience_levels">
+        <item>Any</item>
+        <item>Beginner</item>
+        <item>Intermediate</item>
+        <item>Expert</item>
+    </string-array>
+
+    <string-array name="available_options">
+        <item>Any Partner</item>
+        <item>Available Now</item>
+        <item>Verified Only</item>
+    </string-array>
+
+    <string-array name="number_of_days">
+        <item>1 Day</item>
+        <item>2 Days</item>
+        <item>3 Days</item>
+        <item>4 Days</item>
+        <item>5 Days</item>
+        <item>6 Days</item>
+        <item>7 Days</item>
+        <item>7+ Days</item>
+    </string-array>
+
 </resources>

@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="Booking Confirmed!"
-            android:textColor="#333333"
+            android:textColor="@color/purple_primary"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -39,7 +39,7 @@
             android:layout_marginTop="12dp"
             android:gravity="center"
             android:text="Your booking has been placed successfully.\nWe have sent the confirmation to your email."
-            android:textColor="#777777"
+            android:textColor="@color/purple_primary"
             android:textSize="14sp" />
 
         <androidx.cardview.widget.CardView
@@ -65,12 +65,12 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Booking ID"
-                        android:textColor="#777777" />
+                        android:textColor="@color/purple_primary" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="TM0123456"
-                        android:textColor="#333333"
+                        android:textColor="@color/purple_primary"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -84,12 +84,12 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Gear"
-                        android:textColor="#777777" />
+                        android:textColor="@color/purple_primary" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Down Jacket"
-                        android:textColor="#333333"
+                        android:textColor="@color/purple_primary"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -103,12 +103,12 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Dates"
-                        android:textColor="#777777" />
+                        android:textColor="@color/purple_primary" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="20 May - 25 May 2025"
-                        android:textColor="#333333"
+                        android:textColor="@color/purple_primary"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -122,12 +122,12 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Total Amount"
-                        android:textColor="#777777" />
+                        android:textColor="@color/purple_primary" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Rs. 1,350"
-                        android:textColor="#333333"
+                        android:textColor="@color/purple_primary"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -141,12 +141,12 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Payment Method"
-                        android:textColor="#777777" />
+                        android:textColor="@color/purple_primary" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="eSewa"
-                        android:textColor="#333333"
+                        android:textColor="@color/purple_primary"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -160,7 +160,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Status"
-                        android:textColor="#777777" />
+                        android:textColor="@color/purple_primary" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -195,7 +195,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:text="Back to Home"
-        android:textColor="#777777"
+        android:textColor="@color/purple_primary"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

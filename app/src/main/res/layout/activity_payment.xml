@@ -11,6 +11,7 @@
         android:id="@+id/headerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/purple_primary"
         android:padding="16dp"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -23,13 +24,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="#333333" />
+             />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Payment"
-            android:textColor="#333333"
+            android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -57,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Booking Summary"
-                android:textColor="#333333"
+                android:textColor="@color/purple_primary"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -72,6 +73,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:background="@color/lightpurple"
                     android:padding="16dp">
 
                     <LinearLayout
@@ -83,12 +85,12 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Down Jacket"
-                            android:textColor="#666666" />
+                            android:textColor="@color/purple_primary" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Rs. 300 / day"
-                            android:textColor="#333333"
+                            android:textColor="@color/purple_primary"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -102,12 +104,12 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Days"
-                            android:textColor="#666666" />
+                            android:textColor="@color/purple_primary" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="5 days"
-                            android:textColor="#333333"
+                            android:textColor="@color/purple_primary"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -126,12 +128,12 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Subtotal"
-                            android:textColor="#666666" />
+                            android:textColor="@color/purple_primary" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Rs. 1,500"
-                            android:textColor="#333333"
+                            android:textColor="@color/purple_primary"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -145,12 +147,12 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Delivery Fee"
-                            android:textColor="#666666" />
+                            android:textColor="@color/purple_primary" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Rs. 0"
-                            android:textColor="#333333"
+                            android:textColor="@color/purple_primary"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -164,7 +166,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Discount"
-                            android:textColor="#666666" />
+                            android:textColor="@color/purple_primary" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -188,14 +190,14 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Total Amount"
-                            android:textColor="#333333"
+                            android:textColor="@color/purple_primary"
                             android:textSize="16sp"
                             android:textStyle="bold" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Rs. 1,350"
-                            android:textColor="#5E35B1"
+                            android:textColor="@color/purple_primary"
                             android:textSize="18sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -210,7 +212,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
                 android:text="Select Payment Method"
-                android:textColor="#333333"
+                android:textColor="@color/purple_primary"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -235,7 +237,7 @@
                         android:checked="true"
                         android:buttonTint="#5E35B1"
                         android:text="eSewa"
-                        android:textColor="#333333"
+                        android:textColor="@color/purple_primary"
                         android:textStyle="bold" />
                 </androidx.cardview.widget.CardView>
 
@@ -253,7 +255,7 @@
                         android:padding="16dp"
                         android:buttonTint="#5E35B1"
                         android:text="Khalti"
-                        android:textColor="#333333"
+                        android:textColor="@color/purple_primary"
                         android:textStyle="bold" />
                 </androidx.cardview.widget.CardView>
 
@@ -271,7 +273,7 @@
                         android:padding="16dp"
                         android:buttonTint="#5E35B1"
                         android:text="Card (Visa, MasterCard)"
-                        android:textColor="#333333"
+                        android:textColor="@color/purple_primary"
                         android:textStyle="bold" />
                 </androidx.cardview.widget.CardView>
 
@@ -289,7 +291,7 @@
                         android:padding="16dp"
                         android:buttonTint="#5E35B1"
                         android:text="Cash on Delivery"
-                        android:textColor="#333333"
+                        android:textColor="@color/purple_primary"
                         android:textStyle="bold" />
                 </androidx.cardview.widget.CardView>
 
@@ -326,7 +328,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
             android:text="Your payment is secure and encrypted"
-            android:textColor="#777777"
+            android:textColor="@color/purple_primary"
             android:textSize="12sp" />
     </LinearLayout>
 

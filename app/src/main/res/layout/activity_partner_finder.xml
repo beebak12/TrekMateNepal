@@ -1,6 +1,508 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <!-- Header -->
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:elevation="4dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="2dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="6dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:background="@color/lightpurple"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:contentDescription="Back"
+                android:padding="4dp"
+                android:src="@drawable/ic_back"
+                 />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="12dp"
+                android:text="Trekking Partners"
+                android:textColor="@color/purple_primary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/btnChat"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:contentDescription="Messages"
+                android:padding="0dp"
+                android:src="@drawable/ic_chat_fab"
+                app:tint="@color/purple_primary" />
+
+        </LinearLayout>
+
+        <!-- Tabs (Find Partners, Requests, My Requests) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <LinearLayout
+                android:id="@+id/tabFindPartners"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:id="@+id/tvTabFindPartners"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="2dp"
+                    android:text="Find Partners"
+                    android:textColor="@color/purple_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:id="@+id/indicatorFindPartners"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/purple_primary" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tabRequests"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:id="@+id/tvTabRequests"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="2dp"
+                    android:text="Requests"
+                    android:textColor="@color/secondary_gray"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:id="@+id/indicatorRequests"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@android:color/transparent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tabMyRequests"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:id="@+id/tvTabMyRequests"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="2dp"
+                    android:text="My Requests"
+                    android:textColor="@color/secondary_gray"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:id="@+id/indicatorMyRequests"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@android:color/transparent" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Scrollable content -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- 1. Find Partners Content (Restored Filter Options) -->
+            <LinearLayout
+                android:id="@+id/contentFindPartners"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="2dp"
+                android:visibility="visible">
+
+                <!-- Search bar -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:background="@drawable/rounded_edittext"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="14dp">
+
+                    <EditText
+                        android:id="@+id/etSearch"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:hint="Search destinations or keywords..."
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:contentDescription="Search"
+                        android:src="@drawable/ic_search"
+                        app:tint="@color/purple_primary" />
+
+                </LinearLayout>
+
+                <!-- Popular Destinations -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="Popular Destinations"
+                    android:textColor="@color/purple_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:id="@+id/chipGroup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/chipEBC"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/bg_chip_purple"
+                            android:gravity="center"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="8dp"
+                            android:text="Everest Base Camp"
+                            android:textColor="@color/purple_primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/chipABC"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/bg_chip_purple"
+                            android:gravity="center"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="8dp"
+                            android:text="Annapurna Base Camp"
+                            android:textColor="@color/purple_primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/chipLangtang"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/bg_chip_purple"
+                            android:gravity="center"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="8dp"
+                            android:text="Langtang Valley"
+                            android:textColor="@color/purple_primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/chipMardi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/bg_chip_purple"
+                            android:gravity="center"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="8dp"
+                            android:text="Mardi Himal"
+                            android:textColor="@color/purple_primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/chipManaslu"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/bg_chip_purple"
+                            android:gravity="center"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="8dp"
+                            android:text="Manaslu Circuit"
+                            android:textColor="@color/purple_primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+                <!-- Detailed Filters (Restored Vertical Layout) -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="2dp"
+                    android:text="Filters"
+                    android:textColor="@color/purple_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <!-- Destination filter -->
+                <LinearLayout
+                    android:id="@+id/filterDestination"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@color/lightpurple"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="14dp"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="📍" android:textSize="16sp" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:layout_weight="1" android:text="Destination" android:textColor="@color/purple_primary" android:textSize="14sp" android:textStyle="bold" />
+                    <TextView android:id="@+id/tvFilterDestination" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="All  ›" android:textColor="@color/purple_primary" android:textSize="13sp" android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Trek Date filter -->
+                <LinearLayout
+                    android:id="@+id/filterTrekDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@color/lightpurple"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="14dp"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="📅" android:textSize="16sp" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:layout_weight="1" android:text="Trek Date" android:textColor="@color/purple_primary" android:textSize="14sp" android:textStyle="bold" />
+                    <TextView android:id="@+id/tvFilterDate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Anytime  ›" android:textColor="@color/purple_primary" android:textSize="13sp" android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Duration filter -->
+                <LinearLayout
+                    android:id="@+id/filterDuration"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@color/lightpurple"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="14dp"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⏱" android:textSize="16sp" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:layout_weight="1" android:text="Duration" android:textColor="@color/purple_primary" android:textSize="14sp" android:textStyle="bold" />
+                    <TextView android:id="@+id/tvFilterDuration" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Any  ›" android:textColor="@color/purple_primary" android:textSize="13sp" android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Gender filter -->
+                <LinearLayout
+                    android:id="@+id/filterGender"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@color/lightpurple"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="14dp"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="👤" android:textSize="16sp" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:layout_weight="1" android:text="Gender" android:textColor="@color/purple_primary" android:textSize="14sp" android:textStyle="bold" />
+                    <TextView android:id="@+id/tvFilterGender" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Any  ›" android:textColor="@color/purple_primary" android:textSize="13sp" android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Group Type filter -->
+                <LinearLayout
+                    android:id="@+id/filterGroupType"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@color/lightpurple"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="14dp"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="👥" android:textSize="16sp" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:layout_weight="1" android:text="Group Type" android:textColor="@color/purple_primary" android:textSize="14sp" android:textStyle="bold" />
+                    <TextView android:id="@+id/tvFilterGroup" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Any  ›" android:textColor="@color/purple_primary" android:textSize="13sp" android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Apply Filters button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnApplyFilters"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:backgroundTint="@color/purple_primary"
+                    android:text="Apply Filters"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="12dp" />
+
+                <!-- Results Section (Visible after Apply Filters) -->
+                <LinearLayout
+                    android:id="@+id/layoutResults"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tvResultsTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:text="Available Partners"
+                        android:textColor="@color/purple_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerPartners"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"
+                        tools:listitem="@layout/item_partner_list" />
+
+                    <TextView
+                        android:id="@+id/tvEmptyResults"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center"
+                        android:text="No partners found matching your filters."
+                        android:textColor="@color/secondary_gray"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- 2. Requests Content -->
+            <LinearLayout
+                android:id="@+id/contentRequests"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:visibility="gone">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerRequests"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    tools:listitem="@layout/item_partner_request" />
+
+                <TextView
+                    android:id="@+id/tvEmptyRequests"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="100dp"
+                    android:gravity="center"
+                    android:text="No trek requests received yet."
+                    android:textColor="@color/secondary_gray"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+            <!-- 3. My Requests Content -->
+            <LinearLayout
+                android:id="@+id/contentMyRequests"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:visibility="gone">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerMyRequests"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    tools:listitem="@layout/item_request_card" />
+
+                <TextView
+                    android:id="@+id/tvEmptyMyRequests"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="100dp"
+                    android:gravity="center"
+                    android:text="You haven't sent any trek requests yet."
+                    android:textColor="@color/secondary_gray"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

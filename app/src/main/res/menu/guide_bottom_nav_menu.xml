@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/guide_nav_home"
+        android:icon="@drawable/ic_homeicon2"
+        android:title="Home"/>
+
+    <item
+        android:id="@+id/guide_nav_requests"
+        android:icon="@drawable/ic_notification"
+        android:title="Requests"/>
+
+    <!-- Placeholder for center FAB -->
+    <item
+        android:id="@+id/guide_nav_placeholder"
+        android:enabled="false"
+        android:title=""/>
+
+    <item
+        android:id="@+id/guide_nav_packages"
+        android:icon="@drawable/baseline_apps_24"
+        android:title="Packages"/>
+
+    <item
+        android:id="@+id/guide_nav_profile"
+        android:icon="@drawable/ic_profile"
+        android:title="Profile"/>
+
+</menu>

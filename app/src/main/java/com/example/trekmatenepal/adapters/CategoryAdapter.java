@@ -53,19 +53,27 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         if (selectedPosition == position) {
 
+            // Selected: solid purple chip, white text AND white icon
             holder.card.setCardBackgroundColor(
                     holder.itemView.getResources().getColor(R.color.purple));
 
             holder.txtCategoryName.setTextColor(
-                    holder.itemView.getResources().getColor(android.R.color.white));
+                    holder.itemView.getResources().getColor(R.color.white));
+
+            holder.imgCategory.setColorFilter(
+                    holder.itemView.getResources().getColor(R.color.white));
 
         } else {
 
+            // Unselected: light-purple chip, purple text AND purple icon (matches item_category.xml)
             holder.card.setCardBackgroundColor(
-                    holder.itemView.getResources().getColor(android.R.color.white));
+                    holder.itemView.getResources().getColor(R.color.lightpurple));
 
             holder.txtCategoryName.setTextColor(
-                    holder.itemView.getResources().getColor(android.R.color.black));
+                    holder.itemView.getResources().getColor(R.color.purple));
+
+            holder.imgCategory.setColorFilter(
+                    holder.itemView.getResources().getColor(R.color.purple));
 
         }
 

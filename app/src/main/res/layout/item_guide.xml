@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:gravity="center_vertical">
+
+        <!-- Guide Profile Image -->
+        <ImageView
+            android:id="@+id/imgGuide"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="Guide Profile"
+            app:shapeAppearanceOverlay="@style/CircleImageStyle" />
+
+        <!-- Guide Info -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp">
+
+            <!-- Name -->
+            <TextView
+                android:id="@+id/txtGuideName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Guide Name"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/purple_primary" />
+
+            <!-- Designation -->
+            <TextView
+                android:id="@+id/txtDesignation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Licensed Guide"
+                android:textSize="12sp"
+                android:textColor="@color/secondary_gray"
+                android:layout_marginTop="2dp" />
+
+            <!-- Experience -->
+            <TextView
+                android:id="@+id/txtExperience"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="8+ Years Experience"
+                android:textSize="12sp"
+                android:textColor="@color/secondary_gray"
+                android:layout_marginTop="2dp" />
+
+            <!-- Languages -->
+            <TextView
+                android:id="@+id/txtLanguages"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Speaks: English, Nepali"
+                android:textSize="12sp"
+                android:textColor="@color/secondary_gray"
+                android:layout_marginTop="2dp" />
+
+        </LinearLayout>
+
+        <!-- Right Side: Rating and Price -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="end"
+            android:layout_marginStart="8dp">
+
+            <!-- Rating Row -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_star"
+                    android:contentDescription="Rating Star"
+                    app:tint="@color/orange"
+                    android:layout_marginEnd="4dp" />
+
+                <TextView
+                    android:id="@+id/txtRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4.9"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/purple_primary" />
+
+                <TextView
+                    android:id="@+id/txtReviews"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(120)"
+                    android:textSize="12sp"
+                    android:textColor="@color/secondary_gray"
+                    android:layout_marginStart="4dp" />
+
+            </LinearLayout>
+
+            <!-- Price -->
+            <TextView
+                android:id="@+id/txtDailyPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rs. 2,500/day"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="@color/purple_primary"
+                android:layout_marginTop="4dp" />
+
+            <!-- Arrow Icon -->
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_back"
+                android:contentDescription="View Guide"
+                android:scaleType="centerInside"
+                android:rotation="180"
+                app:tint="@color/purple_primary"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

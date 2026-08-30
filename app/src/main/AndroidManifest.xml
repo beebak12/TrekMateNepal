@@ -2,7 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
+
+        android:usesCleartextTraffic="true"
+
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -12,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TrekMateNepal">
 
+
+
+        <!-- ── Launcher ── -->
         <activity
             android:name=".activities.SplashActivity"
             android:exported="true">
@@ -21,62 +29,94 @@
             </intent-filter>
         </activity>
 
+        <!-- ── Auth flow ── -->
+        <activity
+            android:name=".activities.StartscreenActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize" />
-
-        <activity
-            android:name=".activities.StartscreenActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".activities.SignupActivity"
-            android:exported="false"
+            android:exported="true"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".activities.ForgotPasswordActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.ForgotPasswordEmailActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.ForgotPasswordPhoneActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.VerifyOtpActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.ResetPasswordActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.PasswordUpdatedActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
 
+        <!-- ── Core screens ── -->
         <activity
             android:name=".activities.DashboardActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-
-        <activity
-            android:name=".activities.TrekListActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".activities.ProfileActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".activities.NotificationActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.SearchActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.CategoryActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
 
+        <!-- ── Trek module ── -->
+        <activity
+            android:name=".activities.TrekListActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.TrekPackageActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
-            android:name=".activities.PostGearActivity"
+            android:name=".activities.TrekDetailsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.TrekBookingActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.PopularTreksActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
-        <activity
-            android:name=".activities.PartnerFinderActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-
+        <!-- ── Gear Rental module ── -->
         <activity
             android:name=".activities.GearRentalActivity"
             android:exported="false"
@@ -85,38 +125,267 @@
             android:name=".activities.GearDetailActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
-            android:name=".activities.TrekDetailsActivity"
+            android:name=".activities.PostGearActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
-            android:name=".activities.TrekBookingActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
+            android:name=".activities.FullScreenImageActivity"
+            android:exported="false" />
 
+        <!-- ── Booking module ── -->
         <activity
             android:name=".activities.BookingActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
-            android:name=".activities.PaymentActivity"
+            android:name=".activities.BookingSummaryActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-
+        <activity
+            android:name=".activities.BookingConfirmationActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.BookingConfirmedActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.BookingSuccessActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-
+        <activity
+            android:name=".activities.BookingDetailsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.MyBookingsActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.PaymentActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.PaymentMethodActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.AvailableGuidesActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.GuideProfileActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.TrekPackageDetailsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.SelectDatesActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
 
+        <!-- ── Guide Side Activities ── -->
+        <activity
+            android:name=".activities.RoleSelectionActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.GuideDashboardActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.GuideBookingRequestsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.GuideBookingDetailsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.GuidePackagesActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.GuideAddPackageActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.GuideEditPackageActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.GuideAvailabilityActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.GuideEarningsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.GuideEditProfileActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.GuideChatActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.GuideNotificationsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
 
+        <!-- ── Partner Finder module ── -->
+        <activity
+            android:name=".activities.PartnerFindingActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.PartnerHomeActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.PartnerSearchActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.PartnerProfileActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.SendJoinRequestActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.PartnerFinderActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.PartnerListActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.SendTrekRequestActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.RequestSentActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.MyRequestsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.AccountInformationActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.MyGearsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.MyPostedGearsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.MyTrekPostsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.MyTrekPartnersActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- ── Chat module ── -->
+        <activity
+            android:name=".activities.ChatActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.PostPartnerRequestActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.PostDetailActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.TrekPostsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- ── Settings & Placeholder activities ── -->
+        <activity
+            android:name=".activities.NotificationSettingsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.PrivacySettingsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.AppPreferencesActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.DataStorageActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.HelpInformationActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.ChangePasswordActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.LoginSecurityActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.BlockedUsersActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.DownloadedTreksActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.DataUsageActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.HelpCenterActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.FAQActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.ContactSupportActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.ReportProblemActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.TermsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.PrivacyPolicyActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.AboutActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
 
     </application>
 

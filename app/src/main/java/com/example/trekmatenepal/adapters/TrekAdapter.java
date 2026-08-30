@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trekmatenepal.R;
-import com.example.trekmatenepal.activities.TrekBookingActivity;
+import com.example.trekmatenepal.activities.TrekPackageDetailsActivity;
 import com.example.trekmatenepal.models.TrekModel;
 
 import java.util.List;
@@ -41,28 +41,34 @@ public class TrekAdapter extends RecyclerView.Adapter<TrekAdapter.ViewHolder> {
         TrekModel trek = trekList.get(position);
         Context context = holder.itemView.getContext();
 
-        holder.image.setImageResource(trek.getImage());
+        int imageRes = trek.getImage();
+        if (isValidDrawable(holder.itemView, imageRes)) {
+            holder.image.setImageResource(imageRes);
+        } else {
+            holder.image.setImageResource(R.drawable.everest);
+        }
+
         holder.name.setText(trek.getTrekName());
         holder.duration.setText(trek.getDuration());
         holder.rating.setText(trek.getRating());
         holder.reviews.setText("(" + trek.getReviews() + ")");
 
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, TrekBookingActivity.class);
-            intent.putExtra("name", trek.getTrekName());
-            intent.putExtra("location", trek.getLocation());
-            intent.putExtra("duration", trek.getDuration());
-            intent.putExtra("rating", trek.getRating());
-            intent.putExtra("reviews", trek.getReviews());
-            intent.putExtra("image", trek.getImage());
-            intent.putExtra("difficulty", trek.getDifficulty());
-            intent.putExtra("altitude", trek.getAltitude());
-            intent.putExtra("distance", trek.getDistance());
-            intent.putExtra("description", trek.getDescription());
-            intent.putExtra("fee", trek.getFee());
+            Intent intent = new Intent(context, TrekPackageDetailsActivity.class);
+            intent.putExtra("trek", trek);
             context.startActivity(intent);
         });
 
+    }
+
+    private boolean isValidDrawable(View v, int resourceId) {
+        if (resourceId <= 0) return false;
+        try {
+            String type = v.getContext().getResources().getResourceTypeName(resourceId);
+            return "drawable".equals(type) || "mipmap".equals(type);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override

@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/purple_primary">
+
+    <!-- Header -->
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btnMenu"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="Menu"
+            android:src="@drawable/ic_menu_vector"
+            app:tint="@color/white" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="TrekMate Nepal"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/btnNotification"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:contentDescription="Notifications"
+            android:src="@drawable/ic_notification"
+            app:tint="@color/white" />
+
+    </LinearLayout>
+
+    <!-- Main Content Card -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:cardCornerRadius="32dp"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout"
+        app:shapeAppearanceOverlay="@style/RoundedSquare8">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/lightpurple"
+                android:padding="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Post Trek / Partner Request"
+                    android:textColor="@color/purple_primary"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Share your trek plan and find partners"
+                    android:textColor="@color/purple_primary"
+                    android:textSize="14sp" />
+
+                <!-- Trek / Route -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Trek / Route"
+                    android:textColor="@color/purple_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spinnerTrek"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_white_rounded_outline"
+                    android:paddingHorizontal="12dp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilCustomTrek"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:hint="Enter Custom Trek Name"
+                    android:visibility="gone"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etCustomTrek"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Route Image Selection -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Route Image (Optional)"
+                    android:textColor="@color/purple_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <FrameLayout
+                    android:id="@+id/layoutSelectRouteImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_white_rounded_outline"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/imgRoutePreview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/layoutAddImageIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_addicon"
+                            app:tint="@color/secondary_gray" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Add Route Image"
+                            android:textColor="@color/secondary_gray"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </FrameLayout>
+
+                <!-- Date Selection -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Start Date"
+                            android:textColor="@color/purple_primary"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutStartDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/bg_white_rounded_outline"
+                            android:gravity="center_vertical"
+                            android:paddingHorizontal="12dp">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_calendar_purple" />
+
+                            <TextView
+                                android:id="@+id/tvStartDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="Select Date"
+                                android:textColor="@color/secondary_gray"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="End Date"
+                            android:textColor="@color/purple_primary"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutEndDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/bg_white_rounded_outline"
+                            android:gravity="center_vertical"
+                            android:paddingHorizontal="12dp">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_calendar_purple" />
+
+                            <TextView
+                                android:id="@+id/tvEndDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="Select Date"
+                                android:textColor="@color/secondary_gray"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Partners Needed -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Number of Partners Needed"
+                    android:textColor="@color/purple_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spinnerPartners"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_white_rounded_outline"
+                    android:paddingHorizontal="12dp" />
+
+                <!-- Experience & Location -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Experience Level"
+                            android:textColor="@color/purple_primary"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <Spinner
+                            android:id="@+id/spinnerExperience"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/bg_white_rounded_outline" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Starting Location"
+                            android:textColor="@color/purple_primary"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/bg_white_rounded_outline"
+                            android:gravity="center_vertical"
+                            android:paddingHorizontal="12dp">
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:src="@drawable/ic_location"
+                                app:tint="@color/secondary_gray" />
+
+                            <EditText
+                                android:id="@+id/etLocation"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="6dp"
+                                android:background="@android:color/transparent"
+                                android:hint="Kathmandu"
+                                android:inputType="text"
+                                android:textColor="@color/purple_primary"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Budget -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Budget (Optional)"
+                    android:textColor="@color/purple_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etBudget"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_white_rounded_outline"
+                    android:hint="Rs. 50,000"
+                    android:inputType="text"
+                    android:paddingHorizontal="12dp"
+                    android:textColor="@color/purple_primary"
+                    android:textSize="13sp" />
+
+                <!-- About -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="About Your Trek"
+                    android:textColor="@color/purple_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etAbout"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_white_rounded_outline"
+                    android:gravity="top"
+                    android:hint="Looking for trekking partners to join me..."
+                    android:inputType="textMultiLine"
+                    android:padding="12dp"
+                    android:textColor="@color/purple_primary"
+                    android:textSize="13sp" />
+
+                <!-- Post Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnPost"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginBottom="24dp"
+                    android:backgroundTint="@color/purple_primary"
+                    android:text="Post Trek Request"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="28dp" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

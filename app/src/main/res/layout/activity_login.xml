@@ -47,7 +47,7 @@
             android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:hint="Email or Phone"
+            android:hint="Email / Phone / username"
             android:textColor="#FFFFFF"
             android:textColorHint="#BDBDBD"
             android:background="@drawable/bg_edittext"

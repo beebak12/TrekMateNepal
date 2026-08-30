@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <include
+        android:id="@+id/headerLayout"
+        layout="@layout/layout_header_simple" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="40dp">
+
+            <TextView
+                style="@style/SettingsHeader"
+                android:text="PROFILE VISIBILITY" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/SettingsCard">
+                <include android:id="@+id/optProfileVisibility" layout="@layout/item_settings_row" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                style="@style/SettingsHeader"
+                android:text="CONTACT INFORMATION" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/SettingsCard">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                    <include android:id="@+id/optShowPhone" layout="@layout/item_settings_row" />
+                    <include android:id="@+id/optShowEmail" layout="@layout/item_settings_row" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                style="@style/SettingsHeader"
+                android:text="MESSAGING &amp; REQUESTS" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/SettingsCard">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                    <include android:id="@+id/optWhoCanMessage" layout="@layout/item_settings_row" />
+                    <include android:id="@+id/optWhoCanSendRequests" layout="@layout/item_settings_row" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                style="@style/SettingsHeader"
+                android:text="ONLINE STATUS" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/SettingsCard">
+                <include android:id="@+id/optShowOnline" layout="@layout/item_settings_row" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                style="@style/SettingsHeader"
+                android:text="BLOCKED USERS" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/SettingsCard">
+                <include android:id="@+id/optBlockedUsers" layout="@layout/item_settings_row" />
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

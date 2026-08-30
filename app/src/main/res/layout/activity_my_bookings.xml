@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
+        android:background="@color/purple_primary"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -23,13 +24,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="#333333" />
+             />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="My Bookings"
-            android:textColor="#333333"
+            android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -69,10 +70,23 @@
 
     </com.google.android.material.tabs.TabLayout>
 
+    <TextView
+        android:id="@+id/tvEmptyBookings"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="You don't have any bookings yet."
+        android:textColor="@color/purple_primary"
+        android:textSize="15sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/includeBottomNav"
+        app:layout_constraintTop_toBottomOf="@id/tabLayout" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerBookings"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:clipToPadding="false"
         android:padding="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/includeBottomNav"

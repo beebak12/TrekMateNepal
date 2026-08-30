@@ -3,15 +3,15 @@
 
     <item
         android:id="@+id/nav_home"
-        android:icon="@drawable/ic_homeicon"
+        android:icon="@drawable/ic_home_clean"
         android:title="Home" />
 
     <item
         android:id="@+id/nav_gear"
-        android:icon="@drawable/ic_gear"
-        android:title="Gears"/>
+        android:icon="@drawable/ic_shopping_bag"
+        android:title="Gear"/>
 
-    <!-- Placeholder for center FAB - no icon needed here -->
+    <!-- Placeholder for center FAB -->
     <item
         android:id="@+id/nav_add_placeholder"
         android:enabled="false"
@@ -19,12 +19,12 @@
 
     <item
         android:id="@+id/nav_partner"
-        android:icon="@drawable/ic_partnericon"
+        android:icon="@drawable/ic_partners_vector"
         android:title="Partners"/>
 
     <item
         android:id="@+id/nav_profile"
-        android:icon="@drawable/ic_menu"
+        android:icon="@drawable/ic_menu_vector"
         android:title="Menu"/>
 
 </menu>

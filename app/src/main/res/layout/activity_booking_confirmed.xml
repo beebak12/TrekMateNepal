@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="32dp">
+
+        <!-- Success Circle Icon -->
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_check_circle"
+            android:contentDescription="Success"
+            app:tint="@color/success_green"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Booking Confirmed!"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="@color/purple_primary"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Message -->
+        <TextView
+            android:id="@+id/tvMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Your booking with Pemba Sherpa has been confirmed."
+            android:textSize="15sp"
+            android:textColor="@color/purple_primary"
+            android:gravity="center"
+            android:lineSpacingExtra="4dp"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Booking ID Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="@color/white"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Booking ID"
+                android:textSize="12sp"
+                android:textColor="@color/purple_primary"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tvBookingId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BK-2025-0001234"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/purple_primary"
+                android:fontFamily="monospace" />
+
+        </LinearLayout>
+
+        <!-- Button Container -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:spacing="12dp">
+
+            <Button
+                android:id="@+id/btnViewBookings"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="View My Bookings"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/purple_primary"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_marginBottom="8dp" />
+
+            <Button
+                android:id="@+id/btnBackHome"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Go to Dashboard"
+                android:textColor="@color/purple_primary"
+                android:backgroundTint="@color/white"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

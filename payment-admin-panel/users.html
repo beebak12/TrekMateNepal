@@ -16,6 +16,7 @@
     <title>TrekMate Nepal | User Management</title>
 
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/navigation.css">
 </head>
 
 <body>
@@ -33,25 +34,65 @@
             </div>
 
             <nav class="sidebar-navigation" aria-label="Main navigation">
-                <a class="navigation-item" href="index.html">
+
+                <a
+                    class="navigation-item"
+                    href="index.html"
+                >
                     <span class="navigation-icon">▦</span>
                     Payment Dashboard
                 </a>
 
-                <a class="navigation-item" href="index.html#transactions">
+                <a
+                    class="navigation-item"
+                    href="index.html#transactions"
+                >
                     <span class="navigation-icon">⇄</span>
                     Transactions
                 </a>
 
-                <a class="navigation-item active" href="users.html">
-                    <span class="navigation-icon">♙</span>
-                    Users
-                </a>
+                <!-- Users and Gear dropdown -->
+                <div
+                    class="navigation-group open"
+                    id="usersNavigationGroup"
+                >
+                    <button
+                        class="navigation-item users-menu-toggle active"
+                        id="usersMenuToggle"
+                        type="button"
+                        aria-expanded="true"
+                        aria-controls="usersSubmenu"
+                    >
+                        <span class="navigation-icon">♙</span>
+                        Users &amp; Gear
+                        <span class="menu-chevron">⌄</span>
+                    </button>
 
-                <button class="navigation-item" id="providerNavigation">
-                    <span class="navigation-icon">♢</span>
-                    Providers & Gear
-                </button>
+                    <div
+                        class="navigation-submenu"
+                        id="usersSubmenu"
+                    >
+                        <a
+                            class="subnavigation-item"
+                            href="users.html#users"
+                            data-user-view="users"
+                        >
+                            <span class="subnavigation-dot"></span>
+                            Users
+                        </a>
+
+                        <a
+                            class="subnavigation-item"
+                            id="providerNavigation"
+                            href="users.html#providers"
+                            data-user-view="providers"
+                        >
+                            <span class="subnavigation-dot"></span>
+                            Providers &amp; Gear
+                        </a>
+                    </div>
+                </div>
+
             </nav>
 
             <div class="sidebar-footer">
@@ -80,13 +121,17 @@
 
                     <div>
                         <h2>User Management</h2>
+
                         <p>
                             Manage customers, providers and rental activity
                         </p>
                     </div>
                 </div>
 
-                <button class="primary-button add-user-button" id="addUserButton">
+                <button
+                    class="primary-button add-user-button"
+                    id="addUserButton"
+                >
                     + Add User
                 </button>
             </header>
@@ -115,6 +160,7 @@
                     </div>
 
                     <strong id="totalUsers">0</strong>
+
                     <small>Customers and gear providers</small>
                 </article>
 
@@ -125,6 +171,7 @@
                     </div>
 
                     <strong id="totalProviders">0</strong>
+
                     <small>Registered rental providers</small>
                 </article>
 
@@ -135,6 +182,7 @@
                     </div>
 
                     <strong id="totalGearItems">0</strong>
+
                     <small>Total items listed by providers</small>
                 </article>
 
@@ -145,6 +193,7 @@
                     </div>
 
                     <strong id="totalCompletedRentals">0</strong>
+
                     <small>Completed gear bookings</small>
                 </article>
 
@@ -155,13 +204,17 @@
                 <div class="panel-header user-table-header">
                     <div>
                         <h3>Registered Users</h3>
+
                         <p>
                             View and manage TrekMate customers and providers
                         </p>
                     </div>
 
                     <div class="table-controls">
-                        <label for="userSearch" class="visually-hidden">
+                        <label
+                            for="userSearch"
+                            class="visually-hidden"
+                        >
                             Search users
                         </label>
 
@@ -171,24 +224,46 @@
                             placeholder="Search name, email or ID"
                         >
 
-                        <label for="roleFilter" class="visually-hidden">
+                        <label
+                            for="roleFilter"
+                            class="visually-hidden"
+                        >
                             Filter by role
                         </label>
 
                         <select id="roleFilter">
-                            <option value="all">All roles</option>
-                            <option value="customer">Customers</option>
-                            <option value="provider">Providers</option>
+                            <option value="all">
+                                All roles
+                            </option>
+
+                            <option value="customer">
+                                Customers
+                            </option>
+
+                            <option value="provider">
+                                Providers
+                            </option>
                         </select>
 
-                        <label for="userStatusFilter" class="visually-hidden">
+                        <label
+                            for="userStatusFilter"
+                            class="visually-hidden"
+                        >
                             Filter by status
                         </label>
 
                         <select id="userStatusFilter">
-                            <option value="all">All statuses</option>
-                            <option value="active">Active</option>
-                            <option value="deactivated">Deactivated</option>
+                            <option value="all">
+                                All statuses
+                            </option>
+
+                            <option value="active">
+                                Active
+                            </option>
+
+                            <option value="deactivated">
+                                Deactivated
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -214,14 +289,22 @@
                     </table>
                 </div>
 
-                <div class="empty-state hidden" id="userEmptyState">
+                <div
+                    class="empty-state hidden"
+                    id="userEmptyState"
+                >
                     <strong>No users found</strong>
-                    <p>Try changing the search text or selected filters.</p>
+
+                    <p>
+                        Try changing the search text or selected filters.
+                    </p>
                 </div>
             </section>
 
             <footer class="dashboard-footer">
-                <p>TrekMate Nepal User Administration</p>
+                <p>
+                    TrekMate Nepal User Administration
+                </p>
 
                 <p>
                     User deletion is represented as account deactivation
@@ -232,7 +315,7 @@
         </main>
     </div>
 
-    <!-- Add/Edit User Modal -->
+    <!-- Add or Edit User Modal -->
     <div
         class="modal-overlay hidden"
         id="userFormModal"
@@ -251,17 +334,24 @@
 
             <div class="modal-icon">♙</div>
 
-            <h3 id="userFormTitle">Add New User</h3>
+            <h3 id="userFormTitle">
+                Add New User
+            </h3>
 
             <p>
                 Enter the user information below.
             </p>
 
             <form id="userForm">
-                <input type="hidden" id="editingUserId">
+                <input
+                    type="hidden"
+                    id="editingUserId"
+                >
 
                 <div class="form-group">
-                    <label for="userName">Full name</label>
+                    <label for="userName">
+                        Full name
+                    </label>
 
                     <input
                         type="text"
@@ -272,7 +362,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="userEmail">Email address</label>
+                    <label for="userEmail">
+                        Email address
+                    </label>
 
                     <input
                         type="email"
@@ -284,20 +376,34 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="userRole">User role</label>
+                        <label for="userRole">
+                            User role
+                        </label>
 
                         <select id="userRole" required>
-                            <option value="customer">Customer</option>
-                            <option value="provider">Gear Provider</option>
+                            <option value="customer">
+                                Customer
+                            </option>
+
+                            <option value="provider">
+                                Gear Provider
+                            </option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="userStatus">Status</label>
+                        <label for="userStatus">
+                            Status
+                        </label>
 
                         <select id="userStatus" required>
-                            <option value="active">Active</option>
-                            <option value="deactivated">Deactivated</option>
+                            <option value="active">
+                                Active
+                            </option>
+
+                            <option value="deactivated">
+                                Deactivated
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -311,7 +417,10 @@
                         Cancel
                     </button>
 
-                    <button type="submit" class="primary-button">
+                    <button
+                        type="submit"
+                        class="primary-button"
+                    >
                         Save User
                     </button>
                 </div>
@@ -337,13 +446,22 @@
             </button>
 
             <div class="provider-profile-header">
-                <div class="provider-large-avatar" id="providerAvatar">
+                <div
+                    class="provider-large-avatar"
+                    id="providerAvatar"
+                >
                     —
                 </div>
 
                 <div>
-                    <span class="provider-label">Gear Provider</span>
-                    <h3 id="providerDetailsTitle">Provider Details</h3>
+                    <span class="provider-label">
+                        Gear Provider
+                    </span>
+
+                    <h3 id="providerDetailsTitle">
+                        Provider Details
+                    </h3>
+
                     <p id="providerDetailsEmail">—</p>
                 </div>
             </div>
@@ -368,14 +486,19 @@
             <div class="history-section">
                 <div class="history-heading">
                     <div>
-                        <h4>Gear Rental and Transaction History</h4>
+                        <h4>
+                            Gear Rental and Transaction History
+                        </h4>
+
                         <p>
                             Bookings and provider payout records
                         </p>
                     </div>
                 </div>
 
-                <div class="table-container provider-history-table">
+                <div
+                    class="table-container provider-history-table"
+                >
                     <table>
                         <thead>
                             <tr>
@@ -400,7 +523,10 @@
                     id="providerHistoryEmptyState"
                 >
                     <strong>No rental history</strong>
-                    <p>This provider has no recorded gear bookings.</p>
+
+                    <p>
+                        This provider has no recorded gear bookings.
+                    </p>
                 </div>
             </div>
         </div>
@@ -423,9 +549,13 @@
                 ×
             </button>
 
-            <div class="modal-icon warning-modal-icon">!</div>
+            <div class="modal-icon warning-modal-icon">
+                !
+            </div>
 
-            <h3 id="deactivateTitle">Deactivate User?</h3>
+            <h3 id="deactivateTitle">
+                Deactivate User?
+            </h3>
 
             <p>
                 The user will lose account access, but their booking and
@@ -457,11 +587,17 @@
         </div>
     </div>
 
-    <!-- Toast message -->
-    <div class="toast hidden" id="toast" role="status">
+    <!-- Toast -->
+    <div
+        class="toast hidden"
+        id="toast"
+        role="status"
+    >
         User updated successfully.
     </div>
 
+    <!-- users.js loads first so filters exist before navigation.js -->
     <script src="js/users.js"></script>
+    <script src="js/navigation.js"></script>
 </body>
 </html>

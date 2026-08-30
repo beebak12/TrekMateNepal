@@ -16,6 +16,7 @@
     <title>TrekMate Nepal | Payment Admin Panel</title>
 
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/navigation.css">
 </head>
 
 <body>
@@ -33,35 +34,88 @@
             </div>
 
             <nav class="sidebar-navigation" aria-label="Main navigation">
-                <button class="navigation-item active" data-section="dashboard">
+
+                <button
+                    class="navigation-item active"
+                    data-section="dashboard"
+                >
                     <span class="navigation-icon">▦</span>
                     Dashboard
                 </button>
 
-                <button class="navigation-item" data-section="transactions">
+                <button
+                    class="navigation-item"
+                    data-section="transactions"
+                >
                     <span class="navigation-icon">⇄</span>
                     Transactions
                 </button>
 
-                <a class="navigation-item" href="users.html">
-                    <span class="navigation-icon">♙</span>
-                    Users &amp; Gear
-                </a>
+                <!-- Users and Gear dropdown -->
+                <div
+                    class="navigation-group"
+                    id="usersNavigationGroup"
+                >
+                    <button
+                        class="navigation-item users-menu-toggle"
+                        id="usersMenuToggle"
+                        type="button"
+                        aria-expanded="false"
+                        aria-controls="usersSubmenu"
+                    >
+                        <span class="navigation-icon">♙</span>
+                        Users &amp; Gear
+                        <span class="menu-chevron">⌄</span>
+                    </button>
 
-                <button class="navigation-item" data-section="revenue">
+                    <div
+                        class="navigation-submenu"
+                        id="usersSubmenu"
+                    >
+                        <a
+                            class="subnavigation-item"
+                            href="users.html#users"
+                            data-user-view="users"
+                        >
+                            <span class="subnavigation-dot"></span>
+                            Users
+                        </a>
+
+                        <a
+                            class="subnavigation-item"
+                            href="users.html#providers"
+                            data-user-view="providers"
+                        >
+                            <span class="subnavigation-dot"></span>
+                            Providers &amp; Gear
+                        </a>
+                    </div>
+                </div>
+
+                <button
+                    class="navigation-item"
+                    data-section="revenue"
+                >
                     <span class="navigation-icon">₨</span>
                     Revenue
                 </button>
 
-                <button class="navigation-item" data-section="payouts">
+                <button
+                    class="navigation-item"
+                    data-section="payouts"
+                >
                     <span class="navigation-icon">✓</span>
                     Provider Payouts
                 </button>
 
-                <button class="navigation-item" data-section="refunds">
+                <button
+                    class="navigation-item"
+                    data-section="refunds"
+                >
                     <span class="navigation-icon">↶</span>
                     Refunds
                 </button>
+
             </nav>
 
             <div class="sidebar-footer">
@@ -90,6 +144,7 @@
 
                     <div>
                         <h2>Payment Dashboard</h2>
+
                         <p>
                             Monitor revenue, transactions and provider payouts
                         </p>
@@ -127,7 +182,10 @@
             </section>
 
             <!-- Summary cards -->
-            <section class="summary-grid" aria-label="Financial summary">
+            <section
+                class="summary-grid"
+                aria-label="Financial summary"
+            >
 
                 <article class="summary-card gross-card">
                     <div class="card-heading">
@@ -183,13 +241,14 @@
 
             </section>
 
-            <!-- Revenue split -->
+            <!-- Revenue and payout overview -->
             <section class="content-grid">
 
                 <article class="panel revenue-overview">
                     <div class="panel-header">
                         <div>
                             <h3>Commission Overview</h3>
+
                             <p>
                                 Distribution of verified booking revenue
                             </p>
@@ -237,7 +296,6 @@
                     </div>
                 </article>
 
-                <!-- Pending payout panel -->
                 <article class="panel pending-panel">
                     <div class="panel-header">
                         <div>
@@ -430,7 +488,7 @@
         </div>
     </div>
 
-    <!-- Notification message -->
+    <!-- Notification -->
     <div
         class="toast hidden"
         id="toast"
@@ -439,6 +497,8 @@
         Payout marked as paid successfully.
     </div>
 
+    <!-- Navigation loads first to protect dropdown clicks from app.js -->
+    <script src="js/navigation.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

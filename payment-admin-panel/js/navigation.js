@@ -8,7 +8,7 @@ const usersMenuToggle =
 
 function isUsersPage() {
     return window.location.pathname.endsWith(
-        "/users.html"
+        "users.html"
     );
 }
 
@@ -31,6 +31,33 @@ function setDropdownState(isOpen) {
     );
 }
 
+function clearMainNavigationSelection() {
+    document.querySelectorAll(
+        ".navigation-item"
+    ).forEach((item) => {
+        item.classList.remove("active");
+    });
+}
+
+function activateMainNavigation(section) {
+    clearMainNavigationSelection();
+
+    const selectedNavigation =
+        document.querySelector(
+            `[data-section="${section}"]`
+        );
+
+    if (selectedNavigation) {
+        selectedNavigation.classList.add(
+            "active"
+        );
+    }
+}
+
+/*
+ * Control Users and Providers views.
+ */
+
 function applyUserView() {
     if (!isUsersPage()) {
         return;
@@ -40,6 +67,14 @@ function applyUserView() {
         window.location.hash === "#providers"
             ? "providers"
             : "users";
+
+    setDropdownState(true);
+
+    clearMainNavigationSelection();
+
+    if (usersMenuToggle) {
+        usersMenuToggle.classList.add("active");
+    }
 
     document.querySelectorAll(
         "[data-user-view]"
@@ -85,25 +120,136 @@ function applyUserView() {
             ".user-management-panel"
         );
 
-    if (
-        window.location.hash &&
-        userPanel
-    ) {
-        userPanel.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
+    if (userPanel && window.location.hash) {
+        requestAnimationFrame(() => {
+            userPanel.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
         });
     }
 }
+
+/*
+ * Handle links coming from users.html to sections
+ * inside the Payment Dashboard.
+ */
+
+function applyDashboardRoute() {
+    if (isUsersPage()) {
+        return;
+    }
+
+    const requestedSection =
+        window.location.hash.replace("#", "") ||
+        "dashboard";
+
+    const statusFilter =
+        document.getElementById("statusFilter");
+
+    if (requestedSection === "dashboard") {
+        activateMainNavigation("dashboard");
+
+        if (statusFilter) {
+            statusFilter.value = "all";
+            statusFilter.dispatchEvent(
+                new Event("change")
+            );
+        }
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+        return;
+    }
+
+    if (requestedSection === "transactions") {
+        activateMainNavigation("transactions");
+
+        if (statusFilter) {
+            statusFilter.value = "all";
+            statusFilter.dispatchEvent(
+                new Event("change")
+            );
+        }
+
+        scrollToDashboardSection(
+            "#transactions"
+        );
+
+        return;
+    }
+
+    if (requestedSection === "revenue") {
+        activateMainNavigation("revenue");
+
+        scrollToDashboardSection(
+            "#revenue"
+        );
+
+        return;
+    }
+
+    if (requestedSection === "payouts") {
+        activateMainNavigation("payouts");
+
+        scrollToDashboardSection(
+            "#payouts"
+        );
+
+        return;
+    }
+
+    if (requestedSection === "refunds") {
+        activateMainNavigation("refunds");
+
+        if (statusFilter) {
+            statusFilter.value = "refunded";
+            statusFilter.dispatchEvent(
+                new Event("change")
+            );
+        }
+
+        scrollToDashboardSection(
+            "#transactions"
+        );
+
+        return;
+    }
+
+    activateMainNavigation("dashboard");
+}
+
+function scrollToDashboardSection(selector) {
+    const section =
+        document.querySelector(selector);
+
+    if (!section) {
+        return;
+    }
+
+    requestAnimationFrame(() => {
+        section.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    });
+}
+
+/*
+ * Dropdown toggle.
+ *
+ * Capture mode and stopImmediatePropagation prevent
+ * app.js from treating this as a dashboard button.
+ */
 
 if (usersMenuToggle) {
     usersMenuToggle.addEventListener(
         "click",
         (event) => {
-            /*
-             * Prevent app.js from treating the dropdown
-             * toggle as a dashboard-section button.
-             */
+            event.preventDefault();
             event.stopImmediatePropagation();
 
             const isCurrentlyOpen =
@@ -112,16 +258,32 @@ if (usersMenuToggle) {
                 );
 
             setDropdownState(!isCurrentlyOpen);
-        }
+        },
+        true
     );
 }
 
+/*
+ * Initialise the correct page state.
+ */
+
 if (isUsersPage()) {
-    setDropdownState(true);
     applyUserView();
+} else {
+    applyDashboardRoute();
 }
+
+/*
+ * Support changing views without a full reload.
+ */
 
 window.addEventListener(
     "hashchange",
-    applyUserView
+    () => {
+        if (isUsersPage()) {
+            applyUserView();
+        } else {
+            applyDashboardRoute();
+        }
+    }
 );

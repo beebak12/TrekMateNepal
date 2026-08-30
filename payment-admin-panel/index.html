@@ -38,6 +38,7 @@
                 <button
                     class="navigation-item active"
                     data-section="dashboard"
+                    type="button"
                 >
                     <span class="navigation-icon">▦</span>
                     Dashboard
@@ -46,6 +47,7 @@
                 <button
                     class="navigation-item"
                     data-section="transactions"
+                    type="button"
                 >
                     <span class="navigation-icon">⇄</span>
                     Transactions
@@ -95,6 +97,7 @@
                 <button
                     class="navigation-item"
                     data-section="revenue"
+                    type="button"
                 >
                     <span class="navigation-icon">₨</span>
                     Revenue
@@ -103,6 +106,7 @@
                 <button
                     class="navigation-item"
                     data-section="payouts"
+                    type="button"
                 >
                     <span class="navigation-icon">✓</span>
                     Provider Payouts
@@ -111,6 +115,7 @@
                 <button
                     class="navigation-item"
                     data-section="refunds"
+                    type="button"
                 >
                     <span class="navigation-icon">↶</span>
                     Refunds
@@ -244,7 +249,10 @@
             <!-- Revenue and payout overview -->
             <section class="content-grid">
 
-                <article class="panel revenue-overview">
+                <article
+                    class="panel revenue-overview"
+                    id="revenue"
+                >
                     <div class="panel-header">
                         <div>
                             <h3>Commission Overview</h3>
@@ -296,7 +304,10 @@
                     </div>
                 </article>
 
-                <article class="panel pending-panel">
+                <article
+                    class="panel pending-panel"
+                    id="payouts"
+                >
                     <div class="panel-header">
                         <div>
                             <h3>Pending Payouts</h3>
@@ -497,8 +508,8 @@
         Payout marked as paid successfully.
     </div>
 
-    <!-- Navigation loads first to protect dropdown clicks from app.js -->
-    <script src="js/navigation.js"></script>
+    <!-- app.js loads first so dashboard filters are ready -->
     <script src="js/app.js"></script>
+    <script src="js/navigation.js"></script>
 </body>
 </html>

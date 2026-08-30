@@ -37,15 +37,17 @@
 
                 <a
                     class="navigation-item"
-                    href="index.html"
+                    href="index.html#dashboard"
+                    data-section="dashboard"
                 >
                     <span class="navigation-icon">▦</span>
-                    Payment Dashboard
+                    Dashboard
                 </a>
 
                 <a
                     class="navigation-item"
                     href="index.html#transactions"
+                    data-section="transactions"
                 >
                     <span class="navigation-icon">⇄</span>
                     Transactions
@@ -92,6 +94,33 @@
                         </a>
                     </div>
                 </div>
+
+                <a
+                    class="navigation-item"
+                    href="index.html#revenue"
+                    data-section="revenue"
+                >
+                    <span class="navigation-icon">₨</span>
+                    Revenue
+                </a>
+
+                <a
+                    class="navigation-item"
+                    href="index.html#payouts"
+                    data-section="payouts"
+                >
+                    <span class="navigation-icon">✓</span>
+                    Provider Payouts
+                </a>
+
+                <a
+                    class="navigation-item"
+                    href="index.html#refunds"
+                    data-section="refunds"
+                >
+                    <span class="navigation-icon">↶</span>
+                    Refunds
+                </a>
 
             </nav>
 
@@ -596,7 +625,7 @@
         User updated successfully.
     </div>
 
-    <!-- users.js loads first so filters exist before navigation.js -->
+    <!-- Users data loads before navigation filters -->
     <script src="js/users.js"></script>
     <script src="js/navigation.js"></script>
 </body>

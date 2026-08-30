@@ -1,4 +1,6 @@
 package com.example.trekmatenepal.activities;
 
-public class PartnerFinderActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class PartnerFinderActivity extends AppCompatActivity {
 }

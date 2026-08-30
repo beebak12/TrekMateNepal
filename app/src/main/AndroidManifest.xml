@@ -4,6 +4,7 @@
 
     <application
         android:allowBackup="true"
+
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -20,6 +21,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".activities.TreksCompletedActivity" />
+        <activity android:name=".activities.ChatActivity" />
+        <activity android:name=".activities.SearchActivity" />
+        <activity android:name=".activities.CategoryActivity" />
+        <activity android:name=".activities.EditProfileActivity"
+            android:exported="true" />
+        <activity android:name=".activities.PopularTreksActivity" />
 
         <activity
             android:name=".activities.LoginActivity"
@@ -53,22 +62,12 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name=".activities.ProfileActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-
-        <activity
-            android:name=".activities.NotificationActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-
-        <activity
             android:name=".activities.TrekPackageActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name=".activities.PostGearActivity"
+            android:name=".activities.PostedGearActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
@@ -81,8 +80,9 @@
             android:name=".activities.GearRentalActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+
         <activity
-            android:name=".activities.GearDetailActivity"
+            android:name=".activities.GearDetailsActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
@@ -115,6 +115,23 @@
             android:name=".activities.MyBookingsActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".activities.NotificationActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".activities.ProfileActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+
 
 
 

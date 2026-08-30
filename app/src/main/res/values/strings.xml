@@ -50,4 +50,9 @@
     <string name="search_trekking_gear">Search trekking gear...</string>
     <string name="categorie">Categories</string>
     <string name="popular_rentals">Popular Rentals</string>
+    <string name="profile_name">Bibek Paudel</string>
+    <string name="username">bibekpaudel12</string>
+    <string name="email">paudelbeebak11@gmail.com</string>
+    <string name="phone">+977 9861234567</string>
+    <string name="location">Pokhara, Nepal</string>
 </resources>

@@ -1,0 +1,651 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F7F7FA"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- ================= TOP SECTION (Overlap Header & Profile) ================= -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Background Header -->
+            <ImageView
+                android:id="@+id/headerBg"
+                android:layout_width="match_parent"
+                android:layout_height="185dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/profilebackground"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Back Button -->
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="18dp"
+                android:padding="12dp"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@android:color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="34dp"
+                android:text="Edit Profile"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Profile Image (Centered on Header bottom edge) -->
+            <ImageView
+                android:id="@+id/imgProfile"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:background="@drawable/profile_circle_bg"
+                android:clipToOutline="true"
+                android:padding="4dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/partner1"
+                app:layout_constraintBottom_toBottomOf="@id/headerBg"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/headerBg" />
+
+            <!-- Camera Button -->
+            <ImageView
+                android:id="@+id/btnCamera"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/camera_circle_bg"
+                android:padding="10dp"
+                android:src="@drawable/ic_camera"
+                app:tint="@android:color/white"
+                android:elevation="4dp"
+                app:layout_constraintBottom_toBottomOf="@id/imgProfile"
+                app:layout_constraintEnd_toEndOf="@id/imgProfile"
+                android:layout_marginEnd="-5dp"
+                android:layout_marginBottom="2dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="15dp" />
+
+
+        <!-- ================= PERSONAL INFORMATION ================= -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/section_card_bg"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Personal Information"
+                android:textColor="#56308D"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <!-- Full Name -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Full Name"
+                android:textColor="#4A4A4A"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/edit_text_bg"
+                android:gravity="center_vertical"
+                android:paddingStart="12dp"
+                android:paddingEnd="10dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_person"
+                    android:tint="#56308D" />
+
+                <EditText
+                    android:id="@+id/etFullName"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:background="@android:color/transparent"
+                    android:hint="Full Name"
+                    android:padding="0dp"
+                    android:text="Bibek Paudel"
+                    android:textColor="#444444"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+
+            <!-- Username -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Username"
+                android:textColor="#4A4A4A"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/edit_text_bg"
+                android:gravity="center_vertical"
+                android:paddingStart="12dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_person"
+                    android:tint="#56308D" />
+
+                <EditText
+                    android:id="@+id/etUsername"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:background="@android:color/transparent"
+                    android:padding="0dp"
+                    android:text="bibekpaudel12"
+                    android:textColor="#444444"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+
+            <!-- Email -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Email"
+                android:textColor="#4A4A4A"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/edit_text_bg"
+                android:gravity="center_vertical"
+                android:paddingStart="12dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_email"
+                    android:tint="#56308D" />
+
+                <EditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:background="@android:color/transparent"
+                    android:inputType="textEmailAddress"
+                    android:padding="0dp"
+                    android:text="paudelbibek11@gmail.com"
+                    android:textColor="#444444"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+
+            <!-- Phone -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Phone Number"
+                android:textColor="#4A4A4A"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/edit_text_bg"
+                android:gravity="center_vertical"
+                android:paddingStart="12dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_phone"
+                    android:tint="#56308D" />
+
+                <EditText
+                    android:id="@+id/etPhone"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:background="@android:color/transparent"
+                    android:inputType="phone"
+                    android:padding="0dp"
+                    android:text="+977 9861234567"
+                    android:textColor="#444444"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+
+            <!-- DOB and Age -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Date of Birth"
+                android:textColor="#4A4A4A"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:background="@drawable/edit_text_bg"
+                    android:gravity="center_vertical"
+                    android:paddingStart="10dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_calendar"
+                        android:tint="#56308D" />
+
+                    <TextView
+                        android:id="@+id/tvDateOfBirth"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="15 June 1998"
+                        android:textColor="#444444"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvAge"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_text_bg"
+                    android:gravity="center"
+                    android:text="Age: 26"
+                    android:textColor="#444444"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+
+            <!-- Gender -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Gender"
+                android:textColor="#4A4A4A"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/radioGender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rbMale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="#56308D"
+                    android:checked="true"
+                    android:text="Male"
+                    android:textSize="12sp" />
+
+                <RadioButton
+                    android:id="@+id/rbFemale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="22dp"
+                    android:buttonTint="#56308D"
+                    android:text="Female"
+                    android:textSize="12sp" />
+
+                <RadioButton
+                    android:id="@+id/rbOther"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="22dp"
+                    android:buttonTint="#56308D"
+                    android:text="Other"
+                    android:textSize="12sp" />
+
+            </RadioGroup>
+
+
+            <!-- Location -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Location"
+                android:textColor="#4A4A4A"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/edit_text_bg"
+                android:gravity="center_vertical"
+                android:paddingStart="12dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_location"
+                    android:tint="#56308D" />
+
+                <EditText
+                    android:id="@+id/etLocation"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:background="@android:color/transparent"
+                    android:padding="0dp"
+                    android:text="Pokhara, Nepal"
+                    android:textColor="#444444"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+
+            <!-- Bio -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Bio"
+                android:textColor="#4A4A4A"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="78dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/edit_text_bg"
+                android:gravity="top"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_bio"
+                    android:tint="#56308D" />
+
+                <EditText
+                    android:id="@+id/etBio"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="top"
+                    android:padding="0dp"
+                    android:text="Adventure seeker | Trekker | Exploring mountains and nature of beautiful Nepal."
+                    android:textColor="#444444"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <!-- ================= TREKKING INFORMATION ================= -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/section_card_bg"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trekking Information"
+                android:textColor="#56308D"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+
+            <!-- Trek Counter -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="No. of Treks Completed"
+                    android:textColor="#4A4A4A"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btnMinus"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/counter_button_bg"
+                    android:text="−"
+                    android:textColor="#56308D"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tvTrekCount"
+                    android:layout_width="42dp"
+                    android:layout_height="32dp"
+                    android:gravity="center"
+                    android:text="12"
+                    android:textColor="#444444"
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/btnPlus"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/counter_button_bg"
+                    android:text="+"
+                    android:textColor="#56308D"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Where's Trek (Preferred Locations)"
+                android:textColor="#4A4A4A"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+
+            <!-- Location Chips -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/chipEverest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:background="@drawable/chip_selected_bg"
+                    android:gravity="center"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:text="Everest Region ✓"
+                    android:textColor="@android:color/white"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/chipAnnapurna"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/chip_selected_bg"
+                    android:gravity="center"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:text="Annapurna Region ✓"
+                    android:textColor="@android:color/white"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/chipLangtang"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:background="@drawable/chip_unselected_bg"
+                    android:gravity="center"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:text="Langtang Region"
+                    android:textColor="#555555"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/chipMustang"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/chip_unselected_bg"
+                    android:gravity="center"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:text="Mustang"
+                    android:textColor="#555555"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/chipManaslu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/chip_unselected_bg"
+                    android:gravity="center"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:text="Manaslu Region"
+                    android:textColor="#555555"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/chipOthers"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/chip_unselected_bg"
+                android:gravity="center"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:text="Others"
+                android:textColor="#555555"
+                android:textSize="10sp" />
+
+
+            <!-- Save Button -->
+            <Button
+                android:id="@+id/btnSaveChanges"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/save_button_bg"
+                android:text="Save Changes"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="25dp" />
+
+    </LinearLayout>
+
+</ScrollView>

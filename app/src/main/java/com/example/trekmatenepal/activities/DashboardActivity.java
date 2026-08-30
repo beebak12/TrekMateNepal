@@ -20,7 +20,7 @@ import com.example.trekmatenepal.models.TrekModel;
 
 
 import com.example.trekmatenepal.adapters.GearAdapter;
-import com.example.trekmatenepal.models.GearModel;
+import com.example.trekmatenepal.models.Gear;
 
 import com.example.trekmatenepal.adapters.PartnerAdapter;
 import com.example.trekmatenepal.models.PartnerModel;
@@ -46,7 +46,7 @@ public class DashboardActivity extends AppCompatActivity {
     private TextView viewAllTreks;
 
     private RecyclerView recyclerGear;
-    private ArrayList<GearModel> gearList;
+    private ArrayList<Gear> gearList;
 
     private RecyclerView recyclerPartners;
     private ArrayList<PartnerModel> partnerList;
@@ -67,16 +67,14 @@ public class DashboardActivity extends AppCompatActivity {
         setupRecyclerView();
 
         setupGearRecyclerView();
-        clickListeners();
 
         setupPartnerRecyclerView();
-
-        clickListeners();
 
         setupPostRecyclerView();
 
         setupBottomNavigation();
 
+        clickListeners();
     }
 
     private void initializeViews() {
@@ -179,31 +177,31 @@ public class DashboardActivity extends AppCompatActivity {
 
         gearList = new ArrayList<>();
 
-        gearList.add(new GearModel(
+        gearList.add(new Gear(
                 "Down Jacket",
                 "Rs. 2,000",
                 "/ week",
                 R.drawable.jacket));
 
-        gearList.add(new GearModel(
+        gearList.add(new Gear(
                 "Sleeping Bag",
                 "Rs. 1,000",
                 "/ week",
                 R.drawable.sleepingbag));
 
-        gearList.add(new GearModel(
+        gearList.add(new Gear(
                 "Trekking Boots",
                 "Rs. 1,500",
                 "/ week",
                 R.drawable.boots));
 
-        gearList.add(new GearModel(
+        gearList.add(new Gear(
                 "Backpack 60L",
                 "Rs. 1,800",
                 "/ week",
                 R.drawable.backpack));
 
-        gearList.add(new GearModel(
+        gearList.add(new Gear(
                 "Trekking Pole",
                 "Rs. 300",
                 "/ week",
@@ -235,7 +233,7 @@ public class DashboardActivity extends AppCompatActivity {
         cardPostGear.setOnClickListener(v ->
                 startActivity(new Intent(
                         DashboardActivity.this,
-                        PostGearActivity.class)));
+                        PostedGearActivity.class)));
 
         cardTreks.setOnClickListener(v ->
                 startActivity(new Intent(
@@ -280,7 +278,7 @@ public class DashboardActivity extends AppCompatActivity {
                 "4.9",
                 "(28)",
                 "Available",
-                R.drawable.partner2));
+                R.drawable.profile_photo));
 
         partnerList.add(new PartnerModel(
                 "Ramesh Gurung",

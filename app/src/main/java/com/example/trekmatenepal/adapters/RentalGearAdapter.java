@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trekmatenepal.R;
-import com.example.trekmatenepal.activities.GearDetailActivity;
+import com.example.trekmatenepal.activities.GearDetailsActivity;
 import com.example.trekmatenepal.models.RentalGearModel;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class RentalGearAdapter extends RecyclerView.Adapter<RentalGearAdapter.Vi
         holder.txtGearRating.setText(gear.getRating() + " (120)");
 
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, GearDetailActivity.class);
+            Intent intent = new Intent(context, GearDetailsActivity.class);
             intent.putExtra("name", gear.getName());
             intent.putExtra("price", gear.getPrice());
             intent.putExtra("image", gear.getImage());

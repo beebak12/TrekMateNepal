@@ -1,28 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
+    <color name="dark_black">#FF000000</color>
+    <color name="black1">#172033</color>
+    <color name="black">#212121</color>
     <color name="white">#FFFFFFFF</color>
     <color name="lightpurple">#800080</color>
 
     <!-- Vibrant Material Purple -->
     <color name="material_purple">#9C27B0</color>
-
-    <color name="purple">#6A1B9A</color>
+    <color name="purple1">#6A1B9A</color>
+    <color name="purple_primary">#673AB7</color>
+    <color name="purple_dark">#4527A0</color>
+    <color name="purple_light">#9575CD</color>
+    <color name="purple">#45228C</color>
+    <color name="dark_purple">#32156E</color>
+    <color name="light_purple">#F1EDFA</color>
 
     <color name="background">#F5F7FA</color>
 
     <color name="lightGray">#EAEAEA</color>
-
     <color name="darkGray">#666666</color>
+    <color name="gray1">#687080</color>
+    <color name="light_gray1">#F5F5F8</color>
+    <color name="gray">#6B6B6B</color>
+    <color name="light_gray">#F5F5F5</color>
 
-    <color name="green">#34A853</color>
+    <color name="border_gray1">#D9D9E2</color>
 
-    <color name="orange">#FF9800</color>
 
+    <color name="gold">#FFB71B</color>
+    <color name="red">#F44336</color>
+
+    <color name="green1">#34A853</color>
+    <color name="green">#4CAF50</color>
+    <color name="light_green">#E8F5E9</color>
+    <color name="orange1">#FF9800</color>
+
+    <color name="orange">#D98A24</color>
     <color name="cardColor">#FFFFFF</color>
-
     <color name="hintColor">#9E9E9E</color>
-
     <color name="searchBg">#F1F3F6</color>
     <color name="vividred">#CC050E15</color>
 

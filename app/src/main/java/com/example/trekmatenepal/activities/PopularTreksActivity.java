@@ -1,4 +1,6 @@
 package com.example.trekmatenepal.activities;
 
-public class PopularTreksActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class PopularTreksActivity extends AppCompatActivity {
 }

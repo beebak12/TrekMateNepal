@@ -199,10 +199,6 @@
 
         <!-- ── Guide Side Activities ── -->
         <activity
-            android:name=".activities.RoleSelectionActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
             android:name=".activities.GuideDashboardActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />

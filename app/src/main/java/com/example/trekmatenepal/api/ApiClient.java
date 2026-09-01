@@ -18,6 +18,10 @@ public class ApiClient {
 
     private static Retrofit retrofit;
 
+    public static String getBaseUrl() {
+        return BASE_URL;
+    }
+
     public static Retrofit getClient() {
 
         Log.d(TAG, "ApiClient.getClient() called");

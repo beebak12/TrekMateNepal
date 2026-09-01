@@ -10,6 +10,7 @@
     tools:openDrawer="end">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dashboardContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#F5F7FA">
@@ -53,14 +54,15 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:background="@color/lightpurple"
-
-                android:layout_height="wrap_content">
+                android:layout_height="56dp">
 
                 <LinearLayout
                     android:id="@+id/headerText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:layout_marginStart="12dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -93,18 +95,14 @@
                     android:id="@+id/notificationBtn"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-
                     android:layout_marginEnd="6dp"
                     android:background="@drawable/ic_notification"
                     android:contentDescription="@string/notifications"
-                    android:foregroundGravity="center_vertical"
                     android:padding="2dp"
-                    android:layout_marginTop="5dp"
-
                     android:src="@drawable/ic_notification"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/profileImage"
-                    tools:layout_editor_absoluteY="10dp"
-                    tools:ignore="MissingConstraints" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/profileImage"
@@ -114,22 +112,24 @@
                     android:contentDescription="Profile"
                     android:padding="10dp"
                     android:src="@drawable/ic_profile"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/textView"
-                    android:layout_width="192dp"
-                    android:layout_height="41dp"
-                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="TrekMate Nepal"
                     android:textColor="@color/purple_primary"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    tools:layout_editor_absoluteX="96dp"
-                    tools:layout_editor_absoluteY="9dp"
-                    tools:ignore="MissingConstraints" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/notificationBtn"
+                    app:layout_constraintStart_toEndOf="@id/headerText"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

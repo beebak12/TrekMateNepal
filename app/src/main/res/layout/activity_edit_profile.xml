@@ -627,11 +627,20 @@
 
 
             <!-- Save Button -->
+            <ProgressBar
+                android:id="@+id/progressEditProfile"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_marginTop="14dp"
+                android:indeterminate="true"
+                android:visibility="gone" />
+
             <Button
                 android:id="@+id/btnSaveChanges"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
-                android:layout_marginTop="14dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/save_button_bg"
                 android:text="Save Changes"
                 android:textAllCaps="false"

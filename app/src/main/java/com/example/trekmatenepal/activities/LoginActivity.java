@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +17,8 @@ import com.example.trekmatenepal.api.ApiClient;
 import com.example.trekmatenepal.api.ApiService;
 import com.example.trekmatenepal.data.SessionUser;
 import com.example.trekmatenepal.model.LoginRequest;
+
+import com.example.trekmatenepal.model.LoginResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,6 +31,8 @@ public class LoginActivity extends AppCompatActivity {
     EditText etEmail, etPassword;
     Button btnLogin;
     TextView txtSignup, txtForgot;
+    RadioGroup loginRoleGroup;
+    RadioButton rbLoginTrekker, rbLoginGuide;
 
     ApiService apiService;
 
@@ -40,11 +46,22 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         txtSignup = findViewById(R.id.txtSignup);
         txtForgot = findViewById(R.id.txtForgot);
+        loginRoleGroup = findViewById(R.id.loginRoleGroup);
+        rbLoginTrekker = findViewById(R.id.rbLoginTrekker);
+        rbLoginGuide = findViewById(R.id.rbLoginGuide);
 
         // Create Retrofit API service
         apiService = ApiClient.getClient().create(ApiService.class);
 
+        loginRoleGroup.setOnCheckedChangeListener((group, checkedId) -> updateLoginMode());
+        updateLoginMode();
+
         btnLogin.setOnClickListener(v -> {
+
+            if (rbLoginGuide.isChecked()) {
+                loginAsGuideLocally();
+                return;
+            }
 
             String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString();
@@ -90,15 +107,15 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setEnabled(false);
 
         LoginRequest request =
-                new LoginRequest(email, password);
+                new LoginRequest(email, password, "USER");
 
         apiService.loginUser(request).enqueue(
-                new Callback<Object>() {
+                new Callback<LoginResponse>() {
 
                     @Override
                     public void onResponse(
-                            Call<Object> call,
-                            Response<Object> response) {
+                            Call<LoginResponse> call,
+                            Response<LoginResponse> response) {
 
                         btnLogin.setEnabled(true);
 
@@ -108,20 +125,17 @@ public class LoginActivity extends AppCompatActivity {
                                         + response.code()
                         );
 
-                        if (response.isSuccessful()) {
+                        if (response.isSuccessful() && response.body() != null
+                                && response.body().isSuccess()
+                                && response.body().getToken() != null
+                                && response.body().getUser() != null) {
 
                             Log.d(
                                     TAG,
                                     "Login successful"
                             );
 
-                            /*
-                             * At this stage we have confirmed that
-                             * the backend accepted the login.
-                             *
-                             * We will add proper JWT parsing/storage
-                             * after confirming the API works.
-                             */
+                            LoginResponse loginResponse = response.body();
 
                             Toast.makeText(
                                     LoginActivity.this,
@@ -129,13 +143,14 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT
                             ).show();
 
-                            // Remember the logged-in user
-                            SessionUser.setUserId(
-                                    LoginActivity.this,
-                                    email
-                            );
+                            // The backend has verified that this is a database USER/Trekker.
+                            SessionUser.clear(LoginActivity.this);
+                            SessionUser.setUserId(LoginActivity.this,
+                                    String.valueOf(loginResponse.getUser().getId()));
+                            SessionUser.setToken(LoginActivity.this, loginResponse.getToken());
+                            saveRole("TREKKER");
 
-                            checkUserRole();
+                            openDestination(DashboardActivity.class);
 
                         } else {
 
@@ -172,7 +187,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(
-                            Call<Object> call,
+                            Call<LoginResponse> call,
                             Throwable t) {
 
                         btnLogin.setEnabled(true);
@@ -193,44 +208,35 @@ public class LoginActivity extends AppCompatActivity {
         );
     }
 
-    private void checkUserRole() {
+    private void updateLoginMode() {
+        boolean guideMode = rbLoginGuide.isChecked();
+        etEmail.setEnabled(!guideMode);
+        etPassword.setEnabled(!guideMode);
+        etEmail.setAlpha(guideMode ? 0.6f : 1f);
+        etPassword.setAlpha(guideMode ? 0.6f : 1f);
+        btnLogin.setText(guideMode ? "CONTINUE AS GUIDE" : "LOGIN AS TREKKER");
+        txtForgot.setVisibility(guideMode ? android.view.View.GONE : android.view.View.VISIBLE);
+    }
 
-        android.content.SharedPreferences prefs =
-                getSharedPreferences(
-                        "TrekMatePrefs",
-                        MODE_PRIVATE
-                );
+    /** Temporary guide access requested by the project owner; no backend call is made. */
+    private void loginAsGuideLocally() {
+        SessionUser.clear(this);
+        SessionUser.setUserId(this, "Local Guide");
+        saveRole("GUIDE");
+        Toast.makeText(this, "Continuing in Guide mode", Toast.LENGTH_SHORT).show();
+        openDestination(GuideDashboardActivity.class);
+    }
 
-        String role =
-                prefs.getString("user_role", "");
+    private void saveRole(String role) {
+        getSharedPreferences("TrekMatePrefs", MODE_PRIVATE)
+                .edit()
+                .putString("user_role", role)
+                .apply();
+    }
 
-        Intent intent;
-
-        if (role.equals("TREKKER")) {
-
-            intent =
-                    new Intent(
-                            this,
-                            DashboardActivity.class
-                    );
-
-        } else if (role.equals("GUIDE")) {
-
-            intent =
-                    new Intent(
-                            this,
-                            GuideDashboardActivity.class
-                    );
-
-        } else {
-
-            intent =
-                    new Intent(
-                            this,
-                            RoleSelectionActivity.class
-                    );
-        }
-
+    private void openDestination(Class<?> destination) {
+        Intent intent = new Intent(this, destination);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }

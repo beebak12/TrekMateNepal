@@ -15,6 +15,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.widget.ProgressBar;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -22,10 +25,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.trekmatenepal.R;
-import com.example.trekmatenepal.database.DatabaseHelpher;
-import com.example.trekmatenepal.models.UserModel;
+import com.example.trekmatenepal.api.ApiClient;
+import com.example.trekmatenepal.api.ApiService;
+import com.example.trekmatenepal.data.SessionUser;
+import com.example.trekmatenepal.model.ErrorResponse;
+import com.example.trekmatenepal.model.ProfileResponse;
+import com.example.trekmatenepal.model.UpdateProfileRequest;
+import com.google.gson.Gson;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class EditProfileActivity extends AppCompatActivity {
 
@@ -40,7 +61,11 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private int trekCount = 0;
     private String selectedImagePath = "";
-    private DatabaseHelpher dbHelper;
+    private ProgressBar progressEditProfile;
+    private ApiService apiService;
+    private String selectedDobIso = "";
+    private String authToken;
+    private boolean newImageSelected;
 
     private boolean isEverestSelected = false, isAnnapurnaSelected = false, isLangtangSelected = false;
     private boolean isMustangSelected = false, isManasluSelected = false, isOthersSelected = false;
@@ -51,6 +76,7 @@ public class EditProfileActivity extends AppCompatActivity {
             uri -> {
                 if (uri != null) {
                     selectedImagePath = uri.toString();
+                    newImageSelected = true;
                     imgProfile.setImageURI(uri);
                 }
             }
@@ -73,7 +99,8 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
-        dbHelper = new DatabaseHelpher(this);
+        apiService = ApiClient.getClient().create(ApiService.class);
+        authToken = SessionUser.getToken(this);
         initializeViews();
         loadUserData();
         setupListeners();
@@ -86,6 +113,7 @@ public class EditProfileActivity extends AppCompatActivity {
         btnMinus = findViewById(R.id.btnMinus);
         btnPlus = findViewById(R.id.btnPlus);
         btnSaveChanges = findViewById(R.id.btnSaveChanges);
+        progressEditProfile = findViewById(R.id.progressEditProfile);
 
         etFullName = findViewById(R.id.etFullName);
         etUsername = findViewById(R.id.etUsername);
@@ -112,33 +140,54 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void loadUserData() {
-        UserModel user = dbHelper.getUserProfile();
-        if (user != null) {
-            etFullName.setText(user.getFullName());
-            etUsername.setText(user.getUsername());
-            etEmail.setText(user.getEmail());
-            etPhone.setText(user.getPhone());
-            tvDateOfBirth.setText(user.getDob());
-            tvAge.setText(user.getAge());
-            etLocation.setText(user.getLocation());
-            etBio.setText(user.getBio());
-            trekCount = user.getTrekCount();
-            tvTrekCount.setText(String.valueOf(trekCount));
-
-            if (user.getImagePath() != null && !user.getImagePath().isEmpty()) {
-                selectedImagePath = user.getImagePath();
-                imgProfile.setImageURI(Uri.parse(selectedImagePath));
-            }
-
-            if (user.getGender() != null) {
-                if (user.getGender().equals("Male")) rbMale.setChecked(true);
-                else if (user.getGender().equals("Female")) rbFemale.setChecked(true);
-                else if (user.getGender().equals("Other")) rbOther.setChecked(true);
-            }
-
-            parseRegions(user.getPreferredRegions());
+        if (authToken == null || authToken.trim().isEmpty()) {
+            Toast.makeText(this, "Your session has expired. Please log in again.", Toast.LENGTH_LONG).show();
+            btnSaveChanges.setEnabled(false);
+            return;
         }
+        setLoading(true, "Loading profile…");
+        apiService.getProfile("Bearer " + authToken).enqueue(new Callback<ProfileResponse>() {
+            @Override
+            public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
+                setLoading(false, null);
+                if (response.isSuccessful() && response.body() != null
+                        && response.body().isSuccess() && response.body().getData() != null) {
+                    bindUserData(response.body().getData());
+                } else if (response.code() == 401) {
+                    btnSaveChanges.setEnabled(false);
+                    Toast.makeText(EditProfileActivity.this, "Your session has expired. Please log in again.", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(EditProfileActivity.this,
+                            readError(response, "Unable to load your profile."), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProfileResponse> call, Throwable t) {
+                setLoading(false, null);
+                Toast.makeText(EditProfileActivity.this,
+                        "Cannot connect to the server. Check your internet connection.", Toast.LENGTH_LONG).show();
+            }
+        });
         updateAllChips();
+    }
+
+    private void bindUserData(ProfileResponse.UserData user) {
+        etFullName.setText(value(user.getFullName()));
+        etUsername.setText(value(user.getUsername()));
+        etEmail.setText(value(user.getEmail()));
+        etEmail.setEnabled(false);
+        etPhone.setText(value(user.getPhone()));
+        etLocation.setText(value(user.getCity()));
+        etBio.setText(value(user.getBio()));
+        selectedDobIso = normalizeIsoDate(user.getDob());
+        updateDobDisplay(selectedDobIso);
+        if ("MALE".equalsIgnoreCase(user.getGender())) rbMale.setChecked(true);
+        else if ("FEMALE".equalsIgnoreCase(user.getGender())) rbFemale.setChecked(true);
+        else if ("OTHER".equalsIgnoreCase(user.getGender())) rbOther.setChecked(true);
+        if (user.getProfileImage() != null && !user.getProfileImage().trim().isEmpty()) {
+            loadRemoteImage(user.getProfileImage());
+        }
     }
 
     private void setupListeners() {
@@ -198,8 +247,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 (view, year1, monthOfYear, dayOfMonth) -> {
-                    String dob = dayOfMonth + " " + getMonthName(monthOfYear) + " " + year1;
-                    tvDateOfBirth.setText(dob);
+                    selectedDobIso = String.format(Locale.US, "%04d-%02d-%02d", year1, monthOfYear + 1, dayOfMonth);
+                    updateDobDisplay(selectedDobIso);
                     calculateAge(year1, monthOfYear, dayOfMonth);
                 }, year, month, day);
         datePickerDialog.show();
@@ -243,28 +292,174 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void saveChanges() {
-        UserModel user = new UserModel();
-        user.setFullName(etFullName.getText().toString());
-        user.setUsername(etUsername.getText().toString());
-        user.setEmail(etEmail.getText().toString());
-        user.setPhone(etPhone.getText().toString());
-        user.setDob(tvDateOfBirth.getText().toString());
-        user.setAge(tvAge.getText().toString());
-        user.setLocation(etLocation.getText().toString());
-        user.setBio(etBio.getText().toString());
-        user.setTrekCount(trekCount);
-        user.setPreferredRegions(getSerializedRegions());
-        user.setImagePath(selectedImagePath);
-
-        int selectedId = radioGender.getCheckedRadioButtonId();
-        if (selectedId != -1) {
-            RadioButton selectedRb = findViewById(selectedId);
-            user.setGender(selectedRb.getText().toString());
+        String fullName = etFullName.getText().toString().trim();
+        String username = etUsername.getText().toString().trim();
+        String email = etEmail.getText().toString().trim();
+        String phone = etPhone.getText().toString().trim();
+        String city = etLocation.getText().toString().trim();
+        String bio = etBio.getText().toString().trim();
+        if (fullName.isEmpty()) {
+            etFullName.setError("Full name is required");
+            etFullName.requestFocus();
+            return;
         }
+        if (username.length() < 3) {
+            etUsername.setError("Username must be at least 3 characters");
+            etUsername.requestFocus();
+            return;
+        }
+        if (email.isEmpty()) {
+            Toast.makeText(this, "Profile email is missing. Reload the profile and try again.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (phone.isEmpty()) {
+            etPhone.setError("Phone number is required");
+            etPhone.requestFocus();
+            return;
+        }
+        if (selectedDobIso.isEmpty()) {
+            Toast.makeText(this, "Please select your date of birth", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (city.isEmpty()) {
+            etLocation.setError("Address is required");
+            etLocation.requestFocus();
+            return;
+        }
+        int selectedId = radioGender.getCheckedRadioButtonId();
+        if (selectedId == -1) {
+            Toast.makeText(this, "Please select your gender", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String gender = selectedId == R.id.rbMale ? "MALE"
+                : selectedId == R.id.rbFemale ? "FEMALE" : "OTHER";
+        UpdateProfileRequest request = new UpdateProfileRequest(
+                fullName, username, email, phone, selectedDobIso, gender, bio, city, null);
+        setLoading(true, "Saving…");
+        apiService.updateProfile("Bearer " + authToken, request).enqueue(new Callback<ProfileResponse>() {
+            @Override
+            public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    if (newImageSelected) uploadSelectedImage();
+                    else finishSuccessfulSave();
+                } else {
+                    setLoading(false, null);
+                    String fallback = response.code() == 409
+                            ? "That username is already in use." : "Profile update failed. Please check your information.";
+                    Toast.makeText(EditProfileActivity.this, readError(response, fallback), Toast.LENGTH_LONG).show();
+                }
+            }
 
-        dbHelper.saveUserProfile(user);
-        Toast.makeText(this, "Profile Updated Successfully!", Toast.LENGTH_SHORT).show();
+            @Override
+            public void onFailure(Call<ProfileResponse> call, Throwable t) {
+                setLoading(false, null);
+                Toast.makeText(EditProfileActivity.this,
+                        "Cannot connect to the server. Your changes were not saved.", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void uploadSelectedImage() {
+        try (InputStream input = getContentResolver().openInputStream(Uri.parse(selectedImagePath));
+             ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+            if (input == null) throw new IllegalStateException("Unable to read selected image");
+            byte[] buffer = new byte[8192];
+            int read;
+            while ((read = input.read(buffer)) != -1) output.write(buffer, 0, read);
+            String mime = getContentResolver().getType(Uri.parse(selectedImagePath));
+            if (mime == null) mime = "image/jpeg";
+            RequestBody body = RequestBody.create(MediaType.parse(mime), output.toByteArray());
+            MultipartBody.Part part = MultipartBody.Part.createFormData("image", "profile.jpg", body);
+            apiService.uploadProfileImage("Bearer " + authToken, part).enqueue(new Callback<ProfileResponse>() {
+                @Override
+                public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
+                    if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                        finishSuccessfulSave();
+                    } else {
+                        setLoading(false, null);
+                        Toast.makeText(EditProfileActivity.this,
+                                "Profile details were saved, but the photo upload failed.", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ProfileResponse> call, Throwable t) {
+                    setLoading(false, null);
+                    Toast.makeText(EditProfileActivity.this,
+                            "Profile details were saved, but the photo upload failed.", Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (Exception e) {
+            setLoading(false, null);
+            Toast.makeText(this, "Profile details were saved, but the selected photo could not be read.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void finishSuccessfulSave() {
+        setLoading(false, null);
+        Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
+        setResult(RESULT_OK);
         finish();
+    }
+
+    private void setLoading(boolean loading, String buttonText) {
+        progressEditProfile.setVisibility(loading ? View.VISIBLE : View.GONE);
+        btnSaveChanges.setEnabled(!loading);
+        btnSaveChanges.setText(loading && buttonText != null ? buttonText : "Save Changes");
+    }
+
+    private String readError(Response<?> response, String fallback) {
+        try {
+            if (response.errorBody() != null) {
+                ErrorResponse error = new Gson().fromJson(response.errorBody().string(), ErrorResponse.class);
+                if (error != null && error.getMessage() != null && !error.getMessage().trim().isEmpty()) {
+                    return error.getMessage();
+                }
+            }
+        } catch (Exception ignored) { }
+        return fallback;
+    }
+
+    private void loadRemoteImage(String path) {
+        String url = path.startsWith("http") ? path : ApiClient.getBaseUrl() + path.replaceFirst("^/", "");
+        apiService.downloadImage(url).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
+                    if (bitmap != null) imgProfile.setImageBitmap(bitmap);
+                }
+            }
+            @Override public void onFailure(Call<ResponseBody> call, Throwable t) { }
+        });
+    }
+
+    private String normalizeIsoDate(String dob) {
+        if (dob == null || dob.trim().isEmpty()) return "";
+        return dob.length() >= 10 ? dob.substring(0, 10) : dob;
+    }
+
+    private void updateDobDisplay(String isoDate) {
+        if (isoDate == null || isoDate.isEmpty()) {
+            tvDateOfBirth.setText("Select date of birth");
+            tvAge.setText("Age: —");
+            return;
+        }
+        try {
+            SimpleDateFormat api = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            api.setLenient(false);
+            Date parsed = api.parse(isoDate);
+            tvDateOfBirth.setText(new SimpleDateFormat("d MMMM yyyy", Locale.getDefault()).format(parsed));
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(parsed);
+            calculateAge(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+        } catch (Exception e) {
+            tvDateOfBirth.setText(isoDate);
+        }
+    }
+
+    private String value(String input) {
+        return input == null ? "" : input;
     }
 
     private String getSerializedRegions() {

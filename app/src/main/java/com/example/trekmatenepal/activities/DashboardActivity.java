@@ -13,6 +13,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -59,6 +62,8 @@ public class DashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+        applySystemBarInsets();
+
         PostRepository.loadPosts(this);
         initializeViews();
         setupRecyclerView();
@@ -69,6 +74,16 @@ public class DashboardActivity extends AppCompatActivity {
         setupUserMenu();
         setupBackHandling();
         clickListeners();
+    }
+
+    private void applySystemBarInsets() {
+        View content = findViewById(R.id.dashboardContent);
+        ViewCompat.setOnApplyWindowInsetsListener(content, (view, windowInsets) -> {
+            Insets bars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            view.setPadding(view.getPaddingLeft(), bars.top, view.getPaddingRight(), bars.bottom);
+            return windowInsets;
+        });
+        ViewCompat.requestApplyInsets(content);
     }
 
     private void updateChatBadge() {
@@ -214,11 +229,7 @@ public class DashboardActivity extends AppCompatActivity {
             int id = item.getItemId();
             if (id == R.id.nav_home) return true;
             else if (id == R.id.nav_gear) {
-                try {
-                    startActivity(new Intent(this, GearRentalActivity.class));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                openGearRental();
             }
             else if (id == R.id.nav_partner) {
                 try {
@@ -310,11 +321,7 @@ public class DashboardActivity extends AppCompatActivity {
         });
 
         cardRentGear.setOnClickListener(v -> {
-            try {
-                startActivity(new Intent(DashboardActivity.this, GearRentalActivity.class));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            openGearRental();
         });
         
         cardPartner.setOnClickListener(v -> {
@@ -379,13 +386,9 @@ public class DashboardActivity extends AppCompatActivity {
         });
         
         viewAllGear.setOnClickListener(v -> {
-            try {
-                startActivity(new Intent(DashboardActivity.this, GearRentalActivity.class));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            openGearRental();
         });
-        
+
         findViewById(R.id.viewAllPosts).setOnClickListener(v -> {
             try {
                 startActivity(new Intent(DashboardActivity.this, TrekPostsActivity.class));
@@ -407,5 +410,9 @@ public class DashboardActivity extends AppCompatActivity {
         findViewById(R.id.categoryHiking).setOnClickListener(openCategory);
         findViewById(R.id.categoryClimbing).setOnClickListener(openCategory);
         findViewById(R.id.categoryAdventure).setOnClickListener(openCategory);
+    }
+
+    private void openGearRental() {
+        startActivity(new Intent(this, GearRentalActivity.class));
     }
 }

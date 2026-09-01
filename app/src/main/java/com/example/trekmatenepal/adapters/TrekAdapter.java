@@ -49,9 +49,9 @@ public class TrekAdapter extends RecyclerView.Adapter<TrekAdapter.ViewHolder> {
         }
 
         holder.name.setText(trek.getTrekName());
+        holder.location.setText(trek.getLocation());
         holder.duration.setText(trek.getDuration());
-        holder.rating.setText(trek.getRating());
-        holder.reviews.setText("(" + trek.getReviews() + ")");
+        holder.status.setText(trek.getDifficulty());
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, TrekPackageDetailsActivity.class);
@@ -79,16 +79,16 @@ public class TrekAdapter extends RecyclerView.Adapter<TrekAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView image;
-        TextView name, duration, rating, reviews;
+        TextView name, location, duration, status;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            image = itemView.findViewById(R.id.imgTrek);
-            name = itemView.findViewById(R.id.txtTrekName);
-            duration = itemView.findViewById(R.id.txtDuration);
-            rating = itemView.findViewById(R.id.txtRating);
-            reviews = itemView.findViewById(R.id.txtReviews);
+            image = itemView.findViewById(R.id.trekImage);
+            name = itemView.findViewById(R.id.trekName);
+            location = itemView.findViewById(R.id.trekLocation);
+            duration = itemView.findViewById(R.id.trekDate);
+            status = itemView.findViewById(R.id.trekStatus);
 
         }
     }

@@ -17,6 +17,7 @@ router.post(
     body('name').trim().notEmpty().withMessage('Gear name is required'),
     body('price_per_day').isNumeric().withMessage('Price per day must be numeric'),
     body('quantity').isNumeric().withMessage('Quantity must be numeric'),
+    body('owner_user_id').optional({ nullable: true }).isInt({ min: 1 }).withMessage('Owner user must be valid'),
   ],
   gearController.createGear
 );
@@ -28,6 +29,7 @@ router.put(
   [
     body('name').optional().trim().notEmpty().withMessage('Gear name cannot be empty'),
     body('price_per_day').optional().isNumeric().withMessage('Price per day must be numeric'),
+    body('owner_user_id').optional({ nullable: true }).isInt({ min: 1 }).withMessage('Owner user must be valid'),
   ],
   gearController.updateGear
 );

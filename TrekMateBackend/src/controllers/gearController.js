@@ -59,6 +59,7 @@ const createGear = async (req, res) => {
     const pool = getPool();
     const {
       category_id,
+      owner_user_id,
       name,
       description,
       price_per_day,
@@ -71,11 +72,12 @@ const createGear = async (req, res) => {
 
     const [result] = await pool.query(
       `INSERT INTO gear (
-        category_id, name, description, price_per_day, quantity, availability,
+        category_id, owner_user_id, name, description, price_per_day, quantity, availability,
         condition_status, owner_name, image_url
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         category_id,
+        owner_user_id || null,
         name,
         description || null,
         Number(price_per_day),
@@ -127,6 +129,7 @@ const updateGear = async (req, res) => {
 
     const {
       category_id,
+      owner_user_id,
       name,
       description,
       price_per_day,
@@ -139,11 +142,12 @@ const updateGear = async (req, res) => {
 
     await pool.query(
       `UPDATE gear
-       SET category_id = ?, name = ?, description = ?, price_per_day = ?, quantity = ?,
+       SET category_id = ?, owner_user_id = ?, name = ?, description = ?, price_per_day = ?, quantity = ?,
            availability = ?, condition_status = ?, owner_name = ?, image_url = ?
        WHERE id = ?`,
       [
         category_id ?? existingRows[0].category_id,
+        owner_user_id ?? existingRows[0].owner_user_id,
         name ?? existingRows[0].name,
         description ?? existingRows[0].description,
         Number(price_per_day ?? existingRows[0].price_per_day),

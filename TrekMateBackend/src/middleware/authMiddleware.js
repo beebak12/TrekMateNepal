@@ -17,7 +17,7 @@ const protect = async (req, res, next) => {
 
     const pool = getPool();
     const [rows] = await pool.query(
-      'SELECT id, full_name, username, email, role_id FROM users WHERE id = ?',
+      'SELECT id, full_name, username, email, role_id, is_active FROM users WHERE id = ?',
       [decoded.id]
     );
 
@@ -25,6 +25,13 @@ const protect = async (req, res, next) => {
       return res.status(401).json({
         success: false,
         message: 'User not found',
+      });
+    }
+
+    if (!rows[0].is_active) {
+      return res.status(403).json({
+        success: false,
+        message: 'Account is deactivated',
       });
     }
 

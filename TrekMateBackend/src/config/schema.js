@@ -103,6 +103,7 @@ const schemaStatements = [
   `CREATE TABLE IF NOT EXISTS gear (
     id INT PRIMARY KEY AUTO_INCREMENT,
     category_id INT NOT NULL,
+    owner_user_id INT,
     name VARCHAR(120) NOT NULL,
     description TEXT,
     price_per_day DECIMAL(10,2) NOT NULL,
@@ -114,6 +115,8 @@ const schemaStatements = [
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_gear_category FOREIGN KEY (category_id) REFERENCES gear_categories(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT fk_gear_owner_user FOREIGN KEY (owner_user_id) REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    INDEX idx_gear_owner_user (owner_user_id),
     INDEX idx_gear_name (name)
   )`,
 
@@ -336,14 +339,108 @@ const schemaStatements = [
     details JSON,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_admin_logs_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+  )`,
+
+  `CREATE TABLE IF NOT EXISTS payment_transactions (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    transaction_reference VARCHAR(80) NOT NULL UNIQUE,
+    gateway_transaction_id VARCHAR(150) UNIQUE,
+    rental_id INT,
+    package_booking_id INT,
+    customer_id INT NOT NULL,
+    provider_id INT,
+    gateway ENUM('ESEWA', 'KHALTI', 'MANUAL', 'SANDBOX') NOT NULL DEFAULT 'SANDBOX',
+    gross_amount DECIMAL(12,2) NOT NULL,
+    commission_rate DECIMAL(5,2) NOT NULL DEFAULT 10.00,
+    commission_amount DECIMAL(12,2) NOT NULL,
+    provider_payable DECIMAL(12,2) NOT NULL,
+    payment_status ENUM('PENDING', 'VERIFIED', 'FAILED', 'REFUNDED', 'PARTIALLY_REFUNDED') NOT NULL DEFAULT 'PENDING',
+    verification_status ENUM('UNVERIFIED', 'VERIFIED', 'FAILED') NOT NULL DEFAULT 'UNVERIFIED',
+    verified_at DATETIME,
+    gateway_response JSON,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_payment_rental FOREIGN KEY (rental_id) REFERENCES gear_rentals(id) ON DELETE SET NULL,
+    CONSTRAINT fk_payment_package_booking FOREIGN KEY (package_booking_id) REFERENCES package_bookings(id) ON DELETE SET NULL,
+    CONSTRAINT fk_payment_customer FOREIGN KEY (customer_id) REFERENCES users(id) ON DELETE RESTRICT,
+    CONSTRAINT fk_payment_provider FOREIGN KEY (provider_id) REFERENCES users(id) ON DELETE SET NULL,
+    INDEX idx_payment_status (payment_status),
+    INDEX idx_payment_provider (provider_id),
+    INDEX idx_payment_created_at (created_at)
+  )`,
+
+  `CREATE TABLE IF NOT EXISTS provider_payouts (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    transaction_id INT NOT NULL UNIQUE,
+    provider_id INT NOT NULL,
+    amount DECIMAL(12,2) NOT NULL,
+    status ENUM('PENDING', 'APPROVED', 'PAID', 'REJECTED') NOT NULL DEFAULT 'PENDING',
+    approved_by INT,
+    approved_at DATETIME,
+    paid_at DATETIME,
+    payout_reference VARCHAR(150),
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_payout_transaction FOREIGN KEY (transaction_id) REFERENCES payment_transactions(id) ON DELETE CASCADE,
+    CONSTRAINT fk_payout_provider FOREIGN KEY (provider_id) REFERENCES users(id) ON DELETE RESTRICT,
+    CONSTRAINT fk_payout_approved_by FOREIGN KEY (approved_by) REFERENCES users(id) ON DELETE SET NULL,
+    INDEX idx_payout_status (status),
+    INDEX idx_payout_provider (provider_id)
+  )`,
+
+  `CREATE TABLE IF NOT EXISTS payment_refunds (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    transaction_id INT NOT NULL,
+    amount DECIMAL(12,2) NOT NULL,
+    reason TEXT NOT NULL,
+    status ENUM('REQUESTED', 'APPROVED', 'COMPLETED', 'REJECTED') NOT NULL DEFAULT 'REQUESTED',
+    requested_by INT,
+    approved_by INT,
+    approved_at DATETIME,
+    completed_at DATETIME,
+    refund_reference VARCHAR(150),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_refund_transaction FOREIGN KEY (transaction_id) REFERENCES payment_transactions(id) ON DELETE CASCADE,
+    CONSTRAINT fk_refund_requested_by FOREIGN KEY (requested_by) REFERENCES users(id) ON DELETE SET NULL,
+    CONSTRAINT fk_refund_approved_by FOREIGN KEY (approved_by) REFERENCES users(id) ON DELETE SET NULL,
+    INDEX idx_refund_status (status),
+    INDEX idx_refund_transaction (transaction_id)
   )`
 ];
+
+const columnExists = async (pool, tableName, columnName) => {
+  const [rows] = await pool.query(
+    `SELECT 1
+     FROM information_schema.COLUMNS
+     WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?
+     LIMIT 1`,
+    [tableName, columnName]
+  );
+  return rows.length > 0;
+};
 
 const initializeSchema = async () => {
   const pool = getPool();
 
   for (const statement of schemaStatements) {
     await pool.query(statement);
+  }
+
+  await pool.query(
+    `INSERT IGNORE INTO roles (id, name) VALUES (1, 'USER'), (2, 'GUIDE'), (3, 'ADMIN')`
+  );
+
+  if (!(await columnExists(pool, 'gear', 'owner_user_id'))) {
+    await pool.query(
+      `ALTER TABLE gear
+       ADD COLUMN owner_user_id INT NULL AFTER category_id,
+       ADD INDEX idx_gear_owner_user (owner_user_id),
+       ADD CONSTRAINT fk_gear_owner_user
+         FOREIGN KEY (owner_user_id) REFERENCES users(id)
+         ON DELETE SET NULL ON UPDATE CASCADE`
+    );
   }
 
   console.log('Database schema initialized successfully');

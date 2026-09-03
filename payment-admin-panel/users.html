@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="TrekMate Nepal user and provider management"
+    >
+
+    <title>TrekMate Nepal | User Management</title>
+
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/navigation.css">
+</head>
+
+<body>
+    <div class="dashboard-layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <div class="brand-logo">TM</div>
+
+                <div>
+                    <h1>TrekMate</h1>
+                    <p>Nepal Admin</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-navigation" aria-label="Main navigation">
+
+                <a
+                    class="navigation-item"
+                    href="index.html#dashboard"
+                    data-section="dashboard"
+                >
+                    <span class="navigation-icon">▦</span>
+                    Dashboard
+                </a>
+
+                <a
+                    class="navigation-item"
+                    href="index.html#transactions"
+                    data-section="transactions"
+                >
+                    <span class="navigation-icon">⇄</span>
+                    Transactions
+                </a>
+
+                <!-- Users and Gear dropdown -->
+                <div
+                    class="navigation-group open"
+                    id="usersNavigationGroup"
+                >
+                    <button
+                        class="navigation-item users-menu-toggle active"
+                        id="usersMenuToggle"
+                        type="button"
+                        aria-expanded="true"
+                        aria-controls="usersSubmenu"
+                    >
+                        <span class="navigation-icon">♙</span>
+                        Users &amp; Gear
+                        <span class="menu-chevron">⌄</span>
+                    </button>
+
+                    <div
+                        class="navigation-submenu"
+                        id="usersSubmenu"
+                    >
+                        <a
+                            class="subnavigation-item"
+                            href="users.html#users"
+                            data-user-view="users"
+                        >
+                            <span class="subnavigation-dot"></span>
+                            Users
+                        </a>
+
+                        <a
+                            class="subnavigation-item"
+                            id="providerNavigation"
+                            href="users.html#providers"
+                            data-user-view="providers"
+                        >
+                            <span class="subnavigation-dot"></span>
+                            Providers &amp; Gear
+                        </a>
+                    </div>
+                </div>
+
+                <a
+                    class="navigation-item"
+                    href="index.html#revenue"
+                    data-section="revenue"
+                >
+                    <span class="navigation-icon">₨</span>
+                    Revenue
+                </a>
+
+                <a
+                    class="navigation-item"
+                    href="index.html#payouts"
+                    data-section="payouts"
+                >
+                    <span class="navigation-icon">✓</span>
+                    Provider Payouts
+                </a>
+
+                <a
+                    class="navigation-item"
+                    href="index.html#refunds"
+                    data-section="refunds"
+                >
+                    <span class="navigation-icon">↶</span>
+                    Refunds
+                </a>
+
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="admin-avatar">SP</div>
+
+                <div>
+                    <strong>Admin User</strong>
+                    <span>System Administrator</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main content -->
+        <main class="main-content">
+
+            <!-- Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button
+                        class="menu-button"
+                        id="menuButton"
+                        aria-label="Open navigation menu"
+                    >
+                        ☰
+                    </button>
+
+                    <div>
+                        <h2>User Management</h2>
+
+                        <p>
+                            Manage customers, providers and rental activity
+                        </p>
+                    </div>
+                </div>
+
+                <button
+                    class="primary-button add-user-button"
+                    id="addUserButton"
+                >
+                    + Add User
+                </button>
+            </header>
+
+            <!-- Prototype notice -->
+            <section class="prototype-notice">
+                <div>
+                    <strong>Prototype mode</strong>
+
+                    <p>
+                        User changes currently affect demonstration data only.
+                        Bibek’s Express API will connect these actions to MySQL.
+                    </p>
+                </div>
+
+                <span>Frontend Preview</span>
+            </section>
+
+            <!-- User summary -->
+            <section class="summary-grid users-summary-grid">
+
+                <article class="summary-card gross-card">
+                    <div class="card-heading">
+                        <span>Total Users</span>
+                        <span class="card-icon">♙</span>
+                    </div>
+
+                    <strong id="totalUsers">0</strong>
+
+                    <small>Customers and gear providers</small>
+                </article>
+
+                <article class="summary-card revenue-card">
+                    <div class="card-heading">
+                        <span>Gear Providers</span>
+                        <span class="card-icon">♢</span>
+                    </div>
+
+                    <strong id="totalProviders">0</strong>
+
+                    <small>Registered rental providers</small>
+                </article>
+
+                <article class="summary-card payable-card">
+                    <div class="card-heading">
+                        <span>Listed Gear Items</span>
+                        <span class="card-icon">▣</span>
+                    </div>
+
+                    <strong id="totalGearItems">0</strong>
+
+                    <small>Total items listed by providers</small>
+                </article>
+
+                <article class="summary-card refund-card">
+                    <div class="card-heading">
+                        <span>Completed Rentals</span>
+                        <span class="card-icon">✓</span>
+                    </div>
+
+                    <strong id="totalCompletedRentals">0</strong>
+
+                    <small>Completed gear bookings</small>
+                </article>
+
+            </section>
+
+            <!-- User table -->
+            <section class="panel user-management-panel">
+                <div class="panel-header user-table-header">
+                    <div>
+                        <h3>Registered Users</h3>
+
+                        <p>
+                            View and manage TrekMate customers and providers
+                        </p>
+                    </div>
+
+                    <div class="table-controls">
+                        <label
+                            for="userSearch"
+                            class="visually-hidden"
+                        >
+                            Search users
+                        </label>
+
+                        <input
+                            type="search"
+                            id="userSearch"
+                            placeholder="Search name, email or ID"
+                        >
+
+                        <label
+                            for="roleFilter"
+                            class="visually-hidden"
+                        >
+                            Filter by role
+                        </label>
+
+                        <select id="roleFilter">
+                            <option value="all">
+                                All roles
+                            </option>
+
+                            <option value="customer">
+                                Customers
+                            </option>
+
+                            <option value="provider">
+                                Providers
+                            </option>
+                        </select>
+
+                        <label
+                            for="userStatusFilter"
+                            class="visually-hidden"
+                        >
+                            Filter by status
+                        </label>
+
+                        <select id="userStatusFilter">
+                            <option value="all">
+                                All statuses
+                            </option>
+
+                            <option value="active">
+                                Active
+                            </option>
+
+                            <option value="deactivated">
+                                Deactivated
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="user-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Gear Listed</th>
+                                <th>Gear Booked</th>
+                                <th>Provider Earnings</th>
+                                <th>Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="userTableBody">
+                            <!-- Created through users.js -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div
+                    class="empty-state hidden"
+                    id="userEmptyState"
+                >
+                    <strong>No users found</strong>
+
+                    <p>
+                        Try changing the search text or selected filters.
+                    </p>
+                </div>
+            </section>
+
+            <footer class="dashboard-footer">
+                <p>
+                    TrekMate Nepal User Administration
+                </p>
+
+                <p>
+                    User deletion is represented as account deactivation
+                    to preserve transaction history.
+                </p>
+            </footer>
+
+        </main>
+    </div>
+
+    <!-- Add or Edit User Modal -->
+    <div
+        class="modal-overlay hidden"
+        id="userFormModal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="userFormTitle"
+    >
+        <div class="modal user-form-modal">
+            <button
+                class="modal-close"
+                id="closeUserFormButton"
+                aria-label="Close user form"
+            >
+                ×
+            </button>
+
+            <div class="modal-icon">♙</div>
+
+            <h3 id="userFormTitle">
+                Add New User
+            </h3>
+
+            <p>
+                Enter the user information below.
+            </p>
+
+            <form id="userForm">
+                <input
+                    type="hidden"
+                    id="editingUserId"
+                >
+
+                <div class="form-group">
+                    <label for="userName">
+                        Full name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="userName"
+                        placeholder="Enter full name"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="userEmail">
+                        Email address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="userEmail"
+                        placeholder="Enter email address"
+                        required
+                    >
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="userRole">
+                            User role
+                        </label>
+
+                        <select id="userRole" required>
+                            <option value="customer">
+                                Customer
+                            </option>
+
+                            <option value="provider">
+                                Gear Provider
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userStatus">
+                            Status
+                        </label>
+
+                        <select id="userStatus" required>
+                            <option value="active">
+                                Active
+                            </option>
+
+                            <option value="deactivated">
+                                Deactivated
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-actions form-actions">
+                    <button
+                        type="button"
+                        class="secondary-button"
+                        id="cancelUserFormButton"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="primary-button"
+                    >
+                        Save User
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Provider Details Modal -->
+    <div
+        class="modal-overlay hidden"
+        id="providerDetailsModal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="providerDetailsTitle"
+    >
+        <div class="modal provider-details-modal">
+            <button
+                class="modal-close"
+                id="closeProviderDetailsButton"
+                aria-label="Close provider details"
+            >
+                ×
+            </button>
+
+            <div class="provider-profile-header">
+                <div
+                    class="provider-large-avatar"
+                    id="providerAvatar"
+                >
+                    —
+                </div>
+
+                <div>
+                    <span class="provider-label">
+                        Gear Provider
+                    </span>
+
+                    <h3 id="providerDetailsTitle">
+                        Provider Details
+                    </h3>
+
+                    <p id="providerDetailsEmail">—</p>
+                </div>
+            </div>
+
+            <div class="provider-stat-grid">
+                <div>
+                    <span>Gear listed</span>
+                    <strong id="providerGearCount">0</strong>
+                </div>
+
+                <div>
+                    <span>Bookings</span>
+                    <strong id="providerBookingCount">0</strong>
+                </div>
+
+                <div>
+                    <span>Total earnings</span>
+                    <strong id="providerEarnings">NPR 0</strong>
+                </div>
+            </div>
+
+            <div class="history-section">
+                <div class="history-heading">
+                    <div>
+                        <h4>
+                            Gear Rental and Transaction History
+                        </h4>
+
+                        <p>
+                            Bookings and provider payout records
+                        </p>
+                    </div>
+                </div>
+
+                <div
+                    class="table-container provider-history-table"
+                >
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Booking</th>
+                                <th>Gear Item</th>
+                                <th>Customer</th>
+                                <th>Rental Period</th>
+                                <th>Booking Amount</th>
+                                <th>Provider Share</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="providerHistoryBody">
+                            <!-- Created through users.js -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div
+                    class="empty-state hidden"
+                    id="providerHistoryEmptyState"
+                >
+                    <strong>No rental history</strong>
+
+                    <p>
+                        This provider has no recorded gear bookings.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deactivation Confirmation Modal -->
+    <div
+        class="modal-overlay hidden"
+        id="deactivateModal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="deactivateTitle"
+    >
+        <div class="modal">
+            <button
+                class="modal-close"
+                id="closeDeactivateButton"
+                aria-label="Close confirmation"
+            >
+                ×
+            </button>
+
+            <div class="modal-icon warning-modal-icon">
+                !
+            </div>
+
+            <h3 id="deactivateTitle">
+                Deactivate User?
+            </h3>
+
+            <p>
+                The user will lose account access, but their booking and
+                transaction records will remain available.
+            </p>
+
+            <div class="modal-details">
+                <div>
+                    <span>User</span>
+                    <strong id="deactivateUserName">—</strong>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button
+                    class="secondary-button"
+                    id="cancelDeactivateButton"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    class="danger-button"
+                    id="confirmDeactivateButton"
+                >
+                    Deactivate User
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div
+        class="toast hidden"
+        id="toast"
+        role="status"
+    >
+        User updated successfully.
+    </div>
+
+    <!-- Users data loads before navigation filters -->
+    <script src="js/users.js"></script>
+    <script src="js/navigation.js"></script>
+</body>
+</html>

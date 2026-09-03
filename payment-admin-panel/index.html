@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="TrekMate Nepal payment and revenue administration panel"
+    >
+
+    <title>TrekMate Nepal | Payment Admin Panel</title>
+
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/navigation.css">
+</head>
+
+<body>
+    <div class="dashboard-layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <div class="brand-logo">TM</div>
+
+                <div>
+                    <h1>TrekMate</h1>
+                    <p>Nepal Admin</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-navigation" aria-label="Main navigation">
+
+                <button
+                    class="navigation-item active"
+                    data-section="dashboard"
+                    type="button"
+                >
+                    <span class="navigation-icon">▦</span>
+                    Dashboard
+                </button>
+
+                <button
+                    class="navigation-item"
+                    data-section="transactions"
+                    type="button"
+                >
+                    <span class="navigation-icon">⇄</span>
+                    Transactions
+                </button>
+
+                <!-- Users and Gear dropdown -->
+                <div
+                    class="navigation-group"
+                    id="usersNavigationGroup"
+                >
+                    <button
+                        class="navigation-item users-menu-toggle"
+                        id="usersMenuToggle"
+                        type="button"
+                        aria-expanded="false"
+                        aria-controls="usersSubmenu"
+                    >
+                        <span class="navigation-icon">♙</span>
+                        Users &amp; Gear
+                        <span class="menu-chevron">⌄</span>
+                    </button>
+
+                    <div
+                        class="navigation-submenu"
+                        id="usersSubmenu"
+                    >
+                        <a
+                            class="subnavigation-item"
+                            href="users.html#users"
+                            data-user-view="users"
+                        >
+                            <span class="subnavigation-dot"></span>
+                            Users
+                        </a>
+
+                        <a
+                            class="subnavigation-item"
+                            href="users.html#providers"
+                            data-user-view="providers"
+                        >
+                            <span class="subnavigation-dot"></span>
+                            Providers &amp; Gear
+                        </a>
+                    </div>
+                </div>
+
+                <button
+                    class="navigation-item"
+                    data-section="revenue"
+                    type="button"
+                >
+                    <span class="navigation-icon">₨</span>
+                    Revenue
+                </button>
+
+                <button
+                    class="navigation-item"
+                    data-section="payouts"
+                    type="button"
+                >
+                    <span class="navigation-icon">✓</span>
+                    Provider Payouts
+                </button>
+
+                <button
+                    class="navigation-item"
+                    data-section="refunds"
+                    type="button"
+                >
+                    <span class="navigation-icon">↶</span>
+                    Refunds
+                </button>
+
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="admin-avatar">SP</div>
+
+                <div>
+                    <strong>Admin User</strong>
+                    <span>Financial Administrator</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main content -->
+        <main class="main-content">
+
+            <!-- Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button
+                        class="menu-button"
+                        id="menuButton"
+                        aria-label="Open navigation menu"
+                    >
+                        ☰
+                    </button>
+
+                    <div>
+                        <h2>Payment Dashboard</h2>
+
+                        <p>
+                            Monitor revenue, transactions and provider payouts
+                        </p>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <span class="system-status">
+                        <span class="status-indicator"></span>
+                        System operational
+                    </span>
+
+                    <button
+                        class="notification-button"
+                        aria-label="Notifications"
+                    >
+                        ♢
+                        <span class="notification-count">3</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Prototype notice -->
+            <section class="prototype-notice">
+                <div>
+                    <strong>Prototype mode</strong>
+
+                    <p>
+                        This dashboard currently displays demonstration data.
+                        Live information will be supplied by the Express API.
+                    </p>
+                </div>
+
+                <span>Frontend Preview</span>
+            </section>
+
+            <!-- Summary cards -->
+            <section
+                class="summary-grid"
+                aria-label="Financial summary"
+            >
+
+                <article class="summary-card gross-card">
+                    <div class="card-heading">
+                        <span>Total Booking Amount</span>
+                        <span class="card-icon">₨</span>
+                    </div>
+
+                    <strong id="totalBookingAmount">
+                        NPR 145,000
+                    </strong>
+
+                    <small>From verified transactions</small>
+                </article>
+
+                <article class="summary-card revenue-card">
+                    <div class="card-heading">
+                        <span>TrekMate Revenue</span>
+                        <span class="card-icon">10%</span>
+                    </div>
+
+                    <strong id="totalCommission">
+                        NPR 14,500
+                    </strong>
+
+                    <small>Commission retained by TrekMate</small>
+                </article>
+
+                <article class="summary-card payable-card">
+                    <div class="card-heading">
+                        <span>Pending Payables</span>
+                        <span class="card-icon">⌛</span>
+                    </div>
+
+                    <strong id="pendingPayables">
+                        NPR 45,000
+                    </strong>
+
+                    <small>Waiting for payout approval</small>
+                </article>
+
+                <article class="summary-card refund-card">
+                    <div class="card-heading">
+                        <span>Total Refunds</span>
+                        <span class="card-icon">↶</span>
+                    </div>
+
+                    <strong id="totalRefunds">
+                        NPR 5,000
+                    </strong>
+
+                    <small>Approved refund amount</small>
+                </article>
+
+            </section>
+
+            <!-- Revenue and payout overview -->
+            <section class="content-grid">
+
+                <article
+                    class="panel revenue-overview"
+                    id="revenue"
+                >
+                    <div class="panel-header">
+                        <div>
+                            <h3>Commission Overview</h3>
+
+                            <p>
+                                Distribution of verified booking revenue
+                            </p>
+                        </div>
+
+                        <span class="period-label">
+                            Current records
+                        </span>
+                    </div>
+
+                    <div class="revenue-content">
+                        <div
+                            class="commission-chart"
+                            aria-label="Revenue split chart"
+                        >
+                            <div class="chart-centre">
+                                <strong>10%</strong>
+                                <span>Commission</span>
+                            </div>
+                        </div>
+
+                        <div class="revenue-details">
+                            <div class="revenue-detail">
+                                <span class="legend-dot purple"></span>
+
+                                <div>
+                                    <p>TrekMate Commission</p>
+                                    <strong>NPR 14,500</strong>
+                                </div>
+
+                                <span>10%</span>
+                            </div>
+
+                            <div class="revenue-detail">
+                                <span class="legend-dot green"></span>
+
+                                <div>
+                                    <p>Provider Share</p>
+                                    <strong>NPR 130,500</strong>
+                                </div>
+
+                                <span>90%</span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <article
+                    class="panel pending-panel"
+                    id="payouts"
+                >
+                    <div class="panel-header">
+                        <div>
+                            <h3>Pending Payouts</h3>
+
+                            <p>
+                                Provider payments requiring action
+                            </p>
+                        </div>
+
+                        <span
+                            class="count-badge"
+                            id="pendingPayoutCount"
+                        >
+                            3
+                        </span>
+                    </div>
+
+                    <div
+                        id="pendingPayoutList"
+                        class="pending-payout-list"
+                    >
+                        <!-- Created through app.js -->
+                    </div>
+                </article>
+
+            </section>
+
+            <!-- Transactions -->
+            <section
+                class="panel transaction-panel"
+                id="transactions"
+            >
+                <div class="panel-header transaction-header">
+                    <div>
+                        <h3>Recent Transactions</h3>
+
+                        <p>
+                            Payment verification and payout information
+                        </p>
+                    </div>
+
+                    <div class="table-controls">
+                        <label
+                            for="transactionSearch"
+                            class="visually-hidden"
+                        >
+                            Search transactions
+                        </label>
+
+                        <input
+                            type="search"
+                            id="transactionSearch"
+                            placeholder="Search ID, customer or provider"
+                        >
+
+                        <label
+                            for="statusFilter"
+                            class="visually-hidden"
+                        >
+                            Filter by status
+                        </label>
+
+                        <select id="statusFilter">
+                            <option value="all">
+                                All statuses
+                            </option>
+
+                            <option value="verified">
+                                Verified
+                            </option>
+
+                            <option value="pending">
+                                Pending
+                            </option>
+
+                            <option value="refunded">
+                                Refunded
+                            </option>
+
+                            <option value="failed">
+                                Failed
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Transaction</th>
+                                <th>Customer</th>
+                                <th>Provider</th>
+                                <th>Gross Amount</th>
+                                <th>Commission</th>
+                                <th>Provider Share</th>
+                                <th>Payment</th>
+                                <th>Payout</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="transactionTableBody">
+                            <!-- Created through app.js -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div
+                    class="empty-state hidden"
+                    id="emptyState"
+                >
+                    <strong>No transactions found</strong>
+
+                    <p>
+                        Try changing the search text or selected status.
+                    </p>
+                </div>
+            </section>
+
+            <footer class="dashboard-footer">
+                <p>
+                    TrekMate Nepal Payment Administration Panel
+                </p>
+
+                <p>
+                    Commission model: 10% TrekMate · 90% Provider
+                </p>
+            </footer>
+
+        </main>
+    </div>
+
+    <!-- Payout confirmation modal -->
+    <div
+        class="modal-overlay hidden"
+        id="payoutModal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalTitle"
+    >
+        <div class="modal">
+            <button
+                class="modal-close"
+                id="modalCloseButton"
+                aria-label="Close confirmation window"
+            >
+                ×
+            </button>
+
+            <div class="modal-icon">✓</div>
+
+            <h3 id="modalTitle">
+                Approve Provider Payout?
+            </h3>
+
+            <p>
+                Confirm that the provider has received the payment before
+                marking this payout as paid.
+            </p>
+
+            <div class="modal-details">
+                <div>
+                    <span>Provider</span>
+                    <strong id="modalProviderName">—</strong>
+                </div>
+
+                <div>
+                    <span>Payout amount</span>
+                    <strong id="modalPayoutAmount">—</strong>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button
+                    class="secondary-button"
+                    id="cancelPayoutButton"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    class="primary-button"
+                    id="confirmPayoutButton"
+                >
+                    Confirm and Mark Paid
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div
+        class="toast hidden"
+        id="toast"
+        role="status"
+    >
+        Payout marked as paid successfully.
+    </div>
+
+    <!-- app.js loads first so dashboard filters are ready -->
+    <script src="js/app.js"></script>
+    <script src="js/navigation.js"></script>
+</body>
+</html>

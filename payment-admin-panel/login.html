@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrekMate Nepal | Admin Login</title>
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+    <main class="login-page">
+        <section class="login-card" aria-labelledby="loginTitle">
+            <div class="brand-mark" aria-hidden="true">TM</div>
+            <p class="eyebrow">TrekMate Nepal</p>
+            <h1 id="loginTitle">Admin sign in</h1>
+            <p class="login-description">
+                Sign in with an administrator account to manage payments,
+                users and provider settlements.
+            </p>
+
+            <form id="loginForm">
+                <label for="email">Email address</label>
+                <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autocomplete="username"
+                    required
+                >
+
+                <label for="password">Password</label>
+                <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    autocomplete="current-password"
+                    required
+                >
+
+                <p class="login-error hidden" id="loginError" role="alert"></p>
+
+                <button id="loginButton" type="submit">Sign in</button>
+            </form>
+
+            <p class="connection-note">
+                Local API: <code>127.0.0.1:5050</code>
+            </p>
+        </section>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script>
+        "use strict";
+
+        const loginForm = document.getElementById("loginForm");
+        const loginButton = document.getElementById("loginButton");
+        const loginError = document.getElementById("loginError");
+
+        if (TrekMateAPI.getToken()) {
+            window.location.replace("index.html");
+        }
+
+        loginForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            loginError.classList.add("hidden");
+            loginButton.disabled = true;
+            loginButton.textContent = "Signing in…";
+
+            try {
+                await TrekMateAPI.login(
+                    document.getElementById("email").value.trim(),
+                    document.getElementById("password").value
+                );
+                window.location.replace("index.html");
+            } catch (error) {
+                loginError.textContent = error.message;
+                loginError.classList.remove("hidden");
+                loginButton.disabled = false;
+                loginButton.textContent = "Sign in";
+            }
+        });
+    </script>
+</body>
+</html>

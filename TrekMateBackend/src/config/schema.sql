@@ -369,9 +369,31 @@ CREATE TABLE IF NOT EXISTS payment_transactions (
   INDEX idx_payment_created_at (created_at)
 );
 
+CREATE TABLE IF NOT EXISTS payout_batches (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  settlement_reference VARCHAR(80) NOT NULL UNIQUE,
+  provider_id INT NOT NULL,
+  period_start DATE NOT NULL,
+  period_end DATE NOT NULL,
+  total_amount DECIMAL(12,2) NOT NULL,
+  status ENUM('PENDING', 'APPROVED', 'PAID', 'REJECTED') NOT NULL DEFAULT 'PENDING',
+  approved_by INT,
+  approved_at DATETIME,
+  paid_at DATETIME,
+  payout_reference VARCHAR(150),
+  notes TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_batch_provider FOREIGN KEY (provider_id) REFERENCES users(id) ON DELETE RESTRICT,
+  CONSTRAINT fk_batch_approved_by FOREIGN KEY (approved_by) REFERENCES users(id) ON DELETE SET NULL,
+  INDEX idx_batch_provider_period (provider_id, period_start, period_end),
+  INDEX idx_batch_status (status)
+);
+
 CREATE TABLE IF NOT EXISTS provider_payouts (
   id INT PRIMARY KEY AUTO_INCREMENT,
   transaction_id INT NOT NULL UNIQUE,
+  batch_id INT,
   provider_id INT NOT NULL,
   amount DECIMAL(12,2) NOT NULL,
   status ENUM('PENDING', 'APPROVED', 'PAID', 'REJECTED') NOT NULL DEFAULT 'PENDING',
@@ -383,9 +405,11 @@ CREATE TABLE IF NOT EXISTS provider_payouts (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   CONSTRAINT fk_payout_transaction FOREIGN KEY (transaction_id) REFERENCES payment_transactions(id) ON DELETE CASCADE,
+  CONSTRAINT fk_payout_batch FOREIGN KEY (batch_id) REFERENCES payout_batches(id) ON DELETE SET NULL,
   CONSTRAINT fk_payout_provider FOREIGN KEY (provider_id) REFERENCES users(id) ON DELETE RESTRICT,
   CONSTRAINT fk_payout_approved_by FOREIGN KEY (approved_by) REFERENCES users(id) ON DELETE SET NULL,
   INDEX idx_payout_status (status),
+  INDEX idx_payout_batch (batch_id),
   INDEX idx_payout_provider (provider_id)
 );
 

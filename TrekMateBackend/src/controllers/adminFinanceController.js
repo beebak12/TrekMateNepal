@@ -194,6 +194,153 @@ const updatePayout = async (req, res) => {
   } finally { db.release(); }
 };
 
+const getSettlements = async (req, res) => {
+  try {
+    const status = String(req.query.status || '').toUpperCase();
+    const values = [];
+    const where = status ? 'WHERE pb.status=?' : '';
+    if (status) values.push(status);
+    const [rows] = await getPool().query(
+      `SELECT pb.id,pb.settlement_reference,pb.provider_id,
+              DATE_FORMAT(pb.period_start,'%Y-%m-%d') period_start,
+              DATE_FORMAT(pb.period_end,'%Y-%m-%d') period_end,
+              pb.total_amount,pb.status,pb.approved_by,pb.approved_at,pb.paid_at,
+              pb.payout_reference,pb.notes,pb.created_at,pb.updated_at,
+              u.full_name provider_name,u.email provider_email,
+              COUNT(pp.id) transaction_count
+       FROM payout_batches pb JOIN users u ON u.id=pb.provider_id
+       LEFT JOIN provider_payouts pp ON pp.batch_id=pb.id
+       ${where} GROUP BY pb.id ORDER BY pb.period_end DESC,pb.created_at DESC`, values
+    );
+    return res.json({ success: true, data: rows });
+  } catch (error) { return fail(res, error, 'Failed to fetch weekly settlements'); }
+};
+
+const createSettlement = async (req, res) => {
+  if (invalid(req, res)) return;
+  const { provider_id: providerId, period_start: periodStart, period_end: periodEnd } = req.body;
+  const start = new Date(`${periodStart}T00:00:00Z`);
+  const end = new Date(`${periodEnd}T00:00:00Z`);
+  const days = Math.round((end - start) / 86400000) + 1;
+  if (days < 1 || days > 7) {
+    return res.status(400).json({ success: false, message: 'Settlement period must be between 1 and 7 days' });
+  }
+  const db = await getPool().getConnection();
+  try {
+    await db.beginTransaction();
+    const [items] = await db.query(
+      `SELECT id,amount FROM provider_payouts
+       WHERE provider_id=? AND status='PENDING' AND batch_id IS NULL
+         AND DATE(created_at) BETWEEN ? AND ? FOR UPDATE`,
+      [providerId, periodStart, periodEnd]
+    );
+    if (!items.length) {
+      await db.rollback();
+      return res.status(409).json({ success: false, message: 'No pending payouts found for this provider and period' });
+    }
+    const total = items.reduce((sum, item) => sum + Number(item.amount), 0);
+    const reference = `SET-${periodStart.replaceAll('-', '')}-${providerId}-${Date.now()}`;
+    const [result] = await db.query(
+      `INSERT INTO payout_batches
+       (settlement_reference,provider_id,period_start,period_end,total_amount,notes)
+       VALUES (?,?,?,?,?,?)`,
+      [reference, providerId, periodStart, periodEnd, total.toFixed(2), req.body.notes || null]
+    );
+    await db.query(
+      `UPDATE provider_payouts SET batch_id=? WHERE id IN (${items.map(() => '?').join(',')})`,
+      [result.insertId, ...items.map((item) => item.id)]
+    );
+    await log(db, req.user.id, 'CREATE_WEEKLY_SETTLEMENT', 'payout_batch', result.insertId,
+      { provider_id: providerId, period_start: periodStart, period_end: periodEnd, transaction_count: items.length });
+    await db.commit();
+    return res.status(201).json({ success: true, message: 'Weekly settlement created', data: {
+      id: result.insertId, settlement_reference: reference, total_amount: total.toFixed(2),
+      transaction_count: items.length, status: 'PENDING',
+    } });
+  } catch (error) {
+    await db.rollback();
+    return fail(res, error, 'Failed to create weekly settlement');
+  } finally { db.release(); }
+};
+
+const updateSettlement = async (req, res) => {
+  if (invalid(req, res)) return;
+  const next = req.body.status.toUpperCase();
+  const db = await getPool().getConnection();
+  try {
+    await db.beginTransaction();
+    const [rows] = await db.query('SELECT * FROM payout_batches WHERE id=? FOR UPDATE', [req.params.id]);
+    if (!rows.length) { await db.rollback(); return res.status(404).json({ success: false, message: 'Settlement not found' }); }
+    const transitions = { PENDING: ['APPROVED','REJECTED'], APPROVED: ['PAID','REJECTED'], PAID: [], REJECTED: [] };
+    if (!transitions[rows[0].status].includes(next)) {
+      await db.rollback();
+      return res.status(409).json({ success: false, message: `Cannot change ${rows[0].status} settlement to ${next}` });
+    }
+    if (next === 'PAID' && !req.body.payout_reference) {
+      await db.rollback();
+      return res.status(400).json({ success: false, message: 'Payout reference is required' });
+    }
+    await db.query(
+      `UPDATE payout_batches SET status=?,approved_by=?,
+       approved_at=IF(?='APPROVED',NOW(),approved_at),paid_at=IF(?='PAID',NOW(),paid_at),
+       payout_reference=COALESCE(?,payout_reference),notes=COALESCE(?,notes) WHERE id=?`,
+      [next, req.user.id, next, next, req.body.payout_reference || null, req.body.notes || null, req.params.id]
+    );
+    await db.query(
+      `UPDATE provider_payouts SET status=?,approved_by=?,
+       approved_at=IF(?='APPROVED',NOW(),approved_at),paid_at=IF(?='PAID',NOW(),paid_at),
+       payout_reference=COALESCE(?,payout_reference) WHERE batch_id=?`,
+      [next, req.user.id, next, next, req.body.payout_reference || null, req.params.id]
+    );
+    await log(db, req.user.id, `SETTLEMENT_${next}`, 'payout_batch', req.params.id);
+    await db.commit();
+    return res.json({ success: true, message: `Weekly settlement marked ${next.toLowerCase()}` });
+  } catch (error) {
+    await db.rollback();
+    return fail(res, error, 'Failed to update weekly settlement');
+  } finally { db.release(); }
+};
+
+const getMonthlyReport = async (req, res) => {
+  try {
+    const month = String(req.query.month || '').trim();
+    if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(month)) {
+      return res.status(400).json({ success: false, message: 'Month must use YYYY-MM format' });
+    }
+    const start = `${month}-01`;
+    const [year, monthNumber] = month.split('-').map(Number);
+    const end = new Date(Date.UTC(year, monthNumber, 0)).toISOString().slice(0, 10);
+    const pool = getPool();
+    const [[summary]] = await pool.query(
+      `SELECT COALESCE(SUM(gross_amount),0) gross_amount,
+              COALESCE(SUM(commission_amount),0) trekmate_revenue,
+              COALESCE(SUM(provider_payable),0) provider_payable,
+              COALESCE(COUNT(*),0) transaction_count
+       FROM payment_transactions
+       WHERE verification_status='VERIFIED' AND DATE(verified_at) BETWEEN ? AND ?`, [start, end]
+    );
+    const [[refunds]] = await pool.query(
+      `SELECT COALESCE(SUM(amount),0) refund_amount,COALESCE(COUNT(*),0) refund_count
+       FROM payment_refunds WHERE status='COMPLETED' AND DATE(completed_at) BETWEEN ? AND ?`, [start, end]
+    );
+    const [[settlements]] = await pool.query(
+      `SELECT COALESCE(SUM(total_amount),0) paid_to_providers,COALESCE(COUNT(*),0) settlement_count
+       FROM payout_batches WHERE status='PAID' AND DATE(paid_at) BETWEEN ? AND ?`, [start, end]
+    );
+    const [providers] = await pool.query(
+      `SELECT u.id provider_id,u.full_name provider_name,COUNT(pt.id) transaction_count,
+              COALESCE(SUM(pt.gross_amount),0) gross_amount,
+              COALESCE(SUM(pt.commission_amount),0) commission_amount,
+              COALESCE(SUM(pt.provider_payable),0) provider_payable
+       FROM payment_transactions pt JOIN users u ON u.id=pt.provider_id
+       WHERE pt.verification_status='VERIFIED' AND DATE(pt.verified_at) BETWEEN ? AND ?
+       GROUP BY u.id,u.full_name ORDER BY provider_payable DESC`, [start, end]
+    );
+    return res.json({ success: true, data: { month, period_start: start, period_end: end,
+      summary: { ...summary, ...refunds, ...settlements }, providers } });
+  } catch (error) { return fail(res, error, 'Failed to generate monthly report'); }
+};
+
 const getRefunds = async (req, res) => {
   try {
     const [rows] = await getPool().query(
@@ -272,4 +419,5 @@ const updateRefund = async (req, res) => {
 };
 
 module.exports = { getDashboard, getTransactions, createTransaction, verifyTransaction,
-  getPayouts, updatePayout, getRefunds, createRefund, updateRefund };
+  getPayouts, updatePayout, getSettlements, createSettlement, updateSettlement,
+  getMonthlyReport, getRefunds, createRefund, updateRefund };

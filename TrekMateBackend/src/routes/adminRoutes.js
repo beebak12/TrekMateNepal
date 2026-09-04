@@ -51,6 +51,19 @@ router.patch('/payouts/:id', [
   body('payout_reference').optional({ nullable: true }).isString().trim().notEmpty(),
 ], finance.updatePayout);
 
+router.get('/settlements', finance.getSettlements);
+router.post('/settlements', [
+  body('provider_id').isInt({ min: 1 }),
+  body('period_start').isISO8601({ strict: true }),
+  body('period_end').isISO8601({ strict: true }),
+], finance.createSettlement);
+router.patch('/settlements/:id', [
+  body('status').isIn(['APPROVED','PAID','REJECTED']),
+  body('payout_reference').optional({ nullable: true }).isString().trim().notEmpty(),
+], finance.updateSettlement);
+
+router.get('/reports/monthly', finance.getMonthlyReport);
+
 router.get('/refunds', finance.getRefunds);
 router.post('/refunds', [
   body('transaction_id').isInt({ min: 1 }),

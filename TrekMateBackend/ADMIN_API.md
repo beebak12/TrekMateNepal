@@ -27,6 +27,10 @@ Authorization: Bearer <admin-jwt>
 | PATCH | `/transactions/:id/verify` | Save a verified/failed result and create a pending payout |
 | GET | `/payouts` | List provider payouts |
 | PATCH | `/payouts/:id` | Approve, reject or mark a payout paid |
+| GET | `/settlements` | List combined weekly provider settlements |
+| POST | `/settlements` | Group a provider's pending payouts for a period of up to seven days |
+| PATCH | `/settlements/:id` | Approve, reject or mark an entire weekly settlement paid |
+| GET | `/reports/monthly?month=YYYY-MM` | Generate monthly revenue, refund and settlement totals |
 | GET | `/refunds` | List refunds |
 | POST | `/refunds` | Request a refund against a verified transaction |
 | PATCH | `/refunds/:id` | Approve, reject or complete a refund |
@@ -35,7 +39,7 @@ Authorization: Bearer <admin-jwt>
 
 The verification endpoint stores a verification result supplied by trusted backend/admin logic. It does **not** contact eSewa or Khalti by itself. A real deployment must call the selected gateway's server-to-server lookup API, compare the amount and transaction identifier, and only then pass the verified result into this workflow.
 
-The prototype payout flow records approval and manual transfer references. It does not automatically transfer money to a provider account.
+The prototype records a 10/90 split for every verified transaction. Pending provider amounts can be grouped into a weekly settlement and marked paid with one manual transfer reference. It does not automatically transfer money to a provider account.
 
 ## Local setup
 

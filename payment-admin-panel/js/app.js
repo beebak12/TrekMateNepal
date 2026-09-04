@@ -1,13 +1,12 @@
 "use strict";
 
-/*
- * Demonstration data only.
- *
- * Later, this array can be replaced with data returned by
- * the TrekMate Nepal Node.js and Express.js REST API.
- */
+/* Fallback data is retained only as an empty collection. */
 
-const transactions = [
+let transactions = [];
+let dashboardSummary = null;
+
+/*
+const demonstrationTransactions = [
     {
         id: "TXN-1001",
         bookingId: "BK-2101",
@@ -93,6 +92,7 @@ const transactions = [
         payoutStatus: "pending"
     }
 ];
+*/
 
 /* Percentage used by the TrekMate revenue model */
 
@@ -160,7 +160,11 @@ const sidebar = document.getElementById("sidebar");
 /* Format numbers as Nepalese rupees */
 
 function formatCurrency(amount) {
-    return `NPR ${new Intl.NumberFormat("en-IN").format(amount)}`;
+    const numericAmount = Number(amount || 0);
+    return `NPR ${new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+    }).format(numericAmount)}`;
 }
 
 /* Calculate commission */
@@ -199,6 +203,48 @@ function createStatusBadge(status) {
 /* Update financial summary using the current records */
 
 function updateFinancialSummary() {
+    if (dashboardSummary) {
+        document.getElementById(
+            "totalBookingAmount"
+        ).textContent = formatCurrency(
+            dashboardSummary.total_booking_amount
+        );
+
+        document.getElementById(
+            "totalCommission"
+        ).textContent = formatCurrency(
+            dashboardSummary.trekmate_revenue
+        );
+
+        document.getElementById(
+            "pendingPayables"
+        ).textContent = formatCurrency(
+            dashboardSummary.pending_payables
+        );
+
+        document.getElementById(
+            "totalRefunds"
+        ).textContent = formatCurrency(
+            dashboardSummary.total_refunds
+        );
+
+        const liveRevenueValues = document.querySelectorAll(
+            ".revenue-detail strong"
+        );
+
+        if (liveRevenueValues.length >= 2) {
+            liveRevenueValues[0].textContent = formatCurrency(
+                dashboardSummary.trekmate_revenue
+            );
+            liveRevenueValues[1].textContent = formatCurrency(
+                Number(dashboardSummary.total_booking_amount) -
+                    Number(dashboardSummary.trekmate_revenue)
+            );
+        }
+
+        return;
+    }
+
     const verifiedTransactions = transactions.filter(
         (transaction) =>
             transaction.paymentStatus === "verified"
@@ -309,22 +355,18 @@ function renderTransactions() {
     transactionTableBody.innerHTML = "";
 
     filteredTransactions.forEach((transaction) => {
-        const commission = calculateCommission(
-            transaction.grossAmount
-        );
+        const commission = transaction.commissionAmount ??
+            calculateCommission(transaction.grossAmount);
 
-        const providerShare = calculateProviderShare(
-            transaction.grossAmount
-        );
+        const providerShare = transaction.providerShare ??
+            calculateProviderShare(transaction.grossAmount);
 
-        const actionDisabled =
-            transaction.paymentStatus !== "verified" ||
-            transaction.payoutStatus !== "pending";
+        const actionDisabled = true;
 
         let actionText = "View";
 
         if (transaction.payoutStatus === "pending") {
-            actionText = "Approve";
+            actionText = "Weekly batch";
         }
 
         if (transaction.payoutStatus === "paid") {
@@ -455,8 +497,9 @@ function renderPendingPayouts() {
                 <button
                     class="approve-button"
                     data-payout-id="${transaction.id}"
+                    disabled
                 >
-                    Approve payout
+                    Add through weekly settlement
                 </button>
             </div>
         `;
@@ -550,6 +593,78 @@ function updateDashboard() {
     updateFinancialSummary();
     renderTransactions();
     renderPendingPayouts();
+}
+
+function normalisePaymentStatus(transaction) {
+    if (
+        transaction.payment_status === "REFUNDED" ||
+        transaction.payment_status === "PARTIALLY_REFUNDED"
+    ) {
+        return "refunded";
+    }
+
+    if (transaction.verification_status === "VERIFIED") {
+        return "verified";
+    }
+
+    if (transaction.verification_status === "FAILED") {
+        return "failed";
+    }
+
+    return "pending";
+}
+
+function mapTransaction(transaction) {
+    const bookingReference = transaction.rental_id
+        ? `Rental #${transaction.rental_id}`
+        : transaction.package_booking_id
+            ? `Package #${transaction.package_booking_id}`
+            : "No booking link";
+
+    return {
+        id: transaction.transaction_reference || `TXN-${transaction.id}`,
+        databaseId: transaction.id,
+        bookingId: bookingReference,
+        date: new Date(transaction.created_at).toLocaleDateString(
+            "en-GB",
+            { day: "2-digit", month: "short", year: "numeric" }
+        ),
+        customer: transaction.customer_name || "Unknown customer",
+        customerEmail: transaction.customer_email || "—",
+        provider: transaction.provider_name || "TrekMate",
+        providerEmail: transaction.provider_email || "—",
+        grossAmount: Number(transaction.gross_amount || 0),
+        commissionAmount: Number(transaction.commission_amount || 0),
+        providerShare: Number(transaction.provider_payable || 0),
+        paymentStatus: normalisePaymentStatus(transaction),
+        payoutStatus: String(transaction.payout_status || "unpaid").toLowerCase()
+    };
+}
+
+async function loadDashboardData() {
+    if (!TrekMateAPI.requireAuth()) {
+        return;
+    }
+
+    transactionTableBody.innerHTML = `
+        <tr><td colspan="9">Loading live transaction data…</td></tr>
+    `;
+
+    try {
+        const [dashboardResponse, transactionResponse] = await Promise.all([
+            TrekMateAPI.request("/admin/dashboard"),
+            TrekMateAPI.request("/admin/transactions")
+        ]);
+
+        dashboardSummary = dashboardResponse.data;
+        transactions = (transactionResponse.data || []).map(mapTransaction);
+        updateDashboard();
+    } catch (error) {
+        transactionTableBody.innerHTML = `
+            <tr><td colspan="9">Unable to load live transaction data.</td></tr>
+        `;
+        showToast(error.message);
+    }
 }
 
 /* Search and filter events */
@@ -671,4 +786,4 @@ document.querySelectorAll(
 
 /* Initial dashboard display */
 
-updateDashboard();
+loadDashboardData();

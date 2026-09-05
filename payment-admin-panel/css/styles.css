@@ -1224,6 +1224,9 @@ a.navigation-item {
     color: var(--primary);
 }
 
+.role-guide { background: var(--green-light); color: var(--green); }
+.role-admin { background: var(--orange-light); color: var(--orange); }
+
 .user-actions {
     display: flex;
     align-items: center;
@@ -1294,6 +1297,14 @@ a.navigation-item {
     color: var(--text);
     font-size: 10px;
     font-weight: 700;
+}
+
+.form-help {
+    display: block;
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 9px;
+    line-height: 1.4;
 }
 
 .form-group input,
@@ -1428,6 +1439,40 @@ a.navigation-item {
 .history-section {
     padding: 20px 28px 28px;
 }
+
+.provider-gear-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.provider-gear-heading,
+.provider-gear-empty { grid-column: 1 / -1; }
+
+.provider-gear-heading {
+    display: flex;
+    justify-content: space-between;
+    color: var(--text);
+    font-size: 11px;
+}
+
+.provider-gear-heading span,
+.provider-gear-item span,
+.provider-gear-empty { color: var(--muted); }
+
+.provider-gear-item,
+.provider-gear-empty {
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #faf9fb;
+    font-size: 10px;
+}
+
+.provider-gear-item strong,
+.provider-gear-item span { display: block; }
+.provider-gear-item span { margin-top: 4px; }
 
 .history-heading {
     display: flex;

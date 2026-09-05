@@ -165,18 +165,18 @@
                 </button>
             </header>
 
-            <!-- Prototype notice -->
+            <!-- Live API notice -->
             <section class="prototype-notice">
                 <div>
-                    <strong>Prototype mode</strong>
+                    <strong>Live API connected</strong>
 
                     <p>
-                        User changes currently affect demonstration data only.
-                        Bibek’s Express API will connect these actions to MySQL.
+                        Users, account status and provider history are loaded
+                        from the TrekMate Express API and MySQL database.
                     </p>
                 </div>
 
-                <span>Frontend Preview</span>
+                <span>MySQL Data</span>
             </section>
 
             <!-- User summary -->
@@ -217,13 +217,13 @@
 
                 <article class="summary-card refund-card">
                     <div class="card-heading">
-                        <span>Completed Rentals</span>
+                        <span>Gear Items Booked</span>
                         <span class="card-icon">✓</span>
                     </div>
 
                     <strong id="totalCompletedRentals">0</strong>
 
-                    <small>Completed gear bookings</small>
+                    <small>Total booked gear quantity</small>
                 </article>
 
             </section>
@@ -271,6 +271,14 @@
 
                             <option value="provider">
                                 Providers
+                            </option>
+
+                            <option value="guide">
+                                Guides
+                            </option>
+
+                            <option value="admin">
+                                Administrators
                             </option>
                         </select>
 
@@ -390,6 +398,38 @@
                     >
                 </div>
 
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="userUsername">Username</label>
+                        <input
+                            type="text"
+                            id="userUsername"
+                            placeholder="Enter username"
+                            minlength="3"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userPhone">Phone</label>
+                        <input
+                            type="tel"
+                            id="userPhone"
+                            placeholder="Optional phone number"
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group" id="userPasswordGroup">
+                    <label for="userPassword">Temporary password</label>
+                    <input
+                        type="password"
+                        id="userPassword"
+                        placeholder="At least 8 characters"
+                        minlength="8"
+                    >
+                </div>
+
                 <div class="form-group">
                     <label for="userEmail">
                         Email address
@@ -411,13 +451,22 @@
 
                         <select id="userRole" required>
                             <option value="customer">
-                                Customer
+                                Standard User
                             </option>
 
-                            <option value="provider">
-                                Gear Provider
+                            <option value="guide">
+                                Guide
+                            </option>
+
+                            <option value="admin">
+                                Administrator
                             </option>
                         </select>
+
+                        <small class="form-help">
+                            Standard users can rent gear and become providers
+                            by listing their own gear.
+                        </small>
                     </div>
 
                     <div class="form-group">
@@ -513,6 +562,8 @@
             </div>
 
             <div class="history-section">
+                <div id="providerGearList" class="provider-gear-list"></div>
+
                 <div class="history-heading">
                     <div>
                         <h4>

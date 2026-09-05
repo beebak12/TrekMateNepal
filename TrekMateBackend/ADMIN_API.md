@@ -18,6 +18,15 @@ Authorization: Bearer <admin-jwt>
 | GET | `/providers` | List users who own gear |
 | GET | `/providers/:id/history` | Provider gear, booking and transaction history |
 
+### User roles and provider status
+
+The account roles stored by the current backend are `USER`, `GUIDE`, and
+`ADMIN`. A gear provider is not a separate account role. A standard `USER`
+becomes a provider by listing gear, and the same account may also rent gear
+from another owner. Admin responses and the web panel therefore identify
+providers from their gear ownership (`gear_listed > 0`) while authorization
+continues to use the stored `USER` role.
+
 ## Payments
 
 | Method | Endpoint | Purpose |

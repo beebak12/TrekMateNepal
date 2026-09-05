@@ -1,948 +1,212 @@
 "use strict";
 
-/*
- * Demonstration user and rental data.
- *
- * Bibek can later replace this data with responses from
- * the Node.js and Express.js API.
- */
+if (!window.TrekMateAPI || !TrekMateAPI.requireAuth()) throw new Error("Admin authentication is required.");
 
-const users = [
-    {
-        id: "USR-1001",
-        name: "Aarav Sharma",
-        email: "aarav@example.com",
-        role: "customer",
-        status: "active",
-        joinedDate: "10 Aug 2026",
-        gearListed: 0,
-        rentalHistory: []
-    },
-    {
-        id: "PRV-2001",
-        name: "Mountain Gear Hub",
-        email: "mountaingear@example.com",
-        role: "provider",
-        status: "active",
-        joinedDate: "03 Jul 2026",
-        gearListed: 8,
-        rentalHistory: [
-            {
-                bookingId: "BK-2101",
-                gearItem: "Four-Person Trekking Tent",
-                customer: "Aarav Sharma",
-                rentalPeriod: "25–28 Aug 2026",
-                amount: 10000,
-                status: "completed"
-            },
-            {
-                bookingId: "BK-2084",
-                gearItem: "Down Sleeping Bag",
-                customer: "Nisha Thapa",
-                rentalPeriod: "15–18 Aug 2026",
-                amount: 6000,
-                status: "completed"
-            }
-        ]
-    },
-    {
-        id: "USR-1002",
-        name: "Nisha Thapa",
-        email: "nisha@example.com",
-        role: "customer",
-        status: "active",
-        joinedDate: "14 Jul 2026",
-        gearListed: 0,
-        rentalHistory: []
-    },
-    {
-        id: "PRV-2002",
-        name: "Himalayan Rentals",
-        email: "himalayan@example.com",
-        role: "provider",
-        status: "active",
-        joinedDate: "22 Jun 2026",
-        gearListed: 12,
-        rentalHistory: [
-            {
-                bookingId: "BK-2102",
-                gearItem: "Complete Annapurna Gear Set",
-                customer: "Nisha Thapa",
-                rentalPeriod: "20–26 Aug 2026",
-                amount: 25000,
-                status: "completed"
-            },
-            {
-                bookingId: "BK-2070",
-                gearItem: "Trekking Poles",
-                customer: "Bikash Karki",
-                rentalPeriod: "10–12 Aug 2026",
-                amount: 4000,
-                status: "completed"
-            },
-            {
-                bookingId: "BK-2055",
-                gearItem: "Waterproof Trekking Boots",
-                customer: "Sanjana Rai",
-                rentalPeriod: "02–07 Aug 2026",
-                amount: 9000,
-                status: "completed"
-            }
-        ]
-    },
-    {
-        id: "PRV-2003",
-        name: "Everest Trek Store",
-        email: "evereststore@example.com",
-        role: "provider",
-        status: "active",
-        joinedDate: "18 Jun 2026",
-        gearListed: 6,
-        rentalHistory: [
-            {
-                bookingId: "BK-2103",
-                gearItem: "Everest Base Camp Gear Package",
-                customer: "Rohan Gurung",
-                rentalPeriod: "27 Aug–03 Sep 2026",
-                amount: 15000,
-                status: "active"
-            },
-            {
-                bookingId: "BK-2036",
-                gearItem: "Insulated Trekking Jacket",
-                customer: "Manish Tamang",
-                rentalPeriod: "22–25 Jul 2026",
-                amount: 7000,
-                status: "completed"
-            }
-        ]
-    },
-    {
-        id: "USR-1003",
-        name: "Rohan Gurung",
-        email: "rohan@example.com",
-        role: "customer",
-        status: "active",
-        joinedDate: "02 Jul 2026",
-        gearListed: 0,
-        rentalHistory: []
-    },
-    {
-        id: "PRV-2004",
-        name: "Annapurna Equipment",
-        email: "annapurnaequipment@example.com",
-        role: "provider",
-        status: "deactivated",
-        joinedDate: "07 May 2026",
-        gearListed: 4,
-        rentalHistory: [
-            {
-                bookingId: "BK-2018",
-                gearItem: "Trekking Backpack 65L",
-                customer: "Isha Adhikari",
-                rentalPeriod: "12–16 Jul 2026",
-                amount: 5000,
-                status: "refunded"
-            }
-        ]
-    },
-    {
-        id: "USR-1004",
-        name: "Sanjana Rai",
-        email: "sanjana@example.com",
-        role: "customer",
-        status: "deactivated",
-        joinedDate: "28 May 2026",
-        gearListed: 0,
-        rentalHistory: []
-    }
-];
-
-const PROVIDER_RATE = 0.90;
-
+let users = [];
 let selectedUserId = null;
-
-/* HTML references */
-
-const userTableBody =
-    document.getElementById("userTableBody");
-
-const userSearch =
-    document.getElementById("userSearch");
-
-const roleFilter =
-    document.getElementById("roleFilter");
-
-const userStatusFilter =
-    document.getElementById("userStatusFilter");
-
-const userEmptyState =
-    document.getElementById("userEmptyState");
-
-const addUserButton =
-    document.getElementById("addUserButton");
-
-const userFormModal =
-    document.getElementById("userFormModal");
-
-const userForm =
-    document.getElementById("userForm");
-
-const userFormTitle =
-    document.getElementById("userFormTitle");
-
-const editingUserId =
-    document.getElementById("editingUserId");
-
-const userName =
-    document.getElementById("userName");
-
-const userEmail =
-    document.getElementById("userEmail");
-
-const userRole =
-    document.getElementById("userRole");
-
-const userStatus =
-    document.getElementById("userStatus");
-
-const closeUserFormButton =
-    document.getElementById("closeUserFormButton");
-
-const cancelUserFormButton =
-    document.getElementById("cancelUserFormButton");
-
-const providerDetailsModal =
-    document.getElementById("providerDetailsModal");
-
-const closeProviderDetailsButton =
-    document.getElementById("closeProviderDetailsButton");
-
-const deactivateModal =
-    document.getElementById("deactivateModal");
-
-const deactivateUserName =
-    document.getElementById("deactivateUserName");
-
-const closeDeactivateButton =
-    document.getElementById("closeDeactivateButton");
-
-const cancelDeactivateButton =
-    document.getElementById("cancelDeactivateButton");
-
-const confirmDeactivateButton =
-    document.getElementById("confirmDeactivateButton");
-
-const providerNavigation =
-    document.getElementById("providerNavigation");
-
-const toast =
-    document.getElementById("toast");
-
-const menuButton =
-    document.getElementById("menuButton");
-
-const sidebar =
-    document.getElementById("sidebar");
-
-/* Utility functions */
-
-function formatCurrency(amount) {
-    return `NPR ${new Intl.NumberFormat("en-IN").format(amount)}`;
-}
-
-function createInitials(name) {
-    return name
-        .split(" ")
-        .slice(0, 2)
-        .map((word) => word.charAt(0))
-        .join("")
-        .toUpperCase();
-}
+const roleIds = { customer: 1, guide: 2, admin: 3 };
+const $ = (id) => document.getElementById(id);
+const table = $("userTableBody");
+const formModal = $("userFormModal");
+const detailsModal = $("providerDetailsModal");
+const deactivateModal = $("deactivateModal");
 
 function escapeHTML(value) {
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+    return String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
 }
 
-function calculateProviderEarnings(user) {
-    return user.rentalHistory
-        .filter((rental) => rental.status === "completed")
-        .reduce(
-            (total, rental) =>
-                total + rental.amount * PROVIDER_RATE,
-            0
-        );
+function money(value) {
+    return `NPR ${Number(value || 0).toLocaleString("en-NP", { maximumFractionDigits: 2 })}`;
 }
 
-function calculateCompletedRentals(user) {
-    return user.rentalHistory.filter(
-        (rental) => rental.status === "completed"
-    ).length;
+function date(value) {
+    return value ? new Intl.DateTimeFormat("en-GB", {
+        day: "2-digit", month: "short", year: "numeric"
+    }).format(new Date(value)) : "—";
 }
 
-/* Dashboard summary */
-
-function updateUserSummary() {
-    const providers = users.filter(
-        (user) => user.role === "provider"
-    );
-
-    const totalGear = providers.reduce(
-        (total, provider) =>
-            total + provider.gearListed,
-        0
-    );
-
-    const completedRentals = providers.reduce(
-        (total, provider) =>
-            total + calculateCompletedRentals(provider),
-        0
-    );
-
-    document.getElementById(
-        "totalUsers"
-    ).textContent = users.length;
-
-    document.getElementById(
-        "totalProviders"
-    ).textContent = providers.length;
-
-    document.getElementById(
-        "totalGearItems"
-    ).textContent = totalGear;
-
-    document.getElementById(
-        "totalCompletedRentals"
-    ).textContent = completedRentals;
+function initials(name) {
+    return String(name || "User").split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
 }
 
-/* User table */
+function normalise(row) {
+    const role = String(row.role || "USER").toUpperCase();
+    return {
+        ...row,
+        name: row.full_name,
+        displayRole: role === "USER" ? (Number(row.gear_listed) > 0 ? "provider" : "customer") : role.toLowerCase(),
+        status: Number(row.is_active) === 1 ? "active" : "deactivated",
+        gearListed: Number(row.gear_listed || 0),
+        gearBooked: Number(row.gear_booked || 0),
+        earnings: Number(row.provider_earnings || 0)
+    };
+}
 
-function renderUsers() {
-    const searchValue = userSearch.value
-        .trim()
-        .toLowerCase();
+function toast(message, error = false) {
+    $("toast").textContent = message;
+    $("toast").classList.toggle("error", error);
+    $("toast").classList.remove("hidden");
+    setTimeout(() => $("toast").classList.add("hidden"), 3000);
+}
 
-    const selectedRole = roleFilter.value;
-    const selectedStatus = userStatusFilter.value;
+function busy(button, state, label = "Working…") {
+    if (state) { button.dataset.oldLabel = button.textContent; button.textContent = label; }
+    else if (button.dataset.oldLabel) button.textContent = button.dataset.oldLabel;
+    button.disabled = state;
+}
 
-    const filteredUsers = users.filter((user) => {
-        const searchableText = `
-            ${user.id}
-            ${user.name}
-            ${user.email}
-        `.toLowerCase();
+function updateSummary() {
+    const providers = users.filter((user) => user.displayRole === "provider");
+    $("totalUsers").textContent = users.length;
+    $("totalProviders").textContent = providers.length;
+    $("totalGearItems").textContent = providers.reduce((sum, user) => sum + user.gearListed, 0);
+    $("totalCompletedRentals").textContent = providers.reduce((sum, user) => sum + user.gearBooked, 0);
+}
 
-        const matchesSearch =
-            searchableText.includes(searchValue);
-
-        const matchesRole =
-            selectedRole === "all" ||
-            user.role === selectedRole;
-
-        const matchesStatus =
-            selectedStatus === "all" ||
-            user.status === selectedStatus;
-
-        return (
-            matchesSearch &&
-            matchesRole &&
-            matchesStatus
-        );
+function render() {
+    const search = $("userSearch").value.trim().toLowerCase();
+    const role = $("roleFilter").value;
+    const status = $("userStatusFilter").value;
+    const filtered = users.filter((user) => {
+        const found = !search || [user.id, user.name, user.username, user.email]
+            .some((value) => String(value || "").toLowerCase().includes(search));
+        return found && (role === "all" || role === user.displayRole) && (status === "all" || status === user.status);
     });
-
-    userTableBody.innerHTML = "";
-
-    filteredUsers.forEach((user) => {
-        const isProvider = user.role === "provider";
-
-        const bookingCount = isProvider
-            ? user.rentalHistory.length
-            : 0;
-
-        const earnings = isProvider
-            ? calculateProviderEarnings(user)
-            : 0;
-
-        const statusClass =
-            user.status === "active"
-                ? "status-verified"
-                : "status-unpaid";
-
-        const row = document.createElement("tr");
-
-        row.innerHTML = `
-            <td>
-                <div class="user-identity">
-                    <div class="user-avatar">
-                        ${escapeHTML(createInitials(user.name))}
-                    </div>
-
-                    <div>
-                        <strong>${escapeHTML(user.name)}</strong>
-                        <span>
-                            ${escapeHTML(user.id)} ·
-                            ${escapeHTML(user.email)}
-                        </span>
-                    </div>
-                </div>
-            </td>
-
-            <td>
-                <span class="role-badge role-${user.role}">
-                    ${
-                        user.role === "provider"
-                            ? "Gear Provider"
-                            : "Customer"
-                    }
-                </span>
-            </td>
-
-            <td>
-                <span class="status-badge ${statusClass}">
-                    ${escapeHTML(user.status)}
-                </span>
-            </td>
-
-            <td class="amount-cell">
-                ${isProvider ? user.gearListed : "—"}
-            </td>
-
-            <td class="amount-cell">
-                ${isProvider ? bookingCount : "—"}
-            </td>
-
-            <td class="amount-cell">
-                ${
-                    isProvider
-                        ? formatCurrency(earnings)
-                        : "—"
-                }
-            </td>
-
-            <td>${escapeHTML(user.joinedDate)}</td>
-
-            <td>
-                <div class="user-actions">
-                    ${
-                        isProvider
-                            ? `
-                                <button
-                                    class="user-action-button details-button"
-                                    data-action="details"
-                                    data-user-id="${user.id}"
-                                >
-                                    History
-                                </button>
-                            `
-                            : ""
-                    }
-
-                    <button
-                        class="user-action-button"
-                        data-action="edit"
-                        data-user-id="${user.id}"
-                    >
-                        Edit
-                    </button>
-
-                    ${
-                        user.status === "active"
-                            ? `
-                                <button
-                                    class="user-action-button deactivate-button"
-                                    data-action="deactivate"
-                                    data-user-id="${user.id}"
-                                >
-                                    Deactivate
-                                </button>
-                            `
-                            : `
-                                <button
-                                    class="user-action-button activate-button"
-                                    data-action="activate"
-                                    data-user-id="${user.id}"
-                                >
-                                    Activate
-                                </button>
-                            `
-                    }
-                </div>
-            </td>
-        `;
-
-        userTableBody.appendChild(row);
-    });
-
-    userEmptyState.classList.toggle(
-        "hidden",
-        filteredUsers.length !== 0
-    );
+    table.innerHTML = filtered.map((user) => {
+        const provider = user.displayRole === "provider";
+        const statusAction = user.status === "active"
+            ? `<button class="user-action-button deactivate-button" data-action="deactivate" data-id="${user.id}">Deactivate</button>`
+            : `<button class="user-action-button activate-button" data-action="activate" data-id="${user.id}">Activate</button>`;
+        return `<tr>
+            <td><div class="user-identity"><span class="user-avatar">${escapeHTML(initials(user.name))}</span><div><strong>${escapeHTML(user.name)}</strong><span>#${user.id} · ${escapeHTML(user.email)}</span></div></div></td>
+            <td><span class="role-badge role-${escapeHTML(user.displayRole)}">${escapeHTML(user.displayRole)}</span></td>
+            <td><span class="status-badge status-${user.status === "active" ? "paid" : "refunded"}">${user.status}</span></td>
+            <td>${user.gearListed}</td><td>${user.gearBooked}</td><td>${provider ? money(user.earnings) : "—"}</td>
+            <td>${date(user.created_at)}</td><td><div class="user-actions">
+            ${provider ? `<button class="user-action-button details-button" data-action="details" data-id="${user.id}">History</button>` : ""}
+            <button class="user-action-button" data-action="edit" data-id="${user.id}">Edit</button>${statusAction}</div></td></tr>`;
+    }).join("");
+    $("userEmptyState").classList.toggle("hidden", filtered.length > 0);
 }
 
-/* Add and edit user */
-
-function openAddUserForm() {
-    selectedUserId = null;
-
-    userForm.reset();
-    editingUserId.value = "";
-    userFormTitle.textContent = "Add New User";
-    userStatus.value = "active";
-
-    userFormModal.classList.remove("hidden");
-    document.body.style.overflow = "hidden";
-
-    userName.focus();
-}
-
-function openEditUserForm(userId) {
-    const user = users.find(
-        (item) => item.id === userId
-    );
-
-    if (!user) {
-        return;
+async function loadUsers() {
+    table.innerHTML = `<tr><td colspan="8">Loading users from MySQL…</td></tr>`;
+    try {
+        const response = await TrekMateAPI.request("/admin/users");
+        users = response.data.map(normalise);
+        updateSummary(); render();
+    } catch (error) {
+        table.innerHTML = `<tr><td colspan="8">${escapeHTML(error.message)}</td></tr>`;
+        toast(error.message, true);
     }
-
-    selectedUserId = userId;
-
-    editingUserId.value = user.id;
-    userName.value = user.name;
-    userEmail.value = user.email;
-    userRole.value = user.role;
-    userStatus.value = user.status;
-
-    userFormTitle.textContent = "Edit User";
-
-    userFormModal.classList.remove("hidden");
-    document.body.style.overflow = "hidden";
 }
 
-function closeUserForm() {
-    selectedUserId = null;
-    userForm.reset();
-    userFormModal.classList.add("hidden");
-    document.body.style.overflow = "";
+function openAdd() {
+    $("userForm").reset(); $("editingUserId").value = "";
+    $("userFormTitle").textContent = "Add New User";
+    $("userPasswordGroup").classList.remove("hidden");
+    $("userPassword").required = true; $("userStatus").value = "active";
+    formModal.classList.remove("hidden"); $("userName").focus();
 }
 
-function saveUser(event) {
+function openEdit(id) {
+    const user = users.find((item) => item.id === id); if (!user) return;
+    $("editingUserId").value = user.id; $("userFormTitle").textContent = "Edit User";
+    $("userName").value = user.name || ""; $("userUsername").value = user.username || "";
+    $("userPhone").value = user.phone || ""; $("userEmail").value = user.email || "";
+    $("userRole").value = user.displayRole === "provider" ? "customer" : user.displayRole;
+    $("userStatus").value = user.status; $("userPassword").required = false;
+    $("userPasswordGroup").classList.add("hidden"); formModal.classList.remove("hidden");
+}
+
+async function saveUser(event) {
     event.preventDefault();
-
-    const enteredName = userName.value.trim();
-    const enteredEmail = userEmail.value.trim();
-    const enteredRole = userRole.value;
-    const enteredStatus = userStatus.value;
-
-    const duplicateEmail = users.some(
-        (user) =>
-            user.email.toLowerCase() ===
-                enteredEmail.toLowerCase() &&
-            user.id !== editingUserId.value
-    );
-
-    if (duplicateEmail) {
-        showToast("A user with this email already exists.");
-        return;
-    }
-
-    if (editingUserId.value) {
-        const existingUser = users.find(
-            (user) => user.id === editingUserId.value
-        );
-
-        if (!existingUser) {
-            return;
+    const button = $("userForm").querySelector('[type="submit"]');
+    const id = Number($("editingUserId").value);
+    const payload = {
+        full_name: $("userName").value.trim(), username: $("userUsername").value.trim(),
+        phone: $("userPhone").value.trim() || null, email: $("userEmail").value.trim(),
+        role_id: roleIds[$("userRole").value]
+    };
+    if (!id) payload.password = $("userPassword").value;
+    busy(button, true, "Saving…");
+    try {
+        let targetId = id;
+        if (id) await TrekMateAPI.request(`/admin/users/${id}`, { method: "PUT", body: JSON.stringify(payload) });
+        else {
+            const result = await TrekMateAPI.request("/admin/users", { method: "POST", body: JSON.stringify(payload) });
+            targetId = result.data.id;
         }
-
-        existingUser.name = enteredName;
-        existingUser.email = enteredEmail;
-        existingUser.status = enteredStatus;
-
-        if (
-            existingUser.role !== enteredRole &&
-            enteredRole === "customer"
-        ) {
-            existingUser.gearListed = 0;
-            existingUser.rentalHistory = [];
-        }
-
-        existingUser.role = enteredRole;
-
-        showToast("User updated successfully.");
-    } else {
-        const userPrefix =
-            enteredRole === "provider"
-                ? "PRV"
-                : "USR";
-
-        users.unshift({
-            id: `${userPrefix}-${Date.now()
-                .toString()
-                .slice(-6)}`,
-            name: enteredName,
-            email: enteredEmail,
-            role: enteredRole,
-            status: enteredStatus,
-            joinedDate: "30 Aug 2026",
-            gearListed: 0,
-            rentalHistory: []
+        const current = users.find((user) => user.id === id);
+        const requestedActive = $("userStatus").value === "active";
+        const statusChanged = id ? current && (current.status === "active") !== requestedActive : !requestedActive;
+        if (statusChanged) await TrekMateAPI.request(`/admin/users/${targetId}/status`, {
+            method: "PATCH", body: JSON.stringify({ is_active: requestedActive })
         });
-
-        showToast("New user added successfully.");
-    }
-
-    closeUserForm();
-    updateUserPage();
+        formModal.classList.add("hidden"); await loadUsers(); toast(id ? "User updated" : "User created");
+    } catch (error) { toast(error.message, true); } finally { busy(button, false); }
 }
 
-/* Provider details and history */
-
-function openProviderDetails(userId) {
-    const provider = users.find(
-        (user) =>
-            user.id === userId &&
-            user.role === "provider"
-    );
-
-    if (!provider) {
-        return;
-    }
-
-    document.getElementById(
-        "providerAvatar"
-    ).textContent = createInitials(provider.name);
-
-    document.getElementById(
-        "providerDetailsTitle"
-    ).textContent = provider.name;
-
-    document.getElementById(
-        "providerDetailsEmail"
-    ).textContent = `${provider.id} · ${provider.email}`;
-
-    document.getElementById(
-        "providerGearCount"
-    ).textContent = provider.gearListed;
-
-    document.getElementById(
-        "providerBookingCount"
-    ).textContent = provider.rentalHistory.length;
-
-    document.getElementById(
-        "providerEarnings"
-    ).textContent = formatCurrency(
-        calculateProviderEarnings(provider)
-    );
-
-    renderProviderHistory(provider);
-
-    providerDetailsModal.classList.remove("hidden");
-    document.body.style.overflow = "hidden";
-}
-
-function renderProviderHistory(provider) {
-    const providerHistoryBody =
-        document.getElementById("providerHistoryBody");
-
-    const providerHistoryEmptyState =
-        document.getElementById(
-            "providerHistoryEmptyState"
-        );
-
-    providerHistoryBody.innerHTML = "";
-
-    provider.rentalHistory.forEach((rental) => {
-        const providerShare =
-            rental.status === "refunded"
-                ? 0
-                : rental.amount * PROVIDER_RATE;
-
-        const statusClass =
-            rental.status === "completed"
-                ? "status-verified"
-                : rental.status === "active"
-                    ? "status-pending"
-                    : "status-refunded";
-
-        const row = document.createElement("tr");
-
-        row.innerHTML = `
-            <td>
-                <strong>${escapeHTML(rental.bookingId)}</strong>
-            </td>
-
-            <td>${escapeHTML(rental.gearItem)}</td>
-
-            <td>${escapeHTML(rental.customer)}</td>
-
-            <td>${escapeHTML(rental.rentalPeriod)}</td>
-
-            <td class="amount-cell">
-                ${formatCurrency(rental.amount)}
-            </td>
-
-            <td class="commission-cell">
-                ${formatCurrency(providerShare)}
-            </td>
-
-            <td>
-                <span class="status-badge ${statusClass}">
-                    ${escapeHTML(rental.status)}
-                </span>
-            </td>
-        `;
-
-        providerHistoryBody.appendChild(row);
-    });
-
-    providerHistoryEmptyState.classList.toggle(
-        "hidden",
-        provider.rentalHistory.length !== 0
-    );
-}
-
-function closeProviderDetails() {
-    providerDetailsModal.classList.add("hidden");
-    document.body.style.overflow = "";
-}
-
-/* Deactivate and activate */
-
-function openDeactivateModal(userId) {
-    const user = users.find(
-        (item) => item.id === userId
-    );
-
-    if (!user) {
-        return;
-    }
-
-    selectedUserId = userId;
-    deactivateUserName.textContent = user.name;
-
-    deactivateModal.classList.remove("hidden");
-    document.body.style.overflow = "hidden";
-}
-
-function closeDeactivateModal() {
-    selectedUserId = null;
-    deactivateModal.classList.add("hidden");
-    document.body.style.overflow = "";
-}
-
-function confirmDeactivation() {
-    const user = users.find(
-        (item) => item.id === selectedUserId
-    );
-
-    if (!user) {
-        return;
-    }
-
-    user.status = "deactivated";
-
-    closeDeactivateModal();
-    updateUserPage();
-    showToast(`${user.name} has been deactivated.`);
-}
-
-function activateUser(userId) {
-    const user = users.find(
-        (item) => item.id === userId
-    );
-
-    if (!user) {
-        return;
-    }
-
-    user.status = "active";
-
-    updateUserPage();
-    showToast(`${user.name} has been activated.`);
-}
-
-/* Table action handling */
-
-userTableBody.addEventListener("click", (event) => {
-    const actionButton = event.target.closest(
-        "[data-action]"
-    );
-
-    if (!actionButton) {
-        return;
-    }
-
-    const action = actionButton.dataset.action;
-    const userId = actionButton.dataset.userId;
-
-    if (action === "details") {
-        openProviderDetails(userId);
-    }
-
-    if (action === "edit") {
-        openEditUserForm(userId);
-    }
-
-    if (action === "deactivate") {
-        openDeactivateModal(userId);
-    }
-
-    if (action === "activate") {
-        activateUser(userId);
-    }
-});
-
-/* Toast */
-
-function showToast(message) {
-    toast.textContent = message;
-    toast.classList.remove("hidden");
-
-    window.setTimeout(() => {
-        toast.classList.add("hidden");
-    }, 3000);
-}
-
-/* Update the complete page */
-
-function updateUserPage() {
-    updateUserSummary();
-    renderUsers();
-}
-
-/* Search and filters */
-
-userSearch.addEventListener("input", renderUsers);
-roleFilter.addEventListener("change", renderUsers);
-userStatusFilter.addEventListener(
-    "change",
-    renderUsers
-);
-
-/* User form events */
-
-addUserButton.addEventListener(
-    "click",
-    openAddUserForm
-);
-
-userForm.addEventListener(
-    "submit",
-    saveUser
-);
-
-closeUserFormButton.addEventListener(
-    "click",
-    closeUserForm
-);
-
-cancelUserFormButton.addEventListener(
-    "click",
-    closeUserForm
-);
-
-/* Provider details events */
-
-closeProviderDetailsButton.addEventListener(
-    "click",
-    closeProviderDetails
-);
-
-/* Deactivation events */
-
-closeDeactivateButton.addEventListener(
-    "click",
-    closeDeactivateModal
-);
-
-cancelDeactivateButton.addEventListener(
-    "click",
-    closeDeactivateModal
-);
-
-confirmDeactivateButton.addEventListener(
-    "click",
-    confirmDeactivation
-);
-
-/* Provider sidebar filter */
-
-providerNavigation.addEventListener("click", () => {
-    roleFilter.value = "provider";
-    userStatusFilter.value = "all";
-
-    renderUsers();
-
-    document
-        .querySelector(".user-management-panel")
-        .scrollIntoView({
-            behavior: "smooth",
-            block: "start"
+async function setStatus(id, isActive, button) {
+    busy(button, true, isActive ? "Activating…" : "Deactivating…");
+    try {
+        await TrekMateAPI.request(`/admin/users/${id}/status`, {
+            method: "PATCH", body: JSON.stringify({ is_active: isActive })
         });
+        deactivateModal.classList.add("hidden"); await loadUsers();
+        toast(isActive ? "User activated" : "User deactivated");
+    } catch (error) { toast(error.message, true); } finally { busy(button, false); }
+}
 
-    sidebar.classList.remove("open");
+async function providerDetails(id) {
+    detailsModal.classList.remove("hidden"); $("providerDetailsTitle").textContent = "Loading provider…";
+    $("providerGearList").innerHTML = ""; $("providerHistoryBody").innerHTML = "";
+    try {
+        const result = await TrekMateAPI.request(`/admin/providers/${id}/history`);
+        const { provider, gear, transactions } = result.data;
+        $("providerAvatar").textContent = initials(provider.full_name);
+        $("providerDetailsTitle").textContent = provider.full_name;
+        $("providerDetailsEmail").textContent = `#${provider.id} · ${provider.email}`;
+        $("providerGearCount").textContent = gear.length;
+        $("providerBookingCount").textContent = gear.reduce((sum, item) => sum + Number(item.times_booked || 0), 0);
+        $("providerEarnings").textContent = money(transactions.reduce((sum, item) => sum + Number(item.provider_payable || 0), 0));
+        $("providerGearList").innerHTML = gear.length ? `<div class="provider-gear-heading"><strong>Listed Gear</strong><span>${gear.length} item(s)</span></div>` + gear.map((item) => `<div class="provider-gear-item"><strong>${escapeHTML(item.name)}</strong><span>${money(item.price_per_day)}/day · Qty ${item.quantity} · ${escapeHTML(item.availability)}</span></div>`).join("") : `<div class="provider-gear-empty">No gear currently listed.</div>`;
+        $("providerHistoryBody").innerHTML = transactions.map((item) => `<tr><td>${escapeHTML(item.transaction_reference)}</td><td>${item.rental_id ? `Rental #${item.rental_id}` : "No rental link"}</td><td>${escapeHTML(item.customer_name || "—")}</td><td>${date(item.created_at)}</td><td>${money(item.gross_amount)}</td><td>${money(item.provider_payable)}</td><td><span class="status-badge">${escapeHTML(item.payment_status)}</span></td></tr>`).join("");
+        $("providerHistoryEmptyState").classList.toggle("hidden", transactions.length > 0);
+    } catch (error) { $("providerDetailsTitle").textContent = "Provider unavailable"; toast(error.message, true); }
+}
+
+$("userSearch").addEventListener("input", render);
+$("roleFilter").addEventListener("change", render);
+$("userStatusFilter").addEventListener("change", render);
+$("addUserButton").addEventListener("click", openAdd);
+$("userForm").addEventListener("submit", saveUser);
+$("closeUserFormButton").addEventListener("click", () => formModal.classList.add("hidden"));
+$("cancelUserFormButton").addEventListener("click", () => formModal.classList.add("hidden"));
+$("closeProviderDetailsButton").addEventListener("click", () => detailsModal.classList.add("hidden"));
+$("closeDeactivateButton").addEventListener("click", () => deactivateModal.classList.add("hidden"));
+$("cancelDeactivateButton").addEventListener("click", () => deactivateModal.classList.add("hidden"));
+$("confirmDeactivateButton").addEventListener("click", (event) => setStatus(selectedUserId, false, event.currentTarget));
+$("providerNavigation").addEventListener("click", () => { $("roleFilter").value = "provider"; render(); });
+table.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-action]"); if (!button) return;
+    const id = Number(button.dataset.id);
+    if (button.dataset.action === "edit") openEdit(id);
+    if (button.dataset.action === "details") providerDetails(id);
+    if (button.dataset.action === "activate") setStatus(id, true, button);
+    if (button.dataset.action === "deactivate") {
+        selectedUserId = id; $("deactivateUserName").textContent = users.find((user) => user.id === id).name;
+        deactivateModal.classList.remove("hidden");
+    }
 });
 
-/* Mobile sidebar */
-
-menuButton.addEventListener("click", () => {
-    sidebar.classList.toggle("open");
-});
-
-/* Close modals by clicking outside */
-
-[
-    userFormModal,
-    providerDetailsModal,
-    deactivateModal
-].forEach((modal) => {
-    modal.addEventListener("click", (event) => {
-        if (event.target !== modal) {
-            return;
-        }
-
-        if (modal === userFormModal) {
-            closeUserForm();
-        }
-
-        if (modal === providerDetailsModal) {
-            closeProviderDetails();
-        }
-
-        if (modal === deactivateModal) {
-            closeDeactivateModal();
-        }
-    });
-});
-
-/* Escape key closes open modals */
-
+[formModal, detailsModal, deactivateModal].forEach((modal) => modal.addEventListener("click", (event) => {
+    if (event.target === modal) modal.classList.add("hidden");
+}));
+$("menuButton").addEventListener("click", () => $("sidebar").classList.toggle("open"));
 document.addEventListener("keydown", (event) => {
-    if (event.key !== "Escape") {
-        return;
-    }
-
-    if (!userFormModal.classList.contains("hidden")) {
-        closeUserForm();
-    }
-
-    if (
-        !providerDetailsModal.classList.contains("hidden")
-    ) {
-        closeProviderDetails();
-    }
-
-    if (!deactivateModal.classList.contains("hidden")) {
-        closeDeactivateModal();
-    }
+    if (event.key === "Escape") [formModal, detailsModal, deactivateModal].forEach((modal) => modal.classList.add("hidden"));
 });
 
-/* Initial display */
-
-updateUserPage();
+loadUsers();

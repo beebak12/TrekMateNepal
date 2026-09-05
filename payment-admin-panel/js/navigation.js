@@ -7,8 +7,8 @@ const usersMenuToggle =
     document.getElementById("usersMenuToggle");
 
 function isUsersPage() {
-    return window.location.pathname.endsWith(
-        "users.html"
+    return /\/users(?:\.html)?\/?$/.test(
+        window.location.pathname
     );
 }
 
@@ -251,6 +251,11 @@ if (usersMenuToggle) {
         (event) => {
             event.preventDefault();
             event.stopImmediatePropagation();
+
+            if (!isUsersPage()) {
+                window.location.href = "users.html";
+                return;
+            }
 
             const isCurrentlyOpen =
                 usersNavigationGroup.classList.contains(

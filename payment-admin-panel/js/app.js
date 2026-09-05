@@ -102,6 +102,7 @@ const PROVIDER_RATE = 0.90;
 /* Selected payout is stored here while the modal is open */
 
 let selectedPayoutId = null;
+let selectedVerificationId = null;
 
 /* HTML elements */
 
@@ -156,6 +157,11 @@ const modalCloseButton = document.getElementById(
 const toast = document.getElementById("toast");
 const menuButton = document.getElementById("menuButton");
 const sidebar = document.getElementById("sidebar");
+const verificationModal = document.getElementById("verificationModal");
+const verificationReference = document.getElementById("verificationReference");
+const verificationGatewayId = document.getElementById("verificationGatewayId");
+const confirmVerificationButton = document.getElementById("confirmVerificationButton");
+const markFailedButton = document.getElementById("markFailedButton");
 
 /* Format numbers as Nepalese rupees */
 
@@ -361,17 +367,10 @@ function renderTransactions() {
         const providerShare = transaction.providerShare ??
             calculateProviderShare(transaction.grossAmount);
 
-        const actionDisabled = true;
+        const canVerify = transaction.paymentStatus === "pending" ||
+            transaction.paymentStatus === "failed";
 
-        let actionText = "View";
-
-        if (transaction.payoutStatus === "pending") {
-            actionText = "Weekly batch";
-        }
-
-        if (transaction.payoutStatus === "paid") {
-            actionText = "Completed";
-        }
+        let actionText = canVerify ? "Verify" : "Verified";
 
         if (transaction.paymentStatus === "refunded") {
             actionText = "Refunded";
@@ -419,9 +418,9 @@ function renderTransactions() {
 
             <td>
                 <button
-                    class="table-action"
-                    data-payout-id="${transaction.id}"
-                    ${actionDisabled ? "disabled" : ""}
+                    class="table-action verify-transaction-button"
+                    data-transaction-id="${transaction.databaseId}"
+                    ${canVerify ? "" : "disabled"}
                 >
                     ${actionText}
                 </button>
@@ -436,13 +435,64 @@ function renderTransactions() {
         filteredTransactions.length !== 0
     );
 
-    document.querySelectorAll(
-        ".table-action:not(:disabled)"
-    ).forEach((button) => {
-        button.addEventListener("click", () => {
-            openPayoutModal(button.dataset.payoutId);
+    document.querySelectorAll(".verify-transaction-button:not(:disabled)")
+        .forEach((button) => button.addEventListener("click", () => {
+            openVerificationModal(Number(button.dataset.transactionId));
+        }));
+}
+
+function openVerificationModal(databaseId) {
+    const transaction = transactions.find((item) => item.databaseId === databaseId);
+    if (!transaction) return;
+    selectedVerificationId = databaseId;
+    verificationReference.textContent = transaction.id;
+    verificationGatewayId.value = "";
+    verificationModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    verificationGatewayId.focus();
+}
+
+function closeVerificationModal() {
+    selectedVerificationId = null;
+    verificationModal.classList.add("hidden");
+    document.body.style.overflow = "";
+}
+
+function setActionBusy(button, isBusy, busyText) {
+    if (isBusy) {
+        button.dataset.originalText = button.textContent;
+        button.textContent = busyText;
+    } else if (button.dataset.originalText) {
+        button.textContent = button.dataset.originalText;
+    }
+    button.disabled = isBusy;
+}
+
+async function updateVerification(verified, button) {
+    if (!selectedVerificationId) return;
+    const gatewayId = verificationGatewayId.value.trim();
+    if (verified && !gatewayId) {
+        showToast("Enter the sandbox or gateway transaction ID.");
+        verificationGatewayId.focus();
+        return;
+    }
+    setActionBusy(button, true, verified ? "Verifying…" : "Saving…");
+    try {
+        await TrekMateAPI.request(`/admin/transactions/${selectedVerificationId}/verify`, {
+            method: "PATCH",
+            body: JSON.stringify({
+                verified,
+                gateway_transaction_id: gatewayId || null
+            })
         });
-    });
+        closeVerificationModal();
+        await loadDashboardData();
+        showToast(verified ? "Transaction verified." : "Transaction marked failed.");
+    } catch (error) {
+        showToast(error.message);
+    } finally {
+        setActionBusy(button, false);
+    }
 }
 
 /* Render pending payout list */
@@ -702,12 +752,24 @@ payoutModal.addEventListener("click", (event) => {
     }
 });
 
+document.getElementById("closeVerificationButton").addEventListener("click", closeVerificationModal);
+document.getElementById("cancelVerificationButton").addEventListener("click", closeVerificationModal);
+confirmVerificationButton.addEventListener("click", () => updateVerification(true, confirmVerificationButton));
+markFailedButton.addEventListener("click", () => updateVerification(false, markFailedButton));
+verificationModal.addEventListener("click", (event) => {
+    if (event.target === verificationModal) closeVerificationModal();
+});
+
 document.addEventListener("keydown", (event) => {
     if (
         event.key === "Escape" &&
         !payoutModal.classList.contains("hidden")
     ) {
         closePayoutModal();
+    }
+
+    if (event.key === "Escape" && !verificationModal.classList.contains("hidden")) {
+        closeVerificationModal();
     }
 });
 

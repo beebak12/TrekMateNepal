@@ -441,6 +441,60 @@
         </main>
     </div>
 
+    <!-- Transaction verification modal -->
+    <div
+        class="modal-overlay hidden"
+        id="verificationModal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="verificationTitle"
+    >
+        <div class="modal verification-modal">
+            <button
+                class="modal-close"
+                id="closeVerificationButton"
+                aria-label="Close transaction verification"
+            >×</button>
+
+            <div class="modal-icon">✓</div>
+            <h3 id="verificationTitle">Verify Transaction</h3>
+            <p>
+                Confirm the simulated gateway result before including this
+                payment in TrekMate revenue and provider payables.
+            </p>
+
+            <div class="modal-details">
+                <div>
+                    <span>Transaction</span>
+                    <strong id="verificationReference">—</strong>
+                </div>
+            </div>
+
+            <div class="form-group verification-field">
+                <label for="verificationGatewayId">
+                    Sandbox or gateway transaction ID
+                </label>
+                <input
+                    type="text"
+                    id="verificationGatewayId"
+                    placeholder="Example: SANDBOX-VERIFY-001"
+                >
+            </div>
+
+            <div class="modal-actions verification-actions">
+                <button class="secondary-button" id="cancelVerificationButton">
+                    Cancel
+                </button>
+                <button class="danger-button" id="markFailedButton">
+                    Mark Failed
+                </button>
+                <button class="primary-button" id="confirmVerificationButton">
+                    Mark Verified
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Payout confirmation modal -->
     <div
         class="modal-overlay hidden"

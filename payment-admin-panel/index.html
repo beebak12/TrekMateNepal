@@ -331,6 +331,31 @@
                     >
                         <!-- Created through app.js -->
                     </div>
+
+                    <div class="settlement-history">
+                        <div class="settlement-heading">
+                            <div>
+                                <h3>Weekly Settlements</h3>
+                                <p>Combined provider payouts created from verified transactions</p>
+                            </div>
+                        </div>
+                        <div class="table-scroll">
+                            <table class="settlement-table">
+                                <thead>
+                                    <tr>
+                                        <th>Settlement</th>
+                                        <th>Provider</th>
+                                        <th>Period</th>
+                                        <th>Transactions</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="settlementTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </article>
 
             </section>
@@ -495,7 +520,7 @@
         </div>
     </div>
 
-    <!-- Payout confirmation modal -->
+    <!-- Create weekly settlement modal -->
     <div
         class="modal-overlay hidden"
         id="payoutModal"
@@ -512,15 +537,14 @@
                 ×
             </button>
 
-            <div class="modal-icon">✓</div>
+            <div class="modal-icon">Rs</div>
 
             <h3 id="modalTitle">
-                Approve Provider Payout?
+                Create Weekly Settlement
             </h3>
 
             <p>
-                Confirm that the provider has received the payment before
-                marking this payout as paid.
+                Combine this provider's verified pending transactions for a period of up to seven days.
             </p>
 
             <div class="modal-details">
@@ -530,8 +554,19 @@
                 </div>
 
                 <div>
-                    <span>Payout amount</span>
+                    <span>Currently pending</span>
                     <strong id="modalPayoutAmount">—</strong>
+                </div>
+            </div>
+
+            <div class="settlement-form-grid">
+                <div class="form-group">
+                    <label for="settlementStartDate">Period start</label>
+                    <input type="date" id="settlementStartDate">
+                </div>
+                <div class="form-group">
+                    <label for="settlementEndDate">Period end</label>
+                    <input type="date" id="settlementEndDate">
                 </div>
             </div>
 
@@ -547,8 +582,26 @@
                     class="primary-button"
                     id="confirmPayoutButton"
                 >
-                    Confirm and Mark Paid
+                    Create Settlement
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mark settlement paid modal -->
+    <div class="modal-overlay hidden" id="settlementPaidModal" role="dialog" aria-modal="true" aria-labelledby="settlementPaidTitle">
+        <div class="modal">
+            <button class="modal-close" id="closeSettlementPaidButton" aria-label="Close payment window">×</button>
+            <div class="modal-icon">✓</div>
+            <h3 id="settlementPaidTitle">Mark Settlement Paid</h3>
+            <p>Enter the bank, wallet or sandbox transfer reference after the provider has been paid.</p>
+            <div class="form-group">
+                <label for="settlementPayoutReference">Payout reference</label>
+                <input type="text" id="settlementPayoutReference" placeholder="Example: SANDBOX-PAYOUT-001">
+            </div>
+            <div class="modal-actions">
+                <button class="secondary-button" id="cancelSettlementPaidButton">Cancel</button>
+                <button class="primary-button" id="confirmSettlementPaidButton">Confirm Payment</button>
             </div>
         </div>
     </div>

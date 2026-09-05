@@ -4,6 +4,7 @@
 
 let transactions = [];
 let dashboardSummary = null;
+let settlements = [];
 
 /*
 const demonstrationTransactions = [
@@ -103,6 +104,7 @@ const PROVIDER_RATE = 0.90;
 
 let selectedPayoutId = null;
 let selectedVerificationId = null;
+let selectedSettlementId = null;
 
 /* HTML elements */
 
@@ -162,6 +164,12 @@ const verificationReference = document.getElementById("verificationReference");
 const verificationGatewayId = document.getElementById("verificationGatewayId");
 const confirmVerificationButton = document.getElementById("confirmVerificationButton");
 const markFailedButton = document.getElementById("markFailedButton");
+const settlementTableBody = document.getElementById("settlementTableBody");
+const settlementStartDate = document.getElementById("settlementStartDate");
+const settlementEndDate = document.getElementById("settlementEndDate");
+const settlementPaidModal = document.getElementById("settlementPaidModal");
+const settlementPayoutReference = document.getElementById("settlementPayoutReference");
+const confirmSettlementPaidButton = document.getElementById("confirmSettlementPaidButton");
 
 /* Format numbers as Nepalese rupees */
 
@@ -503,10 +511,24 @@ function renderPendingPayouts() {
             transaction.paymentStatus === "verified" &&
             transaction.payoutStatus === "pending"
     );
+    const pendingProviders = Array.from(
+        pendingTransactions.reduce((providers, transaction) => {
+            const current = providers.get(transaction.providerId) || {
+                providerId: transaction.providerId,
+                provider: transaction.provider,
+                transactionCount: 0,
+                amount: 0
+            };
+            current.transactionCount += 1;
+            current.amount += transaction.providerShare;
+            providers.set(transaction.providerId, current);
+            return providers;
+        }, new Map()).values()
+    );
 
     pendingPayoutList.innerHTML = "";
     pendingPayoutCount.textContent =
-        pendingTransactions.length;
+        pendingProviders.length;
 
     if (pendingTransactions.length === 0) {
         pendingPayoutList.innerHTML = `
@@ -519,37 +541,34 @@ function renderPendingPayouts() {
         return;
     }
 
-    pendingTransactions.forEach((transaction) => {
+    pendingProviders.forEach((provider) => {
         const payoutItem = document.createElement("div");
         payoutItem.className = "payout-item";
 
         payoutItem.innerHTML = `
             <div class="provider-avatar">
-                ${createInitials(transaction.provider)}
+                ${createInitials(provider.provider)}
             </div>
 
             <div class="payout-information">
-                <strong>${transaction.provider}</strong>
+                <strong>${provider.provider}</strong>
                 <span>
-                    ${transaction.id} · ${transaction.date}
+                    ${provider.transactionCount} verified transaction(s)
                 </span>
             </div>
 
             <div class="payout-action">
                 <strong>
                     ${formatCurrency(
-                        calculateProviderShare(
-                            transaction.grossAmount
-                        )
+                        provider.amount
                     )}
                 </strong>
 
                 <button
                     class="approve-button"
-                    data-payout-id="${transaction.id}"
-                    disabled
+                    data-provider-id="${provider.providerId}"
                 >
-                    Add through weekly settlement
+                    Create weekly settlement
                 </button>
             </div>
         `;
@@ -561,30 +580,41 @@ function renderPendingPayouts() {
         ".approve-button"
     ).forEach((button) => {
         button.addEventListener("click", () => {
-            openPayoutModal(button.dataset.payoutId);
+            openPayoutModal(Number(button.dataset.providerId));
         });
     });
 }
 
 /* Open payout confirmation window */
 
-function openPayoutModal(transactionId) {
-    const transaction = transactions.find(
-        (item) => item.id === transactionId
+function formatDateInput(date) {
+    return date.toISOString().slice(0, 10);
+}
+
+function openPayoutModal(providerId) {
+    const providerTransactions = transactions.filter(
+        (item) => item.providerId === providerId && item.paymentStatus === "verified" && item.payoutStatus === "pending"
     );
+    const transaction = providerTransactions[0];
 
     if (!transaction) {
         return;
     }
 
-    selectedPayoutId = transactionId;
+    selectedPayoutId = providerId;
 
     modalProviderName.textContent =
         transaction.provider;
 
     modalPayoutAmount.textContent = formatCurrency(
-        calculateProviderShare(transaction.grossAmount)
+        providerTransactions.reduce((sum, item) => sum + item.providerShare, 0)
     );
+
+    const end = new Date();
+    const start = new Date(end);
+    start.setDate(end.getDate() - 6);
+    settlementStartDate.value = formatDateInput(start);
+    settlementEndDate.value = formatDateInput(end);
 
     payoutModal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
@@ -600,30 +630,96 @@ function closePayoutModal() {
 
 /* Mark the selected demonstration payout as paid */
 
-function confirmPayout() {
-    const transaction = transactions.find(
-        (item) => item.id === selectedPayoutId
-    );
+async function confirmPayout() {
+    if (!selectedPayoutId) return;
+    const start = settlementStartDate.value;
+    const end = settlementEndDate.value;
+    if (!start || !end) return showToast("Select both settlement dates.");
+    const days = Math.floor((new Date(end) - new Date(start)) / 86400000);
+    if (days < 0 || days > 6) return showToast("Settlement period must be one to seven days.");
+    setActionBusy(confirmPayoutButton, true, "Creating…");
+    try {
+        await TrekMateAPI.request("/admin/settlements", {
+            method: "POST",
+            body: JSON.stringify({ provider_id: selectedPayoutId, period_start: start, period_end: end })
+        });
+        closePayoutModal();
+        await loadDashboardData();
+        showToast("Weekly settlement created.");
+    } catch (error) {
+        showToast(error.message);
+    } finally {
+        setActionBusy(confirmPayoutButton, false);
+    }
+}
 
-    if (!transaction) {
+function renderSettlements() {
+    settlementTableBody.innerHTML = "";
+    if (!settlements.length) {
+        settlementTableBody.innerHTML = '<tr><td colspan="7">No weekly settlements yet.</td></tr>';
         return;
     }
+    settlements.forEach((settlement) => {
+        const row = document.createElement("tr");
+        const status = String(settlement.status || "PENDING").toLowerCase();
+        let action = '<span>Completed</span>';
+        if (status === "pending") action = `<button class="settlement-action" data-action="approve" data-id="${settlement.id}">Approve</button>`;
+        if (status === "approved") action = `<button class="settlement-action" data-action="paid" data-id="${settlement.id}">Mark Paid</button>`;
+        if (status === "rejected") action = '<span>Rejected</span>';
+        row.innerHTML = `
+            <td><strong>${settlement.settlement_reference}</strong></td>
+            <td>${settlement.provider_name || settlement.provider_email || `Provider #${settlement.provider_id}`}</td>
+            <td>${settlement.period_start} – ${settlement.period_end}</td>
+            <td>${settlement.transaction_count || 0}</td>
+            <td><strong>${formatCurrency(settlement.total_amount)}</strong></td>
+            <td>${createStatusBadge(status)}</td>
+            <td>${action}</td>`;
+        settlementTableBody.appendChild(row);
+    });
+    settlementTableBody.querySelectorAll(".settlement-action").forEach((button) => {
+        button.addEventListener("click", () => handleSettlementAction(button));
+    });
+}
 
-    /*
-     * Prototype behaviour only.
-     *
-     * In the final system, this should call an authenticated
-     * Express API endpoint. The backend should update MySQL
-     * only after the administrator confirms the manual transfer.
-     */
+async function handleSettlementAction(button) {
+    const id = Number(button.dataset.id);
+    if (button.dataset.action === "paid") {
+        selectedSettlementId = id;
+        settlementPayoutReference.value = "";
+        settlementPaidModal.classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+        settlementPayoutReference.focus();
+        return;
+    }
+    setActionBusy(button, true, "Approving…");
+    try {
+        await TrekMateAPI.request(`/admin/settlements/${id}`, { method: "PATCH", body: JSON.stringify({ status: "APPROVED" }) });
+        await loadDashboardData();
+        showToast("Settlement approved.");
+    } catch (error) { showToast(error.message); }
+    finally { setActionBusy(button, false); }
+}
 
-    transaction.payoutStatus = "paid";
+function closeSettlementPaidModal() {
+    selectedSettlementId = null;
+    settlementPaidModal.classList.add("hidden");
+    document.body.style.overflow = "";
+}
 
-    closePayoutModal();
-    updateDashboard();
-    showToast(
-        `${transaction.provider} payout marked as paid.`
-    );
+async function markSettlementPaid() {
+    const reference = settlementPayoutReference.value.trim();
+    if (!reference) return showToast("Enter the payout reference.");
+    setActionBusy(confirmSettlementPaidButton, true, "Saving…");
+    try {
+        await TrekMateAPI.request(`/admin/settlements/${selectedSettlementId}`, {
+            method: "PATCH",
+            body: JSON.stringify({ status: "PAID", payout_reference: reference })
+        });
+        closeSettlementPaidModal();
+        await loadDashboardData();
+        showToast("Settlement marked paid.");
+    } catch (error) { showToast(error.message); }
+    finally { setActionBusy(confirmSettlementPaidButton, false); }
 }
 
 /* Display temporary notification */
@@ -643,6 +739,7 @@ function updateDashboard() {
     updateFinancialSummary();
     renderTransactions();
     renderPendingPayouts();
+    renderSettlements();
 }
 
 function normalisePaymentStatus(transaction) {
@@ -682,6 +779,7 @@ function mapTransaction(transaction) {
         customer: transaction.customer_name || "Unknown customer",
         customerEmail: transaction.customer_email || "—",
         provider: transaction.provider_name || "TrekMate",
+        providerId: Number(transaction.provider_id),
         providerEmail: transaction.provider_email || "—",
         grossAmount: Number(transaction.gross_amount || 0),
         commissionAmount: Number(transaction.commission_amount || 0),
@@ -701,13 +799,15 @@ async function loadDashboardData() {
     `;
 
     try {
-        const [dashboardResponse, transactionResponse] = await Promise.all([
+        const [dashboardResponse, transactionResponse, settlementResponse] = await Promise.all([
             TrekMateAPI.request("/admin/dashboard"),
-            TrekMateAPI.request("/admin/transactions")
+            TrekMateAPI.request("/admin/transactions"),
+            TrekMateAPI.request("/admin/settlements")
         ]);
 
         dashboardSummary = dashboardResponse.data;
         transactions = (transactionResponse.data || []).map(mapTransaction);
+        settlements = settlementResponse.data || [];
         updateDashboard();
     } catch (error) {
         transactionTableBody.innerHTML = `
@@ -759,6 +859,12 @@ markFailedButton.addEventListener("click", () => updateVerification(false, markF
 verificationModal.addEventListener("click", (event) => {
     if (event.target === verificationModal) closeVerificationModal();
 });
+document.getElementById("closeSettlementPaidButton").addEventListener("click", closeSettlementPaidModal);
+document.getElementById("cancelSettlementPaidButton").addEventListener("click", closeSettlementPaidModal);
+confirmSettlementPaidButton.addEventListener("click", markSettlementPaid);
+settlementPaidModal.addEventListener("click", (event) => {
+    if (event.target === settlementPaidModal) closeSettlementPaidModal();
+});
 
 document.addEventListener("keydown", (event) => {
     if (
@@ -770,6 +876,9 @@ document.addEventListener("keydown", (event) => {
 
     if (event.key === "Escape" && !verificationModal.classList.contains("hidden")) {
         closeVerificationModal();
+    }
+    if (event.key === "Escape" && !settlementPaidModal.classList.contains("hidden")) {
+        closeSettlementPaidModal();
     }
 });
 

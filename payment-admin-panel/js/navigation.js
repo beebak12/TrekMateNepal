@@ -249,13 +249,12 @@ if (usersMenuToggle) {
     usersMenuToggle.addEventListener(
         "click",
         (event) => {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-
             if (!isUsersPage()) {
-                window.location.href = "users.html";
                 return;
             }
+
+            event.preventDefault();
+            event.stopImmediatePropagation();
 
             const isCurrentlyOpen =
                 usersNavigationGroup.classList.contains(

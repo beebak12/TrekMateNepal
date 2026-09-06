@@ -172,18 +172,17 @@
                 </div>
             </header>
 
-            <!-- Prototype notice -->
+            <!-- Live data notice -->
             <section class="prototype-notice">
                 <div>
-                    <strong>Prototype mode</strong>
+                    <strong>Live API connected</strong>
 
                     <p>
-                        This dashboard currently displays demonstration data.
-                        Live information will be supplied by the Express API.
+                        Financial records are loaded from the TrekMate Express API and MySQL database.
                     </p>
                 </div>
 
-                <span>Frontend Preview</span>
+                <span>MySQL Data</span>
             </section>
 
             <!-- Summary cards -->
@@ -244,6 +243,28 @@
                     <small>Approved refund amount</small>
                 </article>
 
+            </section>
+
+            <!-- Monthly financial report -->
+            <section class="panel monthly-report-panel" id="monthlyReport">
+                <div class="panel-header monthly-report-header">
+                    <div>
+                        <h3>Monthly Financial Report</h3>
+                        <p>Verified revenue, refunds and provider settlements for one calendar month</p>
+                    </div>
+                    <div class="monthly-report-controls">
+                        <label for="reportMonth">Report month</label>
+                        <input type="month" id="reportMonth">
+                        <button class="primary-button" id="loadMonthlyReportButton">Generate Report</button>
+                    </div>
+                </div>
+
+                <div id="monthlyReportContent" class="monthly-report-content">
+                    <div class="empty-state">
+                        <strong>Select a month</strong>
+                        <p>Generate a report from the live financial records.</p>
+                    </div>
+                </div>
             </section>
 
             <!-- Revenue and payout overview -->

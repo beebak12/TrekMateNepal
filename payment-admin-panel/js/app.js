@@ -170,6 +170,9 @@ const settlementEndDate = document.getElementById("settlementEndDate");
 const settlementPaidModal = document.getElementById("settlementPaidModal");
 const settlementPayoutReference = document.getElementById("settlementPayoutReference");
 const confirmSettlementPaidButton = document.getElementById("confirmSettlementPaidButton");
+const reportMonth = document.getElementById("reportMonth");
+const loadMonthlyReportButton = document.getElementById("loadMonthlyReportButton");
+const monthlyReportContent = document.getElementById("monthlyReportContent");
 
 /* Format numbers as Nepalese rupees */
 
@@ -212,6 +215,69 @@ function createStatusBadge(status) {
             ${status}
         </span>
     `;
+}
+
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+function formatReportMonth(month) {
+    const [year, monthNumber] = month.split("-").map(Number);
+    return new Intl.DateTimeFormat("en-GB", { month: "long", year: "numeric", timeZone: "UTC" })
+        .format(new Date(Date.UTC(year, monthNumber - 1, 1)));
+}
+
+function renderMonthlyReport(report) {
+    const summary = report.summary || {};
+    const providers = report.providers || [];
+    monthlyReportContent.innerHTML = `
+        <div class="monthly-report-period">
+            <strong>${escapeHtml(formatReportMonth(report.month))}</strong>
+            <span>${escapeHtml(report.period_start)} to ${escapeHtml(report.period_end)}</span>
+        </div>
+        <div class="monthly-report-cards">
+            <div><span>Verified gross</span><strong>${formatCurrency(summary.gross_amount)}</strong><small>${Number(summary.transaction_count || 0)} transaction(s)</small></div>
+            <div><span>TrekMate revenue</span><strong>${formatCurrency(summary.trekmate_revenue)}</strong><small>10% commission</small></div>
+            <div><span>Provider payable</span><strong>${formatCurrency(summary.provider_payable)}</strong><small>90% provider share</small></div>
+            <div><span>Completed refunds</span><strong>${formatCurrency(summary.refund_amount)}</strong><small>${Number(summary.refund_count || 0)} refund(s)</small></div>
+            <div><span>Paid settlements</span><strong>${formatCurrency(summary.paid_to_providers)}</strong><small>${Number(summary.settlement_count || 0)} settlement(s)</small></div>
+        </div>
+        <div class="table-scroll monthly-provider-table">
+            <table class="settlement-table">
+                <thead><tr><th>Provider</th><th>Transactions</th><th>Gross</th><th>TrekMate 10%</th><th>Provider 90%</th></tr></thead>
+                <tbody>
+                    ${providers.length ? providers.map((provider) => `
+                        <tr>
+                            <td><strong>${escapeHtml(provider.provider_name || `Provider #${provider.provider_id}`)}</strong></td>
+                            <td>${Number(provider.transaction_count || 0)}</td>
+                            <td>${formatCurrency(provider.gross_amount)}</td>
+                            <td>${formatCurrency(provider.commission_amount)}</td>
+                            <td><strong>${formatCurrency(provider.provider_payable)}</strong></td>
+                        </tr>`).join("") : '<tr><td colspan="5">No verified transactions for this month.</td></tr>'}
+                </tbody>
+            </table>
+        </div>`;
+}
+
+async function loadMonthlyReport() {
+    const month = reportMonth.value;
+    if (!month) return showToast("Select a report month.");
+    setActionBusy(loadMonthlyReportButton, true, "Loading…");
+    monthlyReportContent.innerHTML = '<div class="empty-state"><strong>Loading report…</strong></div>';
+    try {
+        const response = await TrekMateAPI.request(`/admin/reports/monthly?month=${encodeURIComponent(month)}`);
+        renderMonthlyReport(response.data);
+    } catch (error) {
+        monthlyReportContent.innerHTML = '<div class="empty-state"><strong>Unable to load monthly report.</strong></div>';
+        showToast(error.message);
+    } finally {
+        setActionBusy(loadMonthlyReportButton, false);
+    }
 }
 
 /* Update financial summary using the current records */
@@ -862,6 +928,7 @@ verificationModal.addEventListener("click", (event) => {
 document.getElementById("closeSettlementPaidButton").addEventListener("click", closeSettlementPaidModal);
 document.getElementById("cancelSettlementPaidButton").addEventListener("click", closeSettlementPaidModal);
 confirmSettlementPaidButton.addEventListener("click", markSettlementPaid);
+loadMonthlyReportButton.addEventListener("click", loadMonthlyReport);
 settlementPaidModal.addEventListener("click", (event) => {
     if (event.target === settlementPaidModal) closeSettlementPaidModal();
 });
@@ -925,7 +992,7 @@ document.querySelectorAll(
 
         if (section === "revenue") {
             document
-                .querySelector(".revenue-overview")
+                .querySelector(".monthly-report-panel")
                 .scrollIntoView({
                     behavior: "smooth",
                     block: "center"
@@ -957,4 +1024,6 @@ document.querySelectorAll(
 
 /* Initial dashboard display */
 
+reportMonth.value = new Date().toISOString().slice(0, 7);
+loadMonthlyReport();
 loadDashboardData();

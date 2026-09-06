@@ -657,6 +657,33 @@ button {
 .settlement-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 18px 0; text-align: left; }
 .settlement-form-grid input, #settlementPayoutReference { width: 100%; }
 
+.monthly-report-panel { margin-bottom: 24px; }
+.monthly-report-header { align-items: flex-end; }
+.monthly-report-controls { display: flex; align-items: flex-end; gap: 10px; }
+.monthly-report-controls label { color: var(--muted); font-size: 11px; }
+.monthly-report-controls input { min-height: 40px; border: 1px solid var(--border); border-radius: 9px; padding: 8px 10px; font: inherit; }
+.monthly-report-controls .primary-button { min-height: 40px; width: auto; padding: 0 18px; }
+.monthly-report-content { padding: 24px 32px 30px; }
+.monthly-report-period { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 18px; }
+.monthly-report-period strong { font-size: 18px; }
+.monthly-report-period span { color: var(--muted); }
+.monthly-report-cards { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.monthly-report-cards > div { display: flex; min-height: 105px; flex-direction: column; gap: 8px; border: 1px solid var(--border); border-radius: 13px; padding: 16px; }
+.monthly-report-cards span, .monthly-report-cards small { color: var(--muted); }
+.monthly-report-cards strong { font-size: 18px; }
+.monthly-provider-table { margin-top: 22px; }
+
+@media (max-width: 1100px) {
+    .monthly-report-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 720px) {
+    .monthly-report-header, .monthly-report-controls { align-items: stretch; flex-direction: column; }
+    .monthly-report-controls { width: 100%; }
+    .monthly-report-cards { grid-template-columns: 1fr; }
+    .monthly-report-period { align-items: flex-start; flex-direction: column; gap: 5px; }
+}
+
 .payout-item {
     display: grid;
     grid-template-columns: auto 1fr auto;

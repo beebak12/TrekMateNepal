@@ -186,7 +186,7 @@ function applyDashboardRoute() {
         activateMainNavigation("revenue");
 
         scrollToDashboardSection(
-            "#revenue"
+            "#monthlyReport"
         );
 
         return;

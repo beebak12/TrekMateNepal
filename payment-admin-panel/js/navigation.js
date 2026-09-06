@@ -6,6 +6,12 @@ const usersNavigationGroup =
 const usersMenuToggle =
     document.getElementById("usersMenuToggle");
 
+document.querySelectorAll("[data-admin-logout]").forEach((button) => {
+    button.addEventListener("click", () => {
+        TrekMateAPI.logout();
+    });
+});
+
 function isUsersPage() {
     return /\/users(?:\.html)?\/?$/.test(
         window.location.pathname

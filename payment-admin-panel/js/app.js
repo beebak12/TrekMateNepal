@@ -5,6 +5,7 @@
 let transactions = [];
 let dashboardSummary = null;
 let settlements = [];
+let refunds = [];
 
 /*
 const demonstrationTransactions = [
@@ -105,6 +106,8 @@ const PROVIDER_RATE = 0.90;
 let selectedPayoutId = null;
 let selectedVerificationId = null;
 let selectedSettlementId = null;
+let selectedRefundTransactionId = null;
+let selectedRefundId = null;
 
 /* HTML elements */
 
@@ -173,6 +176,17 @@ const confirmSettlementPaidButton = document.getElementById("confirmSettlementPa
 const reportMonth = document.getElementById("reportMonth");
 const loadMonthlyReportButton = document.getElementById("loadMonthlyReportButton");
 const monthlyReportContent = document.getElementById("monthlyReportContent");
+const refundTableBody = document.getElementById("refundTableBody");
+const refundRequestCount = document.getElementById("refundRequestCount");
+const refundRequestModal = document.getElementById("refundRequestModal");
+const refundCompleteModal = document.getElementById("refundCompleteModal");
+const refundTransactionReference = document.getElementById("refundTransactionReference");
+const refundTransactionGross = document.getElementById("refundTransactionGross");
+const refundAmount = document.getElementById("refundAmount");
+const refundReason = document.getElementById("refundReason");
+const refundCompletionReference = document.getElementById("refundCompletionReference");
+const confirmRefundRequestButton = document.getElementById("confirmRefundRequestButton");
+const confirmRefundCompleteButton = document.getElementById("confirmRefundCompleteButton");
 
 /* Format numbers as Nepalese rupees */
 
@@ -424,9 +438,9 @@ function renderTransactions() {
             const matchesSearch =
                 searchableText.includes(searchValue);
 
-            const matchesStatus =
-                selectedStatus === "all" ||
-                transaction.paymentStatus === selectedStatus;
+            const matchesStatus = selectedStatus === "all" ||
+                transaction.paymentStatus === selectedStatus ||
+                (selectedStatus === "refunded" && transaction.paymentStatus === "partially-refunded");
 
             return matchesSearch && matchesStatus;
         }
@@ -443,10 +457,12 @@ function renderTransactions() {
 
         const canVerify = transaction.paymentStatus === "pending" ||
             transaction.paymentStatus === "failed";
+        const canRefund = transaction.rawPaymentStatus === "VERIFIED" ||
+            transaction.rawPaymentStatus === "PARTIALLY_REFUNDED";
 
-        let actionText = canVerify ? "Verify" : "Verified";
+        let actionText = canVerify ? "Verify" : canRefund ? "Request Refund" : "Completed";
 
-        if (transaction.paymentStatus === "refunded") {
+        if (transaction.rawPaymentStatus === "REFUNDED") {
             actionText = "Refunded";
         }
 
@@ -492,9 +508,9 @@ function renderTransactions() {
 
             <td>
                 <button
-                    class="table-action verify-transaction-button"
+                    class="table-action ${canRefund ? "request-refund-button" : "verify-transaction-button"}"
                     data-transaction-id="${transaction.databaseId}"
-                    ${canVerify ? "" : "disabled"}
+                    ${(canVerify || canRefund) ? "" : "disabled"}
                 >
                     ${actionText}
                 </button>
@@ -513,6 +529,126 @@ function renderTransactions() {
         .forEach((button) => button.addEventListener("click", () => {
             openVerificationModal(Number(button.dataset.transactionId));
         }));
+    document.querySelectorAll(".request-refund-button")
+        .forEach((button) => button.addEventListener("click", () => {
+            openRefundRequestModal(Number(button.dataset.transactionId));
+        }));
+}
+
+function openRefundRequestModal(transactionId) {
+    const transaction = transactions.find((item) => item.databaseId === transactionId);
+    if (!transaction) return;
+    selectedRefundTransactionId = transactionId;
+    refundTransactionReference.textContent = transaction.id;
+    refundTransactionGross.textContent = formatCurrency(transaction.grossAmount);
+    refundAmount.value = "";
+    refundAmount.max = String(transaction.grossAmount);
+    refundReason.value = "";
+    refundRequestModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    refundAmount.focus();
+}
+
+function closeRefundRequestModal() {
+    selectedRefundTransactionId = null;
+    refundRequestModal.classList.add("hidden");
+    document.body.style.overflow = "";
+}
+
+async function submitRefundRequest() {
+    const amount = Number(refundAmount.value);
+    const reason = refundReason.value.trim();
+    if (!Number.isFinite(amount) || amount <= 0) return showToast("Enter a valid refund amount.");
+    if (!reason) return showToast("Enter a refund reason.");
+    setActionBusy(confirmRefundRequestButton, true, "Submitting…");
+    try {
+        await TrekMateAPI.request("/admin/refunds", {
+            method: "POST",
+            body: JSON.stringify({ transaction_id: selectedRefundTransactionId, amount, reason })
+        });
+        closeRefundRequestModal();
+        await loadDashboardData();
+        showToast("Refund requested.");
+        document.getElementById("refundsPanel").scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch (error) { showToast(error.message); }
+    finally { setActionBusy(confirmRefundRequestButton, false); }
+}
+
+function renderRefunds() {
+    refundTableBody.innerHTML = "";
+    refundRequestCount.textContent = refunds.filter((refund) => refund.status === "REQUESTED").length;
+    if (!refunds.length) {
+        refundTableBody.innerHTML = '<tr><td colspan="7">No refund requests yet.</td></tr>';
+        return;
+    }
+    refunds.forEach((refund) => {
+        const status = String(refund.status || "REQUESTED").toLowerCase();
+        let actions = '<span>Completed</span>';
+        if (status === "requested") actions = `
+            <button class="refund-action" data-id="${refund.id}" data-status="APPROVED">Approve</button>
+            <button class="refund-action secondary-refund-action" data-id="${refund.id}" data-status="REJECTED">Reject</button>`;
+        if (status === "approved") actions = `
+            <button class="refund-action" data-id="${refund.id}" data-status="COMPLETED">Complete</button>
+            <button class="refund-action secondary-refund-action" data-id="${refund.id}" data-status="REJECTED">Reject</button>`;
+        if (status === "rejected") actions = '<span>Rejected</span>';
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td><strong>${escapeHtml(refund.transaction_reference)}</strong></td>
+            <td>${escapeHtml(refund.customer_name)}</td>
+            <td><strong>${formatCurrency(refund.amount)}</strong></td>
+            <td>${escapeHtml(refund.reason)}</td>
+            <td>${createStatusBadge(status)}</td>
+            <td>${escapeHtml(refund.refund_reference || "—")}</td>
+            <td class="refund-actions">${actions}</td>`;
+        refundTableBody.appendChild(row);
+    });
+    refundTableBody.querySelectorAll(".refund-action").forEach((button) => {
+        button.addEventListener("click", () => updateRefundStatus(button));
+    });
+}
+
+async function updateRefundStatus(button) {
+    const id = Number(button.dataset.id);
+    const status = button.dataset.status;
+    if (status === "COMPLETED") {
+        selectedRefundId = id;
+        refundCompletionReference.value = "";
+        refundCompleteModal.classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+        refundCompletionReference.focus();
+        return;
+    }
+    if (status === "REJECTED" && !window.confirm("Reject this refund request? This cannot be reversed.")) return;
+    setActionBusy(button, true, status === "APPROVED" ? "Approving…" : "Rejecting…");
+    try {
+        await TrekMateAPI.request(`/admin/refunds/${id}`, { method: "PATCH", body: JSON.stringify({ status }) });
+        await loadDashboardData();
+        showToast(`Refund marked ${status.toLowerCase()}.`);
+    } catch (error) { showToast(error.message); }
+    finally { setActionBusy(button, false); }
+}
+
+function closeRefundCompleteModal() {
+    selectedRefundId = null;
+    refundCompleteModal.classList.add("hidden");
+    document.body.style.overflow = "";
+}
+
+async function completeRefund() {
+    const reference = refundCompletionReference.value.trim();
+    if (!reference) return showToast("Enter the refund reference.");
+    setActionBusy(confirmRefundCompleteButton, true, "Completing…");
+    try {
+        await TrekMateAPI.request(`/admin/refunds/${selectedRefundId}`, {
+            method: "PATCH",
+            body: JSON.stringify({ status: "COMPLETED", refund_reference: reference })
+        });
+        closeRefundCompleteModal();
+        await loadDashboardData();
+        await loadMonthlyReport();
+        showToast("Refund completed.");
+    } catch (error) { showToast(error.message); }
+    finally { setActionBusy(confirmRefundCompleteButton, false); }
 }
 
 function openVerificationModal(databaseId) {
@@ -806,15 +942,14 @@ function updateDashboard() {
     renderTransactions();
     renderPendingPayouts();
     renderSettlements();
+    renderRefunds();
 }
 
 function normalisePaymentStatus(transaction) {
-    if (
-        transaction.payment_status === "REFUNDED" ||
-        transaction.payment_status === "PARTIALLY_REFUNDED"
-    ) {
+    if (transaction.payment_status === "REFUNDED") {
         return "refunded";
     }
+    if (transaction.payment_status === "PARTIALLY_REFUNDED") return "partially-refunded";
 
     if (transaction.verification_status === "VERIFIED") {
         return "verified";
@@ -851,7 +986,8 @@ function mapTransaction(transaction) {
         commissionAmount: Number(transaction.commission_amount || 0),
         providerShare: Number(transaction.provider_payable || 0),
         paymentStatus: normalisePaymentStatus(transaction),
-        payoutStatus: String(transaction.payout_status || "unpaid").toLowerCase()
+        payoutStatus: String(transaction.payout_status || "unpaid").toLowerCase(),
+        rawPaymentStatus: String(transaction.payment_status || "PENDING").toUpperCase()
     };
 }
 
@@ -865,15 +1001,17 @@ async function loadDashboardData() {
     `;
 
     try {
-        const [dashboardResponse, transactionResponse, settlementResponse] = await Promise.all([
+        const [dashboardResponse, transactionResponse, settlementResponse, refundResponse] = await Promise.all([
             TrekMateAPI.request("/admin/dashboard"),
             TrekMateAPI.request("/admin/transactions"),
-            TrekMateAPI.request("/admin/settlements")
+            TrekMateAPI.request("/admin/settlements"),
+            TrekMateAPI.request("/admin/refunds")
         ]);
 
         dashboardSummary = dashboardResponse.data;
         transactions = (transactionResponse.data || []).map(mapTransaction);
         settlements = settlementResponse.data || [];
+        refunds = refundResponse.data || [];
         updateDashboard();
     } catch (error) {
         transactionTableBody.innerHTML = `
@@ -929,6 +1067,14 @@ document.getElementById("closeSettlementPaidButton").addEventListener("click", c
 document.getElementById("cancelSettlementPaidButton").addEventListener("click", closeSettlementPaidModal);
 confirmSettlementPaidButton.addEventListener("click", markSettlementPaid);
 loadMonthlyReportButton.addEventListener("click", loadMonthlyReport);
+document.getElementById("closeRefundRequestButton").addEventListener("click", closeRefundRequestModal);
+document.getElementById("cancelRefundRequestButton").addEventListener("click", closeRefundRequestModal);
+confirmRefundRequestButton.addEventListener("click", submitRefundRequest);
+refundRequestModal.addEventListener("click", (event) => { if (event.target === refundRequestModal) closeRefundRequestModal(); });
+document.getElementById("closeRefundCompleteButton").addEventListener("click", closeRefundCompleteModal);
+document.getElementById("cancelRefundCompleteButton").addEventListener("click", closeRefundCompleteModal);
+confirmRefundCompleteButton.addEventListener("click", completeRefund);
+refundCompleteModal.addEventListener("click", (event) => { if (event.target === refundCompleteModal) closeRefundCompleteModal(); });
 settlementPaidModal.addEventListener("click", (event) => {
     if (event.target === settlementPaidModal) closeSettlementPaidModal();
 });
@@ -947,6 +1093,8 @@ document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && !settlementPaidModal.classList.contains("hidden")) {
         closeSettlementPaidModal();
     }
+    if (event.key === "Escape" && !refundRequestModal.classList.contains("hidden")) closeRefundRequestModal();
+    if (event.key === "Escape" && !refundCompleteModal.classList.contains("hidden")) closeRefundCompleteModal();
 });
 
 /* Mobile navigation */
@@ -971,10 +1119,7 @@ document.querySelectorAll(
 
         const section = button.dataset.section;
 
-        if (
-            section === "transactions" ||
-            section === "refunds"
-        ) {
+        if (section === "transactions") {
             document
                 .querySelector(".transaction-panel")
                 .scrollIntoView({
@@ -982,12 +1127,13 @@ document.querySelectorAll(
                     block: "start"
                 });
 
-            statusFilter.value =
-                section === "refunds"
-                    ? "refunded"
-                    : "all";
+            statusFilter.value = "all";
 
             renderTransactions();
+        }
+
+        if (section === "refunds") {
+            document.querySelector(".refund-management-panel").scrollIntoView({ behavior: "smooth", block: "start" });
         }
 
         if (section === "revenue") {

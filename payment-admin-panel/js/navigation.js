@@ -206,14 +206,14 @@ function applyDashboardRoute() {
         activateMainNavigation("refunds");
 
         if (statusFilter) {
-            statusFilter.value = "refunded";
+            statusFilter.value = "all";
             statusFilter.dispatchEvent(
                 new Event("change")
             );
         }
 
         scrollToDashboardSection(
-            "#transactions"
+            "#refundsPanel"
         );
 
         return;

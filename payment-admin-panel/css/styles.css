@@ -885,6 +885,23 @@ tbody tr:hover {
     color: var(--blue);
 }
 
+.status-partially-refunded, .status-requested, .status-approved {
+    background: var(--orange-light);
+    color: var(--orange);
+}
+
+.status-completed { background: var(--green-light); color: var(--green); }
+.status-rejected { background: var(--red-light); color: var(--red); }
+
+.refund-management-panel { margin-top: 24px; }
+.refund-management-panel .table-scroll { padding: 0 32px 28px; }
+.refund-table { min-width: 980px; }
+.refund-actions { display: flex; gap: 7px; }
+.refund-action { border: 0; border-radius: 8px; background: var(--primary); color: white; cursor: pointer; font: inherit; padding: 8px 11px; }
+.secondary-refund-action { background: var(--red-light); color: var(--red); }
+.refund-modal-icon { color: var(--red); background: var(--red-light); }
+.modal textarea { width: 100%; resize: vertical; }
+
 .status-failed,
 .status-unpaid {
     background: var(--red-light);

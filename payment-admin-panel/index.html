@@ -474,6 +474,33 @@
                 </div>
             </section>
 
+            <!-- Refund management -->
+            <section class="panel refund-management-panel" id="refundsPanel">
+                <div class="panel-header">
+                    <div>
+                        <h3>Refund Management</h3>
+                        <p>Review, approve and complete refund requests</p>
+                    </div>
+                    <span class="count-badge" id="refundRequestCount">0</span>
+                </div>
+                <div class="table-scroll">
+                    <table class="settlement-table refund-table">
+                        <thead>
+                            <tr>
+                                <th>Transaction</th>
+                                <th>Customer</th>
+                                <th>Amount</th>
+                                <th>Reason</th>
+                                <th>Status</th>
+                                <th>Reference</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="refundTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
             <footer class="dashboard-footer">
                 <p>
                     TrekMate Nepal Payment Administration Panel
@@ -485,6 +512,50 @@
             </footer>
 
         </main>
+    </div>
+
+    <!-- Request refund modal -->
+    <div class="modal-overlay hidden" id="refundRequestModal" role="dialog" aria-modal="true" aria-labelledby="refundRequestTitle">
+        <div class="modal">
+            <button class="modal-close" id="closeRefundRequestButton" aria-label="Close refund request">×</button>
+            <div class="modal-icon refund-modal-icon">↶</div>
+            <h3 id="refundRequestTitle">Request Refund</h3>
+            <p>Create a refund request against a verified transaction.</p>
+            <div class="modal-details">
+                <div><span>Transaction</span><strong id="refundTransactionReference">—</strong></div>
+                <div><span>Gross amount</span><strong id="refundTransactionGross">—</strong></div>
+            </div>
+            <div class="form-group">
+                <label for="refundAmount">Refund amount</label>
+                <input type="number" id="refundAmount" min="0.01" step="0.01" placeholder="Enter amount">
+            </div>
+            <div class="form-group">
+                <label for="refundReason">Reason</label>
+                <textarea id="refundReason" rows="3" placeholder="Explain why this refund is required"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="secondary-button" id="cancelRefundRequestButton">Cancel</button>
+                <button class="primary-button" id="confirmRefundRequestButton">Submit Request</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Complete refund modal -->
+    <div class="modal-overlay hidden" id="refundCompleteModal" role="dialog" aria-modal="true" aria-labelledby="refundCompleteTitle">
+        <div class="modal">
+            <button class="modal-close" id="closeRefundCompleteButton" aria-label="Close refund completion">×</button>
+            <div class="modal-icon refund-modal-icon">↶</div>
+            <h3 id="refundCompleteTitle">Complete Refund</h3>
+            <p>Enter the gateway, bank or sandbox refund reference after returning the money.</p>
+            <div class="form-group">
+                <label for="refundCompletionReference">Refund reference</label>
+                <input type="text" id="refundCompletionReference" placeholder="Example: SANDBOX-REFUND-001">
+            </div>
+            <div class="modal-actions">
+                <button class="secondary-button" id="cancelRefundCompleteButton">Cancel</button>
+                <button class="primary-button" id="confirmRefundCompleteButton">Confirm Completion</button>
+            </div>
+        </div>
     </div>
 
     <!-- Transaction verification modal -->

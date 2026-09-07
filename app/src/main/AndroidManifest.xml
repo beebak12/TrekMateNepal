@@ -297,6 +297,10 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
+            android:name=".activities.FavouriteGearActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".activities.MyTrekPostsActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />

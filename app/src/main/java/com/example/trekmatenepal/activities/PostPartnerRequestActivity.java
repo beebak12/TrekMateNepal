@@ -38,7 +38,7 @@ public class PostPartnerRequestActivity extends AppCompatActivity {
     private EditText etCustomTrek;
     private LinearLayout layoutStartDate, layoutEndDate;
     private TextView tvStartDate, tvEndDate;
-    private EditText etLocation, etBudget, etAbout;
+    private EditText etLocation, etBudget, etAbout, etGroupName;
     private FrameLayout layoutSelectRouteImage;
     private ImageView imgRoutePreview;
     private LinearLayout layoutAddImageIcon;
@@ -46,13 +46,19 @@ public class PostPartnerRequestActivity extends AppCompatActivity {
 
     private Uri selectedImageUri;
 
-    private final ActivityResultLauncher<String> pickImageLauncher =
-            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+    private final ActivityResultLauncher<String[]> pickImageLauncher =
+            registerForActivityResult(new ActivityResultContracts.OpenDocument(), uri -> {
                 if (uri != null) {
-                    selectedImageUri = uri;
-                    imgRoutePreview.setImageURI(uri);
-                    imgRoutePreview.setVisibility(View.VISIBLE);
-                    layoutAddImageIcon.setVisibility(View.GONE);
+                    try {
+                        getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        selectedImageUri = uri;
+                        imgRoutePreview.setImageURI(uri);
+                        imgRoutePreview.setVisibility(View.VISIBLE);
+                        layoutAddImageIcon.setVisibility(View.GONE);
+                    } catch (SecurityException error) {
+                        selectedImageUri = null;
+                        Toast.makeText(this, "This image cannot be saved. Please choose another image.", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
 
@@ -81,6 +87,7 @@ public class PostPartnerRequestActivity extends AppCompatActivity {
         etLocation = findViewById(R.id.etLocation);
         etBudget = findViewById(R.id.etBudget);
         etAbout = findViewById(R.id.etAbout);
+        etGroupName = findViewById(R.id.etGroupName);
         layoutSelectRouteImage = findViewById(R.id.layoutSelectRouteImage);
         imgRoutePreview = findViewById(R.id.imgRoutePreview);
         layoutAddImageIcon = findViewById(R.id.layoutAddImageIcon);
@@ -143,7 +150,7 @@ public class PostPartnerRequestActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
-        layoutSelectRouteImage.setOnClickListener(v -> pickImageLauncher.launch("image/*"));
+        layoutSelectRouteImage.setOnClickListener(v -> pickImageLauncher.launch(new String[]{"image/*"}));
 
         btnPost.setOnClickListener(v -> {
             String trek = spinnerTrek.getSelectedItem().toString();
@@ -162,9 +169,12 @@ public class PostPartnerRequestActivity extends AppCompatActivity {
             String budget = etBudget.getText().toString().trim();
             String exp = spinnerExperience.getSelectedItem().toString();
             String about = etAbout.getText().toString().trim();
+            String groupName = etGroupName.getText().toString().trim();
 
-            if (startDate.equals("Select Date") || endDate.equals("Select Date") || location.isEmpty()) {
+            if (startDate.equals("Select Date") || endDate.equals("Select Date")
+                    || location.isEmpty() || groupName.isEmpty()) {
                 Toast.makeText(this, "Please fill required fields", Toast.LENGTH_SHORT).show();
+                if (groupName.isEmpty()) etGroupName.setError("Enter a chat group name");
                 return;
             }
 
@@ -183,6 +193,7 @@ public class PostPartnerRequestActivity extends AppCompatActivity {
             newPost.setDescription(about);
             newPost.setBudget(budget);
             newPost.setExperienceLevel(exp);
+            newPost.setGroupName(groupName);
             if (selectedImageUri != null) {
                 newPost.setCustomImageUri(selectedImageUri.toString());
             }
@@ -192,7 +203,7 @@ public class PostPartnerRequestActivity extends AppCompatActivity {
             // Automatically create a group chat for this trek
             ChatSummaryModel groupChat = new ChatSummaryModel(
                     newPost.getGroupId(),
-                    newPost.getTitle() + " Group",
+                    groupName,
                     "Group created. Welcome!",
                     "Just now",
                     newPost.getImageRes(),
@@ -202,6 +213,9 @@ public class PostPartnerRequestActivity extends AppCompatActivity {
             if (newPost.getCustomImageUri() != null) {
                 groupChat.setCustomImageUri(newPost.getCustomImageUri());
             }
+            groupChat.setAdminId(currentUserId);
+            groupChat.addMember(currentUserId);
+            com.example.trekmatenepal.data.ChatRepository.loadChats(this);
             com.example.trekmatenepal.data.ChatRepository.addChat(this, groupChat);
 
             Toast.makeText(this, "Trek request posted successfully!", Toast.LENGTH_SHORT).show();

@@ -1,0 +1,85 @@
+/* Users and Gear dropdown navigation */
+
+.navigation-group {
+    width: 100%;
+}
+
+.users-menu-toggle {
+    width: 100%;
+}
+
+.menu-chevron {
+    margin-left: auto;
+    font-size: 12px;
+    transition: transform 0.2s ease;
+}
+
+.navigation-group.open .menu-chevron {
+    transform: rotate(180deg);
+}
+
+.navigation-submenu {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 6px;
+    padding-left: 36px;
+}
+
+.navigation-group.open .navigation-submenu {
+    display: flex;
+}
+
+.subnavigation-item {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 12px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #e8d8ef;
+    font-size: 12px;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.subnavigation-item:hover {
+    background: rgba(255, 255, 255, 0.11);
+    color: #ffffff;
+}
+
+.subnavigation-item.active {
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.subnavigation-dot {
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.navigation-group.open > .users-menu-toggle {
+    background: rgba(255, 255, 255, 0.11);
+    color: #ffffff;
+}
+
+.navigation-group.open > .users-menu-toggle.active {
+    background: #ffffff;
+    color: var(--primary);
+}
+
+@media (max-width: 820px) {
+    .navigation-submenu {
+        padding-left: 30px;
+    }
+}

@@ -268,6 +268,7 @@ public class DashboardActivity extends AppCompatActivity {
         setupMenuOption(R.id.optionMyBookings, R.drawable.ic_calendar_purple, "My Bookings", "Your trek, gear & guide bookings", MyBookingsActivity.class);
         setupMenuOption(R.id.optionMyGears, R.drawable.ic_gear_purple, "My Gears", "Gear you have rented", MyGearsActivity.class);
         setupMenuOption(R.id.optionMyPostedGears, R.drawable.ic_tag_purple, "My Posted Gears", "Gear you posted for rental", MyPostedGearsActivity.class);
+        setupMenuOption(R.id.optionFavouriteGear, R.drawable.ic_favorite, "Favourite Gear", "Gear items you saved", FavouriteGearActivity.class);
         setupMenuOption(R.id.optionRecentPosts, R.drawable.ic_chat, "Recent Posts", "Browse latest trek partner requests", TrekPostsActivity.class);
         setupMenuOption(R.id.optionMyTrekPosts, R.drawable.ic_mountain_purple, "My Trek Posts", "Your partner & trek posts", MyTrekPostsActivity.class);
         setupMenuOption(R.id.optionMyTrekPartners, R.drawable.ic_people_purple, "My Trek Partners", "Your trekking connections", MyTrekPartnersActivity.class);

@@ -374,6 +374,28 @@
                     android:textColor="@color/purple_primary"
                     android:textSize="13sp" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Chat Group Name *"
+                    android:textColor="@color/purple_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etGroupName"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_white_rounded_outline"
+                    android:hint="e.g. EBC May Trek Group"
+                    android:inputType="textCapWords"
+                    android:maxLength="60"
+                    android:paddingHorizontal="12dp"
+                    android:textColor="@color/purple_primary"
+                    android:textSize="13sp" />
+
                 <!-- About -->
                 <TextView
                     android:layout_width="wrap_content"

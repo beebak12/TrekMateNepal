@@ -20,6 +20,16 @@ public class JoinRequestModel implements Serializable {
         this.timestamp = System.currentTimeMillis();
     }
 
+    public JoinRequestModel(String id, String postId, String requesterId, String requesterName,
+                            String status, long timestamp) {
+        this.id = id;
+        this.postId = postId;
+        this.requesterId = requesterId;
+        this.requesterName = requesterName;
+        this.status = status;
+        this.timestamp = timestamp;
+    }
+
     public String getId() { return id; }
     public String getPostId() { return postId; }
     public String getRequesterId() { return requesterId; }

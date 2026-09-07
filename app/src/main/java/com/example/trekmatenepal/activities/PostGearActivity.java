@@ -1,7 +1,9 @@
 package com.example.trekmatenepal.activities;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -26,6 +28,8 @@ import com.example.trekmatenepal.models.RentalGearModel;
  */
 public class PostGearActivity extends AppCompatActivity {
 
+    private static final String TAG = "PostGearActivity";
+
     private EditText etName, etCategory, etSize, etPrice, etDescription, etLocation;
     private FrameLayout layoutSelectImage;
     private ImageView imgPreview;
@@ -34,10 +38,20 @@ public class PostGearActivity extends AppCompatActivity {
 
     private Uri selectedImageUri;
 
-    private final ActivityResultLauncher<String> pickImageLauncher =
-            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+    private final ActivityResultLauncher<String[]> pickImageLauncher =
+            registerForActivityResult(new ActivityResultContracts.OpenDocument(), uri -> {
                 if (uri != null) {
-                    selectedImageUri = uri;
+                    try {
+                        getContentResolver().takePersistableUriPermission(
+                                uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        selectedImageUri = uri;
+                    } catch (SecurityException error) {
+                        Log.w(TAG, "Image provider did not offer persistent read access", error);
+                        selectedImageUri = null;
+                        Toast.makeText(this,
+                                "This image cannot be kept after the app closes. Choose another image.",
+                                Toast.LENGTH_LONG).show();
+                    }
                     imgPreview.setImageURI(uri);
                     imgPreview.setVisibility(View.VISIBLE);
                     layoutAddIcon.setVisibility(View.GONE);
@@ -70,7 +84,7 @@ public class PostGearActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
-        layoutSelectImage.setOnClickListener(v -> pickImageLauncher.launch("image/*"));
+        layoutSelectImage.setOnClickListener(v -> pickImageLauncher.launch(new String[]{"image/*"}));
 
         btnPost.setOnClickListener(v -> handlePostGear());
     }

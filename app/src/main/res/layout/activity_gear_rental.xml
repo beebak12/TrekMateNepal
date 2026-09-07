@@ -11,7 +11,7 @@
         android:id="@+id/headerLayout"
         android:layout_width="match_parent"
         android:layout_height="46dp"
-        android:background="@color/white"
+        android:background="@color/purple_primary"
         android:elevation="4dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -33,7 +33,7 @@
             android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:text="Gear Rental"
-            android:textColor="@color/purple_primary"
+            android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -42,7 +42,7 @@
             android:layout_height="28dp"
             android:contentDescription="Search"
             android:src="@drawable/ic_search"
-            app:tint="#333333" />
+            app:tint="@color/white" />
 
     </LinearLayout>
 

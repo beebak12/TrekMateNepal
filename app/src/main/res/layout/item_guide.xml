@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="12dp"
+        android:background="@color/lightpurple"
         android:gravity="center_vertical">
 
         <!-- Guide Profile Image -->
@@ -21,6 +22,7 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:scaleType="centerCrop"
+            android:background="@color/white"
             android:contentDescription="Guide Profile"
             app:shapeAppearanceOverlay="@style/CircleImageStyle" />
 
@@ -49,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:text="Licensed Guide"
                 android:textSize="12sp"
-                android:textColor="@color/secondary_gray"
+                android:textColor="@color/dark_text"
                 android:layout_marginTop="2dp" />
 
             <!-- Experience -->
@@ -59,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:text="8+ Years Experience"
                 android:textSize="12sp"
-                android:textColor="@color/secondary_gray"
+                android:textColor="@color/dark_text"
                 android:layout_marginTop="2dp" />
 
             <!-- Languages -->
@@ -69,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:text="Speaks: English, Nepali"
                 android:textSize="12sp"
-                android:textColor="@color/secondary_gray"
+                android:textColor="@color/dark_text"
                 android:layout_marginTop="2dp" />
 
         </LinearLayout>
@@ -92,9 +94,9 @@
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:src="@drawable/ic_star"
+                    android:src="@drawable/ic_star1"
                     android:contentDescription="Rating Star"
-                    app:tint="@color/orange"
+
                     android:layout_marginEnd="4dp" />
 
                 <TextView
@@ -112,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:text="(120)"
                     android:textSize="12sp"
-                    android:textColor="@color/secondary_gray"
+                    android:textColor="@color/dark_text"
                     android:layout_marginStart="4dp" />
 
             </LinearLayout>

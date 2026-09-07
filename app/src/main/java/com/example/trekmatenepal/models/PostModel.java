@@ -19,6 +19,7 @@ public class PostModel implements Serializable {
     private String budget;
     private String experienceLevel;
     private String groupId;
+    private String groupName;
 
     public PostModel(String title, String author, String location, String dateRange, String duration, String interestedCount, int imageRes) {
         this.id = UUID.randomUUID().toString();
@@ -63,4 +64,7 @@ public class PostModel implements Serializable {
 
     public String getGroupId() { return groupId; }
     public void setGroupId(String groupId) { this.groupId = groupId; }
+
+    public String getGroupName() { return groupName; }
+    public void setGroupName(String groupName) { this.groupName = groupName; }
 }

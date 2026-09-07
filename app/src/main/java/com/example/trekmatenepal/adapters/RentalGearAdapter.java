@@ -3,11 +3,13 @@ package com.example.trekmatenepal.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trekmatenepal.R;
 import com.example.trekmatenepal.activities.GearDetailActivity;
+import com.example.trekmatenepal.data.GearFavouriteRepository;
 import com.example.trekmatenepal.models.RentalGearModel;
 
 import java.util.ArrayList;
@@ -25,12 +28,25 @@ import java.util.ArrayList;
  */
 public class RentalGearAdapter extends RecyclerView.Adapter<RentalGearAdapter.ViewHolder> {
 
+    private static final String TAG = "RentalGearAdapter";
+
     private final Context context;
     private final ArrayList<RentalGearModel> gearList;
+    private final OnFavouriteChangedListener favouriteChangedListener;
+
+    public interface OnFavouriteChangedListener {
+        void onFavouriteChanged(RentalGearModel gear);
+    }
 
     public RentalGearAdapter(Context context, ArrayList<RentalGearModel> gearList) {
+        this(context, gearList, null);
+    }
+
+    public RentalGearAdapter(Context context, ArrayList<RentalGearModel> gearList,
+                             OnFavouriteChangedListener listener) {
         this.context = context;
         this.gearList = gearList;
+        this.favouriteChangedListener = listener;
     }
 
     @NonNull
@@ -46,20 +62,19 @@ public class RentalGearAdapter extends RecyclerView.Adapter<RentalGearAdapter.Vi
         RentalGearModel gear = gearList.get(position);
 
         // Image loading logic
-        if (gear.getCustomImageUri() != null) {
-            holder.imgGear.setImageURI(Uri.parse(gear.getCustomImageUri()));
-        } else {
-            int imageRes = gear.getImage();
-            if (isValidDrawable(imageRes)) {
-                holder.imgGear.setImageResource(imageRes);
-            } else {
-                holder.imgGear.setImageResource(R.drawable.jacket);
-            }
-        }
+        bindGearImage(holder.imgGear, gear);
 
         holder.txtGearName.setText(gear.getName());
         holder.txtGearPrice.setText(gear.getPrice());
         holder.txtGearRating.setText(gear.getRating());
+        updateFavouriteIcon(holder.btnFav, GearFavouriteRepository.isFavourite(context, gear));
+        holder.btnFav.setOnClickListener(v -> {
+            boolean selected = GearFavouriteRepository.toggle(context, gear);
+            updateFavouriteIcon(holder.btnFav, selected);
+            Toast.makeText(context, selected ? "Added to favourites" : "Removed from favourites",
+                    Toast.LENGTH_SHORT).show();
+            if (favouriteChangedListener != null) favouriteChangedListener.onFavouriteChanged(gear);
+        });
 
         // Availability badge
         if ("Available".equalsIgnoreCase(gear.getAvailability())) {
@@ -95,6 +110,31 @@ public class RentalGearAdapter extends RecyclerView.Adapter<RentalGearAdapter.Vi
         } catch (Exception e) {
             return false;
         }
+    }
+
+    private void updateFavouriteIcon(ImageView view, boolean selected) {
+        view.setImageResource(R.drawable.ic_favorite);
+        view.setAlpha(selected ? 1f : 0.35f);
+        view.setContentDescription(selected ? "Remove from favourites" : "Add to favourites");
+    }
+
+    private void bindGearImage(ImageView imageView, RentalGearModel gear) {
+        String customImageUri = gear.getCustomImageUri();
+        if (customImageUri != null && !customImageUri.trim().isEmpty()) {
+            try {
+                imageView.setImageURI(Uri.parse(customImageUri));
+                if (imageView.getDrawable() != null) {
+                    return;
+                }
+            } catch (RuntimeException error) {
+                // GetContent/Photo Picker grants may expire after the app process is restarted.
+                Log.w(TAG, "Stored gear image is no longer readable; using fallback", error);
+            }
+            gear.setCustomImageUri(null);
+        }
+
+        int imageRes = gear.getImage();
+        imageView.setImageResource(isValidDrawable(imageRes) ? imageRes : R.drawable.jacket);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

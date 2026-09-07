@@ -3,6 +3,7 @@ package com.example.trekmatenepal.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.trekmatenepal.R;
+import com.example.trekmatenepal.data.GearFavouriteRepository;
 import com.example.trekmatenepal.models.RentalGearModel;
 
 /**
@@ -19,6 +21,8 @@ import com.example.trekmatenepal.models.RentalGearModel;
  * "Rent Now" opens BookingActivity with the same model.
  */
 public class GearDetailActivity extends AppCompatActivity {
+
+    private static final String TAG = "GearDetailActivity";
 
     private ImageView imgGear, btnBack;
     private TextView txtGearName, txtPrice, txtRating, txtAvailability,
@@ -79,18 +83,7 @@ public class GearDetailActivity extends AppCompatActivity {
         }
 
         // Populate UI
-        if (gear.getCustomImageUri() != null) {
-            imgGear.setImageURI(Uri.parse(gear.getCustomImageUri()));
-            gearImageRes = 0; // URI based
-        } else {
-            gearImageRes = gear.getImage();
-            if (isValidDrawable(gearImageRes)) {
-                imgGear.setImageResource(gearImageRes);
-            } else {
-                gearImageRes = R.drawable.jacket;
-                imgGear.setImageResource(gearImageRes);
-            }
-        }
+        loadGearImage();
 
         txtGearName.setText(gear.getName());
         txtPrice.setText(gear.getPrice());
@@ -127,6 +120,25 @@ public class GearDetailActivity extends AppCompatActivity {
         }
     }
 
+    private void loadGearImage() {
+        String customImageUri = gear.getCustomImageUri();
+        if (customImageUri != null && !customImageUri.trim().isEmpty()) {
+            try {
+                imgGear.setImageURI(Uri.parse(customImageUri));
+                if (imgGear.getDrawable() != null) {
+                    gearImageRes = 0;
+                    return;
+                }
+            } catch (RuntimeException error) {
+                Log.w(TAG, "Stored gear image is no longer readable; using fallback", error);
+            }
+            gear.setCustomImageUri(null);
+        }
+
+        gearImageRes = isValidDrawable(gear.getImage()) ? gear.getImage() : R.drawable.jacket;
+        imgGear.setImageResource(gearImageRes);
+    }
+
     private void setupClickListeners() {
         btnBack.setOnClickListener(v -> finish());
 
@@ -144,11 +156,23 @@ public class GearDetailActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Favourite button (visual only for now)
         ImageView btnFav = findViewById(R.id.btnFav);
         if (btnFav != null) {
-            btnFav.setOnClickListener(v ->
-                    android.widget.Toast.makeText(this, "Added to favourites", android.widget.Toast.LENGTH_SHORT).show());
+            updateFavouriteButton(btnFav);
+            btnFav.setOnClickListener(v -> {
+                boolean selected = GearFavouriteRepository.toggle(this, gear);
+                updateFavouriteButton(btnFav);
+                android.widget.Toast.makeText(this,
+                        selected ? "Added to favourites" : "Removed from favourites",
+                        android.widget.Toast.LENGTH_SHORT).show();
+            });
         }
+    }
+
+    private void updateFavouriteButton(ImageView button) {
+        boolean selected = GearFavouriteRepository.isFavourite(this, gear);
+        button.setImageResource(R.drawable.ic_favorite);
+        button.setAlpha(selected ? 1f : 0.35f);
+        button.setContentDescription(selected ? "Remove from favourites" : "Add to favourites");
     }
 }

@@ -23,6 +23,17 @@ public class ChatRepository {
         return filtered;
     }
 
+    public static List<ChatSummaryModel> getChatsForCurrentUser(Context context, boolean isGroup) {
+        String currentUserId = SessionUser.getUserId(context);
+        List<ChatSummaryModel> filtered = new ArrayList<>();
+        for (ChatSummaryModel chat : chats) {
+            if (chat.isGroup() != isGroup) continue;
+            if (!isGroup || chat.getMemberIds().isEmpty() || chat.hasMember(currentUserId)
+                    || currentUserId.equalsIgnoreCase(chat.getAdminId())) filtered.add(chat);
+        }
+        return filtered;
+    }
+
     public static void loadChats(Context context) {
         chats.clear();
         SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -43,6 +54,13 @@ public class ChatRepository {
                         o.getBoolean("isGroup")
                     );
                     c.setCustomImageUri(o.optString("customImageUri", null));
+                    c.setAdminId(o.optString("adminId", null));
+                    JSONArray memberIds = o.optJSONArray("memberIds");
+                    if (memberIds != null) {
+                        List<String> members = new ArrayList<>();
+                        for (int j = 0; j < memberIds.length(); j++) members.add(memberIds.optString(j));
+                        c.setMemberIds(members);
+                    }
                     chats.add(c);
                 }
             } catch (Exception e) {
@@ -83,6 +101,10 @@ public class ChatRepository {
                 o.put("unreadCount", c.getUnreadCount());
                 o.put("isGroup", c.isGroup());
                 o.put("customImageUri", c.getCustomImageUri());
+                o.put("adminId", c.getAdminId());
+                JSONArray members = new JSONArray();
+                for (String memberId : c.getMemberIds()) members.put(memberId);
+                o.put("memberIds", members);
                 arr.put(o);
             }
             context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
@@ -98,5 +120,15 @@ public class ChatRepository {
             count += c.getUnreadCount();
         }
         return count;
+    }
+
+    public static void addGroupMember(Context context, String groupId, String userId) {
+        for (ChatSummaryModel chat : chats) {
+            if (chat.isGroup() && chat.getId().equals(groupId)) {
+                chat.addMember(userId);
+                saveChats(context);
+                return;
+            }
+        }
     }
 }

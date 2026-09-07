@@ -135,6 +135,10 @@
                 layout="@layout/item_menu_option" />
 
             <include
+                android:id="@+id/optionFavouriteGear"
+                layout="@layout/item_menu_option" />
+
+            <include
                 android:id="@+id/optionRecentPosts"
                 layout="@layout/item_menu_option" />
 

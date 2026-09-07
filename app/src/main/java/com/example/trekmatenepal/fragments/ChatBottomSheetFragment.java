@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,8 @@ import com.example.trekmatenepal.activities.ChatActivity;
 import com.example.trekmatenepal.adapters.ChatSummaryAdapter;
 import com.example.trekmatenepal.data.ChatRepository;
 import com.example.trekmatenepal.models.ChatSummaryModel;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
@@ -50,6 +53,27 @@ public class ChatBottomSheetFragment extends BottomSheetDialogFragment {
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!(getDialog() instanceof BottomSheetDialog)) return;
+        BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
+        FrameLayout sheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+        if (sheet == null) return;
+
+        ViewGroup.LayoutParams params = sheet.getLayoutParams();
+        params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        sheet.setLayoutParams(params);
+
+        BottomSheetBehavior<FrameLayout> behavior = BottomSheetBehavior.from(sheet);
+        behavior.setFitToContents(false);
+        behavior.setExpandedOffset(0);
+        behavior.setHalfExpandedRatio(0.52f);
+        behavior.setHideable(true);
+        behavior.setDraggable(true);
+        behavior.setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
+    }
+
     private void initViews(View view) {
         recyclerView = view.findViewById(R.id.recyclerChatSummary);
         tvTabChats = view.findViewById(R.id.tvTabChats);
@@ -59,8 +83,8 @@ public class ChatBottomSheetFragment extends BottomSheetDialogFragment {
     }
 
     private void refreshData() {
-        chatList = ChatRepository.getChats(false);
-        groupList = ChatRepository.getChats(true);
+        chatList = ChatRepository.getChatsForCurrentUser(requireContext(), false);
+        groupList = ChatRepository.getChatsForCurrentUser(requireContext(), true);
     }
 
     private void setupTabs(View view) {

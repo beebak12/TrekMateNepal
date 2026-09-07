@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -19,7 +20,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trekmatenepal.R;
 import com.example.trekmatenepal.adapters.PartnerListAdapter;
+import com.example.trekmatenepal.data.ChatRepository;
+import com.example.trekmatenepal.data.NotificationRepository;
+import com.example.trekmatenepal.data.PostRepository;
+import com.example.trekmatenepal.data.SessionUser;
+import com.example.trekmatenepal.models.JoinRequestModel;
 import com.example.trekmatenepal.models.PartnerModel;
+import com.example.trekmatenepal.models.PostModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -251,17 +258,105 @@ public class PartnerFinderActivity extends AppCompatActivity {
         recyclerPartners.setLayoutManager(new LinearLayoutManager(this));
         recyclerPartners.setAdapter(partnerAdapter);
 
-        // Requests
-        List<PartnerModel> receivedRequests = new ArrayList<>();
-        receivedRequests.add(new PartnerModel("Bibek Paudel", "5.0", "(12)", "Pending", R.drawable.partner4, "Kathmandu", "Mardi Himal", "15 Oct – 20 Oct", "5 Days", "26 Years", "3+", "5", "Join me!", "Trekking", "2-3 People", R.drawable.mardihimal, true));
         recyclerRequests.setLayoutManager(new LinearLayoutManager(this));
-        recyclerRequests.setAdapter(new GenericAdapter(receivedRequests, R.layout.item_partner_request));
-        
-        // My Requests
-        List<PartnerModel> myRequests = new ArrayList<>();
-        myRequests.add(new PartnerModel("Sandeep Magar", "4.9", "(40)", "Accepted", R.drawable.partner1, "Kathmandu", "Annapurna Circuit", "02 Nov – 15 Nov", "14 Days", "30 Years", "12+", "25", "Ready?", "Adventure", "2-5 People", R.drawable.annapurna, true));
         recyclerMyRequests.setLayoutManager(new LinearLayoutManager(this));
-        recyclerMyRequests.setAdapter(new GenericAdapter(myRequests, R.layout.item_request_card));
+        loadRequestLists();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (recyclerRequests != null) loadRequestLists();
+    }
+
+    private void loadRequestLists() {
+        PostRepository.loadPosts(this);
+        String currentUserId = SessionUser.getUserId(this);
+        List<JoinRequestModel> received = new ArrayList<>();
+        List<JoinRequestModel> sent = new ArrayList<>();
+        for (JoinRequestModel request : PostRepository.getJoinRequests(this)) {
+            PostModel post = PostRepository.getPost(request.getPostId());
+            if (request.getRequesterId().equalsIgnoreCase(currentUserId)) sent.add(request);
+            if (post != null && currentUserId.equalsIgnoreCase(post.getAuthorId())) received.add(request);
+        }
+        recyclerRequests.setAdapter(new JoinRequestAdapter(received, true));
+        recyclerMyRequests.setAdapter(new JoinRequestAdapter(sent, false));
+    }
+
+    private void handleRequest(JoinRequestModel request, boolean accept) {
+        PostModel post = PostRepository.getPost(request.getPostId());
+        if (post == null || !SessionUser.getUserId(this).equalsIgnoreCase(post.getAuthorId())) {
+            Toast.makeText(this, "Only the trek post admin can manage this request", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        request.setStatus(accept ? "accepted" : "rejected");
+        PostRepository.updateJoinRequest(this, request);
+        if (accept) {
+            ChatRepository.loadChats(this);
+            ChatRepository.addGroupMember(this, post.getGroupId(), request.getRequesterId());
+            NotificationRepository.notifyUser(this, request.getRequesterId(), "Trek request accepted",
+                    "You were added to " + (post.getGroupName() == null ? post.getTitle() + " Group" : post.getGroupName()),
+                    post.getId(), "partner");
+        } else {
+            NotificationRepository.notifyUser(this, request.getRequesterId(), "Trek request declined",
+                    "Your request to join " + post.getTitle() + " was declined.", post.getId(), "partner");
+        }
+        Toast.makeText(this, accept ? "Member added to the group" : "Request rejected", Toast.LENGTH_SHORT).show();
+        loadRequestLists();
+    }
+
+    private class JoinRequestAdapter extends RecyclerView.Adapter<JoinRequestViewHolder> {
+        private final List<JoinRequestModel> requests;
+        private final boolean adminView;
+
+        JoinRequestAdapter(List<JoinRequestModel> requests, boolean adminView) {
+            this.requests = requests;
+            this.adminView = adminView;
+        }
+
+        @NonNull @Override
+        public JoinRequestViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new JoinRequestViewHolder(LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_partner_request, parent, false));
+        }
+
+        @Override public void onBindViewHolder(@NonNull JoinRequestViewHolder holder, int position) {
+            JoinRequestModel request = requests.get(position);
+            PostModel post = PostRepository.getPost(request.getPostId());
+            holder.name.setText(request.getRequesterName());
+            holder.title.setText((adminView ? "Wants to join " : "Request for ")
+                    + (post == null ? "trek" : post.getTitle()));
+            holder.date.setText(adminView ? "Status: " + request.getStatus() : capitalize(request.getStatus()));
+            holder.image.setImageResource(post == null || post.getImageRes() == 0 ? R.drawable.everest : post.getImageRes());
+            boolean pending = "pending".equalsIgnoreCase(request.getStatus());
+            holder.accept.setVisibility(adminView && pending ? View.VISIBLE : View.GONE);
+            holder.reject.setVisibility(adminView && pending ? View.VISIBLE : View.GONE);
+            holder.accept.setOnClickListener(v -> handleRequest(request, true));
+            holder.reject.setOnClickListener(v -> handleRequest(request, false));
+        }
+
+        @Override public int getItemCount() { return requests.size(); }
+    }
+
+    private static class JoinRequestViewHolder extends RecyclerView.ViewHolder {
+        final TextView name, title, date;
+        final ImageView image;
+        final Button accept, reject;
+        JoinRequestViewHolder(@NonNull View itemView) {
+            super(itemView);
+            name = itemView.findViewById(R.id.txtUserName);
+            title = itemView.findViewById(R.id.txtTitle);
+            date = itemView.findViewById(R.id.txtTrekDate);
+            image = itemView.findViewById(R.id.imgTrek);
+            accept = itemView.findViewById(R.id.btnJoin);
+            reject = itemView.findViewById(R.id.btnReject);
+            accept.setText("Accept");
+        }
+    }
+
+    private static String capitalize(String value) {
+        if (value == null || value.isEmpty()) return "Pending";
+        return Character.toUpperCase(value.charAt(0)) + value.substring(1);
     }
 
     private class GenericAdapter extends RecyclerView.Adapter<GenericViewHolder> {

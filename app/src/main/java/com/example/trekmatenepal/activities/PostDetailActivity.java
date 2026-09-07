@@ -83,11 +83,11 @@ public class PostDetailActivity extends AppCompatActivity {
             return;
         }
 
-        JoinRequestModel request = new JoinRequestModel(post.getId(), currentUserId, "You");
+        JoinRequestModel request = new JoinRequestModel(post.getId(), currentUserId, currentUserId);
         PostRepository.addJoinRequest(this, request);
 
         // Notify Admin
-        NotificationRepository.notifyJoinRequest(this, post.getAuthorId(), "Someone", post.getTitle());
+        NotificationRepository.notifyJoinRequest(this, post.getAuthorId(), currentUserId, post.getTitle());
 
         Toast.makeText(this, "Request sent to " + post.getAuthor(), Toast.LENGTH_SHORT).show();
         finish();

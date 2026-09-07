@@ -25,12 +25,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"
+                android:background="@color/lightpurple"
                 app:cardElevation="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:background="@color/lightpurple"
                     android:padding="16dp">
 
                     <TextView
@@ -53,6 +55,7 @@
                     <include layout="@layout/item_info_row" android:id="@+id/rowPhone" />
                     <include layout="@layout/item_info_row" android:id="@+id/rowDob" />
                     <include layout="@layout/item_info_row" android:id="@+id/rowGender" />
+                    <include layout="@layout/item_info_row" android:id="@+id/rowAddress" />
 
                 </LinearLayout>
 

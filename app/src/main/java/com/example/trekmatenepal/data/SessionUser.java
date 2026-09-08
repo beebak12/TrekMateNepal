@@ -11,6 +11,7 @@ public final class SessionUser {
     private static final String PREFS       = "TrekMatePrefs";
     private static final String KEY_USER_ID = "user_id";
     private static final String KEY_TOKEN   = "auth_token";
+    private static final String KEY_DISPLAY_NAME = "display_name";
     private static final String DEFAULT_ID  = "You";
 
     private SessionUser() { }
@@ -41,6 +42,20 @@ public final class SessionUser {
            .edit()
            .putString(KEY_TOKEN, token)
            .apply();
+    }
+
+    public static String getDisplayName(Context ctx) {
+        String name = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+                .getString(KEY_DISPLAY_NAME, null);
+        return (name == null || name.trim().isEmpty()) ? getUserId(ctx) : name.trim();
+    }
+
+    public static void setDisplayName(Context ctx, String displayName) {
+        if (displayName == null || displayName.trim().isEmpty()) return;
+        ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+                .edit()
+                .putString(KEY_DISPLAY_NAME, displayName.trim())
+                .apply();
     }
 
     public static void clear(Context ctx) {

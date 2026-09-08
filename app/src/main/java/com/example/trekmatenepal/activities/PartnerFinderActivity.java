@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.trekmatenepal.R;
 import com.example.trekmatenepal.adapters.PartnerListAdapter;
 import com.example.trekmatenepal.data.ChatRepository;
+import com.example.trekmatenepal.data.ChatBackendRepository;
 import com.example.trekmatenepal.data.NotificationRepository;
 import com.example.trekmatenepal.data.PostRepository;
 import com.example.trekmatenepal.data.SessionUser;
@@ -294,6 +295,9 @@ public class PartnerFinderActivity extends AppCompatActivity {
         if (accept) {
             ChatRepository.loadChats(this);
             ChatRepository.addGroupMember(this, post.getGroupId(), request.getRequesterId());
+            if (post.getGroupId() != null && post.getGroupId().matches("\\d+") && request.getRequesterId().matches("\\d+")) {
+                ChatBackendRepository.addGroupMember(this, Integer.parseInt(post.getGroupId()), Integer.parseInt(request.getRequesterId()));
+            }
             NotificationRepository.notifyUser(this, request.getRequesterId(), "Trek request accepted",
                     "You were added to " + (post.getGroupName() == null ? post.getTitle() + " Group" : post.getGroupName()),
                     post.getId(), "partner");

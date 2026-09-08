@@ -33,7 +33,7 @@ public class ProfileActivity extends AppCompatActivity {
     private View layoutTreks, layoutEdit, layoutGear, layoutPosts, layoutTreksActivity;
     private TextView tvProfileName, tvProfileLocation, tvTrekCountSummary, tvProfileAge,
             tvProfileGender, tvProfileBio, tvProfileUsername, tvProfileEmail,
-            tvProfilePhone, tvProfileDob, tvProfileAddress, tvProfileError;
+            tvProfilePhone, tvProfileDob, tvProfileAddress, tvProfileHobbies, tvProfileError;
     private ImageView profileImage;
     private ProgressBar progressProfile;
     private ApiService apiService;
@@ -70,6 +70,7 @@ public class ProfileActivity extends AppCompatActivity {
         tvProfilePhone = findViewById(R.id.tvProfilePhone);
         tvProfileDob = findViewById(R.id.tvProfileDob);
         tvProfileAddress = findViewById(R.id.tvProfileAddress);
+        tvProfileHobbies = findViewById(R.id.tvProfileHobbies);
         tvProfileError = findViewById(R.id.tvProfileError);
         progressProfile = findViewById(R.id.progressProfile);
         profileImage = findViewById(R.id.profileImage);
@@ -109,6 +110,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void bindProfile(ProfileResponse.UserData user) {
         tvProfileError.setVisibility(View.GONE);
+        SessionUser.setDisplayName(this, user.getFullName());
         tvProfileName.setText(valueOrDash(user.getFullName()));
         tvProfileUsername.setText(valueOrDash(user.getUsername()));
         tvProfileEmail.setText(valueOrDash(user.getEmail()));
@@ -116,6 +118,8 @@ public class ProfileActivity extends AppCompatActivity {
         tvProfileDob.setText(formatDobForDisplay(user.getDob()));
         tvProfileGender.setText(formatGender(user.getGender()));
         tvProfileBio.setText(valueOrDefault(user.getBio(), "No bio added yet."));
+        tvProfileHobbies.setText(valueOrDefault(user.getHobbies(), "No hobbies added yet."));
+        tvTrekCountSummary.setText(String.valueOf(Math.max(0, user.getTreksCompleted())));
         String address = joinLocation(user.getCity(), user.getCountry());
         tvProfileAddress.setText(address);
         tvProfileLocation.setText(address);
@@ -227,8 +231,8 @@ public class ProfileActivity extends AppCompatActivity {
         tvProfileError.setOnClickListener(v -> loadUserData());
         layoutTreks.setOnClickListener(v -> startActivity(new Intent(this, TreksCompletedActivity.class)));
         layoutEdit.setOnClickListener(v -> startActivity(new Intent(this, EditProfileActivity.class)));
-        layoutGear.setOnClickListener(v -> startActivity(new Intent(this, PostedGearActivity.class)));
-        layoutPosts.setOnClickListener(v -> startActivity(new Intent(this, PostedGearActivity.class)));
+        layoutGear.setOnClickListener(v -> startActivity(new Intent(this, MyPostedGearsActivity.class)));
+        layoutPosts.setOnClickListener(v -> startActivity(new Intent(this, MyPostedGearsActivity.class)));
         layoutTreksActivity.setOnClickListener(v -> startActivity(new Intent(this, TreksCompletedActivity.class)));
         findViewById(R.id.btnNotification).setOnClickListener(v -> startActivity(new Intent(this, NotificationActivity.class)));
         findViewById(R.id.btnSettings).setOnClickListener(v -> startActivity(new Intent(this, SettingsActivity.class)));

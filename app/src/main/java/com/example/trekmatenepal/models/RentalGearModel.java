@@ -1,14 +1,17 @@
 package com.example.trekmatenepal.models;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * RentalGearModel — represents a piece of trekking gear available for rental.
  */
 public class RentalGearModel implements Serializable {
 
+    private String id;
     private int image;             // Local drawable resource ID
     private String customImageUri; // URI string for user-picked images
+    private String remoteImageUrl;
     private String name;
     private String category;
     private String rating;
@@ -25,6 +28,7 @@ public class RentalGearModel implements Serializable {
     // ── Old short constructor ───────────────────────────────────────────────
     public RentalGearModel(int image, String name, String category,
                            String rating, String price, String availability) {
+        this.id = UUID.randomUUID().toString();
         this.image = image;
         this.name = name;
         this.category = category;
@@ -43,6 +47,7 @@ public class RentalGearModel implements Serializable {
     public RentalGearModel(int image, String name, String category, String rating,
                            String price, String availability, String location,
                            String description) {
+        this.id = UUID.randomUUID().toString();
         this.image = image;
         this.name = name;
         this.category = category;
@@ -62,6 +67,7 @@ public class RentalGearModel implements Serializable {
                            String price, String priceRaw, String availability,
                            String location, String description,
                            String size, String condition, String seller) {
+        this.id = UUID.randomUUID().toString();
         this.image = image;
         this.name = name;
         this.category = category;
@@ -81,6 +87,7 @@ public class RentalGearModel implements Serializable {
                            String price, String priceRaw, String availability,
                            String location, String description,
                            String size, String condition, String seller, String sellerId) {
+        this.id = UUID.randomUUID().toString();
         this.image = image;
         this.customImageUri = customImageUri;
         this.name = name;
@@ -106,9 +113,13 @@ public class RentalGearModel implements Serializable {
     }
 
     // ── Getters & Setters ───────────────────────────────────────────────────
+    public String getId()             { return id != null ? id : ""; }
+    public void   setId(String id)     { this.id = id; }
     public int    getImage()           { return image; }
-    public String getCustomImageUri()  { return customImageUri; }
+    public String getCustomImageUri()  { return customImageUri != null ? customImageUri : ""; }
     public void   setCustomImageUri(String uri) { this.customImageUri = uri; }
+    public String getRemoteImageUrl() { return remoteImageUrl != null ? remoteImageUrl : ""; }
+    public void setRemoteImageUrl(String remoteImageUrl) { this.remoteImageUrl = remoteImageUrl; }
     public String getName()            { return name != null ? name : ""; }
     public String getCategory()        { return category != null ? category : ""; }
     public String getRating()          { return rating != null ? rating : ""; }
@@ -121,4 +132,5 @@ public class RentalGearModel implements Serializable {
     public String getCondition()       { return condition != null ? condition : ""; }
     public String getSeller()          { return seller != null ? seller : ""; }
     public String getSellerId()        { return sellerId != null ? sellerId : ""; }
+    public void setAvailability(String availability) { this.availability = availability; }
 }

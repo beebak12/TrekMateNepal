@@ -147,6 +147,8 @@ public class LoginActivity extends AppCompatActivity {
                             SessionUser.clear(LoginActivity.this);
                             SessionUser.setUserId(LoginActivity.this,
                                     String.valueOf(loginResponse.getUser().getId()));
+                            SessionUser.setDisplayName(LoginActivity.this,
+                                    loginResponse.getUser().getFullName());
                             SessionUser.setToken(LoginActivity.this, loginResponse.getToken());
                             saveRole("TREKKER");
 
@@ -222,6 +224,7 @@ public class LoginActivity extends AppCompatActivity {
     private void loginAsGuideLocally() {
         SessionUser.clear(this);
         SessionUser.setUserId(this, "Local Guide");
+        SessionUser.setDisplayName(this, "Local Guide");
         saveRole("GUIDE");
         Toast.makeText(this, "Continuing in Guide mode", Toast.LENGTH_SHORT).show();
         openDestination(GuideDashboardActivity.class);

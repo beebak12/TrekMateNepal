@@ -22,7 +22,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trekmatenepal.R;
 import com.example.trekmatenepal.data.PostRepository;
+import com.example.trekmatenepal.data.PartnerPostBackendRepository;
 import com.example.trekmatenepal.data.SessionUser;
+import com.example.trekmatenepal.data.RemoteImageLoader;
+import com.example.trekmatenepal.api.ApiClient;
+import com.example.trekmatenepal.api.ApiService;
+import com.example.trekmatenepal.model.ProfileResponse;
 import com.example.trekmatenepal.fragments.ChatBottomSheetFragment;
 import com.example.trekmatenepal.adapters.PostAdapter;
 import com.example.trekmatenepal.adapters.TrekAdapter;
@@ -39,6 +44,9 @@ import com.example.trekmatenepal.models.PartnerModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DashboardActivity extends AppCompatActivity {
 
@@ -47,7 +55,7 @@ public class DashboardActivity extends AppCompatActivity {
     private ImageButton notificationBtn;
     private Button exploreBtn;
     private RecyclerView recyclerTreks, recyclerGear, recyclerPartners, recyclerPosts;
-    private TextView viewAllTreks, viewAllGear;
+    private TextView viewAllTreks, viewAllGear, viewAllPartners, tvWelcomeName;
     private TextView fabBadge;
     private BottomNavigationView bottomNavigation;
     private DrawerLayout drawerLayout;
@@ -65,6 +73,10 @@ public class DashboardActivity extends AppCompatActivity {
         applySystemBarInsets();
 
         PostRepository.loadPosts(this);
+        PartnerPostBackendRepository.getAll(new PartnerPostBackendRepository.ListCallback() {
+            @Override public void success(ArrayList<PostModel> posts) { PostRepository.mergePosts(DashboardActivity.this, posts); if (postAdapter != null) { postList.clear(); postList.addAll(PostRepository.getAllPosts()); postAdapter.notifyDataSetChanged(); } }
+            @Override public void error(String message) { }
+        });
         initializeViews();
         setupRecyclerView();
         setupGearRecyclerView();
@@ -122,6 +134,7 @@ public class DashboardActivity extends AppCompatActivity {
         super.onResume();
         com.example.trekmatenepal.data.ChatRepository.loadChats(this);
         updateChatBadge();
+        loadHeaderProfile();
         
         if (postAdapter != null) {
             postList.clear();
@@ -159,6 +172,8 @@ public class DashboardActivity extends AppCompatActivity {
 
         viewAllTreks = findViewById(R.id.viewAllTreks);
         viewAllGear = findViewById(R.id.viewAllGear);
+        viewAllPartners = findViewById(R.id.viewAllPartners);
+        tvWelcomeName = findViewById(R.id.tvWelcomeName);
         fabBadge = findViewById(R.id.fabBadge);
         bottomNavigation = findViewById(R.id.bottomNavigation);
         drawerLayout = findViewById(R.id.drawerLayout);
@@ -251,7 +266,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         // Header User Data
         String userId = SessionUser.getUserId(this);
-        ((TextView) findViewById(R.id.menuUserName)).setText("Bibek Paudel"); // Placeholder
+        ((TextView) findViewById(R.id.menuUserName)).setText(SessionUser.getDisplayName(this));
         ((TextView) findViewById(R.id.menuUserHandle)).setText("@" + userId.toLowerCase().replace(" ", ""));
 
         findViewById(R.id.profileHeader).setOnClickListener(v -> {
@@ -390,6 +405,9 @@ public class DashboardActivity extends AppCompatActivity {
             openGearRental();
         });
 
+        viewAllPartners.setOnClickListener(v ->
+                startActivity(new Intent(DashboardActivity.this, PartnerFinderActivity.class)));
+
         findViewById(R.id.viewAllPosts).setOnClickListener(v -> {
             try {
                 startActivity(new Intent(DashboardActivity.this, TrekPostsActivity.class));
@@ -415,5 +433,33 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void openGearRental() {
         startActivity(new Intent(this, GearRentalActivity.class));
+    }
+
+    private void loadHeaderProfile() {
+        String displayName = SessionUser.getDisplayName(this);
+        tvWelcomeName.setText("Welcome " + firstName(displayName) + " 👋");
+        String token = SessionUser.getToken(this);
+        if (token == null || token.trim().isEmpty()) return;
+        ApiClient.getClient().create(ApiService.class).getProfile("Bearer " + token)
+                .enqueue(new Callback<ProfileResponse>() {
+                    @Override public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
+                        if (!response.isSuccessful() || response.body() == null || !response.body().isSuccess()
+                                || response.body().getData() == null) return;
+                        ProfileResponse.UserData user = response.body().getData();
+                        SessionUser.setDisplayName(DashboardActivity.this, user.getFullName());
+                        tvWelcomeName.setText("Welcome " + firstName(user.getFullName()) + " 👋");
+                        ((TextView) findViewById(R.id.menuUserName)).setText(user.getFullName());
+                        ((TextView) findViewById(R.id.menuUserHandle)).setText("@" + user.getUsername());
+                        RemoteImageLoader.load(profileImage, user.getProfileImage(), R.drawable.ic_profile);
+                        ImageView menuImage = findViewById(R.id.menuProfileImage);
+                        if (menuImage != null) RemoteImageLoader.load(menuImage, user.getProfileImage(), R.drawable.profile_photo);
+                    }
+                    @Override public void onFailure(Call<ProfileResponse> call, Throwable throwable) { }
+                });
+    }
+
+    private String firstName(String name) {
+        if (name == null || name.trim().isEmpty()) return "Trekker";
+        return name.trim().split("\\s+")[0];
     }
 }

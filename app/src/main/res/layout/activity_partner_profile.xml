@@ -205,7 +205,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-                                android:text="Years"
+                                android:text="Age"
                                 android:textColor="@color/purple_primary"
                                 android:textSize="11sp" />
 
@@ -232,7 +232,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-                                android:text="Spots available"
+                                android:text="Treks completed"
                                 android:textColor="@color/purple_primary"
                                 android:textSize="11sp" />
 
@@ -259,7 +259,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-                                android:text="Per Day"
+                                android:text="Preferred group"
                                 android:textColor="@color/purple_primary"
                                 android:textSize="11sp" />
 

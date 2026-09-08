@@ -114,10 +114,13 @@
 
                 <!-- Seller Info -->
                 <LinearLayout
+                    android:id="@+id/layoutSellerProfile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:background="@color/lightpurple"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="12dp">
@@ -235,6 +238,7 @@
 
                 <!-- Size row -->
                 <LinearLayout
+                    android:id="@+id/layoutGearSize"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -262,41 +266,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Multiple Size"
-                        android:textColor="@color/purple"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <!-- Size row (using id detailBrand for backward compat) -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingVertical="6dp">
-
-                    <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:contentDescription="Size"
-                        android:src="@drawable/ic_profile"
-                         />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_weight="1"
-                        android:text="Size"
-                        android:textColor="@color/purple"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/detailBrand"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="M / L / XL"
                         android:textColor="@color/purple"
                         android:textSize="14sp"
                         android:textStyle="bold" />

@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.trekmatenepal.R;
 import com.example.trekmatenepal.adapters.PostAdapter;
 import com.example.trekmatenepal.data.PostRepository;
+import com.example.trekmatenepal.data.PartnerPostBackendRepository;
+import java.util.ArrayList;
+import com.example.trekmatenepal.models.PostModel;
 
 public class TrekPostsActivity extends AppCompatActivity {
 
@@ -21,6 +24,10 @@ public class TrekPostsActivity extends AppCompatActivity {
 
         setupHeader();
         setupRecyclerView();
+        PartnerPostBackendRepository.getAll(new PartnerPostBackendRepository.ListCallback() {
+            @Override public void success(ArrayList<PostModel> posts) { PostRepository.mergePosts(TrekPostsActivity.this, posts); runOnUiThread(() -> setupRecyclerView()); }
+            @Override public void error(String message) { }
+        });
     }
 
     private void setupHeader() {

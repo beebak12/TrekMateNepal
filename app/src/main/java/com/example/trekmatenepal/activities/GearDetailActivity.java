@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -14,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import com.example.trekmatenepal.R;
 import com.example.trekmatenepal.data.GearFavouriteRepository;
 import com.example.trekmatenepal.models.RentalGearModel;
+import com.example.trekmatenepal.data.RemoteImageLoader;
 
 /**
  * GearDetailActivity — shows full details for a selected gear item.
@@ -91,14 +93,22 @@ public class GearDetailActivity extends AppCompatActivity {
 
         boolean available = "Available".equalsIgnoreCase(gear.getAvailability());
         if (txtAvailability != null) {
-            txtAvailability.setText(available ? "Available" : "Currently Unavailable");
+            txtAvailability.setText(gear.getAvailability().isEmpty() ? "Unavailable" : gear.getAvailability());
             txtAvailability.setTextColor(ContextCompat.getColor(this,
                     available ? R.color.success_green : R.color.red));
         }
 
         if (txtDescription != null) txtDescription.setText(gear.getDescription());
         if (detailCategory  != null) detailCategory.setText(gear.getCategory());
-        if (detailSize       != null) detailSize.setText(gear.getSize());
+        View sizeRow = findViewById(R.id.layoutGearSize);
+        boolean sizedCategory = "Footwear".equalsIgnoreCase(gear.getCategory())
+                || "Clothing".equalsIgnoreCase(gear.getCategory());
+        sizeRow.setVisibility(sizedCategory ? View.VISIBLE : View.GONE);
+        if (detailSize != null && sizedCategory) {
+            String size = gear.getSize().replaceFirst("(?i)^size\\s*", "");
+            detailSize.setText(size.isEmpty() ? "—" : size);
+        }
+
         if (detailCondition  != null) detailCondition.setText(gear.getCondition());
         if (detailSeller     != null) detailSeller.setText(gear.getSeller());
         if (detailLocation   != null) detailLocation.setText(gear.getLocation());
@@ -135,6 +145,12 @@ public class GearDetailActivity extends AppCompatActivity {
             gear.setCustomImageUri(null);
         }
 
+        if (!gear.getRemoteImageUrl().isEmpty()) {
+            gearImageRes = 0;
+            RemoteImageLoader.load(imgGear, gear.getRemoteImageUrl(), R.drawable.jacket);
+            return;
+        }
+
         gearImageRes = isValidDrawable(gear.getImage()) ? gear.getImage() : R.drawable.jacket;
         imgGear.setImageResource(gearImageRes);
     }
@@ -142,10 +158,19 @@ public class GearDetailActivity extends AppCompatActivity {
     private void setupClickListeners() {
         btnBack.setOnClickListener(v -> finish());
 
+        findViewById(R.id.layoutSellerProfile).setOnClickListener(v -> {
+            Intent intent = new Intent(this, SellerProfileActivity.class);
+            intent.putExtra(SellerProfileActivity.EXTRA_SELLER_ID, gear.getSellerId());
+            intent.putExtra(SellerProfileActivity.EXTRA_SELLER_NAME, gear.getSeller());
+            startActivity(intent);
+        });
+
         // Tap the gear image → open it full screen
         imgGear.setOnClickListener(v -> {
             Intent intent = new Intent(this, FullScreenImageActivity.class);
             intent.putExtra(FullScreenImageActivity.EXTRA_IMAGE_RES, gearImageRes);
+            intent.putExtra(FullScreenImageActivity.EXTRA_IMAGE_URI, gear.getCustomImageUri());
+            intent.putExtra(FullScreenImageActivity.EXTRA_IMAGE_URL, gear.getRemoteImageUrl());
             startActivity(intent);
         });
 

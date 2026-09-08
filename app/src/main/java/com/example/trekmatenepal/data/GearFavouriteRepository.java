@@ -5,12 +5,21 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.example.trekmatenepal.models.RentalGearModel;
+import com.example.trekmatenepal.api.ApiClient;
+import com.example.trekmatenepal.api.ApiService;
+import com.example.trekmatenepal.model.BasicApiResponse;
+import com.example.trekmatenepal.model.FavoriteListResponse;
+import com.example.trekmatenepal.model.FavoriteRequest;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.List;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /** Persistent, per-account favourite gear storage. */
 public final class GearFavouriteRepository {
@@ -44,12 +53,52 @@ public final class GearFavouriteRepository {
             if (wanted.equals(idFor(saved.get(i)))) {
                 saved.remove(i);
                 save(context, saved);
+                syncRemote(context, gear, false);
                 return false;
             }
         }
         saved.add(0, gear);
         save(context, saved);
+        syncRemote(context, gear, true);
         return true;
+    }
+
+    /** Pushes a favourite change to the authenticated account without blocking the UI. */
+    private static void syncRemote(Context context, RentalGearModel gear, boolean selected) {
+        String token = SessionUser.getToken(context);
+        if (token == null || token.trim().isEmpty() || !gear.getId().matches("\\d+")) return;
+        ApiService api = ApiClient.getClient().create(ApiService.class);
+        String auth = "Bearer " + token;
+        Call<BasicApiResponse> call = selected
+                ? api.addFavorite(auth, new FavoriteRequest("gear", Integer.parseInt(gear.getId())))
+                : api.removeFavorite(auth, "gear", Integer.parseInt(gear.getId()));
+        call.enqueue(new Callback<BasicApiResponse>() {
+            @Override public void onResponse(Call<BasicApiResponse> call, Response<BasicApiResponse> response) {
+                // Local state remains available when the device is temporarily offline.
+            }
+            @Override public void onFailure(Call<BasicApiResponse> call, Throwable t) { }
+        });
+    }
+
+    /** Reconciles the local cache with server favourites for the supplied server gear list. */
+    public static void syncFromServer(Context context, List<RentalGearModel> availableGear, Runnable onComplete) {
+        String token = SessionUser.getToken(context);
+        if (token == null || token.trim().isEmpty()) { if (onComplete != null) onComplete.run(); return; }
+        ApiClient.getClient().create(ApiService.class).getFavorites("Bearer " + token)
+                .enqueue(new Callback<FavoriteListResponse>() {
+                    @Override public void onResponse(Call<FavoriteListResponse> call, Response<FavoriteListResponse> response) {
+                        if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                            ArrayList<RentalGearModel> server = new ArrayList<>();
+                            if (response.body().getData() != null) for (FavoriteListResponse.FavoriteItem item : response.body().getData()) {
+                                if (!"gear".equalsIgnoreCase(item.getEntityType())) continue;
+                                for (RentalGearModel gear : availableGear) if (gear.getId().equals(String.valueOf(item.getEntityId()))) { server.add(gear); break; }
+                            }
+                            save(context, server);
+                        }
+                        if (onComplete != null) onComplete.run();
+                    }
+                    @Override public void onFailure(Call<FavoriteListResponse> call, Throwable t) { if (onComplete != null) onComplete.run(); }
+                });
     }
 
     public static ArrayList<RentalGearModel> getFavourites(Context context) {
@@ -79,6 +128,7 @@ public final class GearFavouriteRepository {
         JSONObject o = new JSONObject();
         o.put("image", gear.getImage());
         o.put("customImageUri", gear.getCustomImageUri());
+        o.put("remoteImageUrl", gear.getRemoteImageUrl());
         o.put("name", gear.getName());
         o.put("category", gear.getCategory());
         o.put("rating", gear.getRating());
@@ -95,11 +145,13 @@ public final class GearFavouriteRepository {
     }
 
     private static RentalGearModel fromJson(JSONObject o) {
-        return new RentalGearModel(o.optInt("image", 0), o.optString("customImageUri", null),
+        RentalGearModel gear = new RentalGearModel(o.optInt("image", 0), o.optString("customImageUri", null),
                 o.optString("name"), o.optString("category"), o.optString("rating"),
                 o.optString("price"), o.optString("priceRaw", "0"),
                 o.optString("availability"), o.optString("location"),
                 o.optString("description"), o.optString("size"),
                 o.optString("condition"), o.optString("seller"), o.optString("sellerId"));
+        gear.setRemoteImageUrl(o.optString("remoteImageUrl", ""));
+        return gear;
     }
 }

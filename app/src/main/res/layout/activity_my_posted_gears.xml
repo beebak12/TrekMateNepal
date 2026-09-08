@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/background">
+    <include android:id="@+id/headerLayout" layout="@layout/layout_header_simple" />
+    <Button android:id="@+id/btnAddGear" android:layout_width="match_parent" android:layout_height="52dp" android:layout_margin="12dp"
+        android:text="+ Post New Gear" android:textAllCaps="false" app:backgroundTint="@color/purple_primary" app:layout_constraintTop_toBottomOf="@id/headerLayout" />
+    <androidx.recyclerview.widget.RecyclerView android:id="@+id/recyclerPostedGear" android:layout_width="match_parent" android:layout_height="0dp"
+        android:clipToPadding="false" android:paddingBottom="12dp" app:layout_constraintTop_toBottomOf="@id/btnAddGear" app:layout_constraintBottom_toBottomOf="parent" />
+    <TextView android:id="@+id/tvEmptyPostedGear" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center"
+        android:text="You have not posted any gear yet." android:textColor="@color/secondary_gray" android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="@id/recyclerPostedGear" app:layout_constraintBottom_toBottomOf="@id/recyclerPostedGear"
+        app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trekmatenepal.R;
 import com.example.trekmatenepal.models.ChatMessageModel;
+import com.example.trekmatenepal.data.RemoteImageLoader;
 
 import java.util.List;
 
@@ -85,7 +86,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (msg.hasAttachment()) {
                 if ("image".equals(msg.getAttachmentType())) {
                     imgAttachment.setVisibility(View.VISIBLE);
-                    imgAttachment.setImageURI(msg.getAttachmentUri());
+                    if (msg.getAttachmentUri() != null) imgAttachment.setImageURI(msg.getAttachmentUri());
+                    else RemoteImageLoader.load(imgAttachment, msg.getRemoteAttachmentUrl(), R.drawable.partner1);
                     txtAttachmentName.setVisibility(View.GONE);
                 } else {
                     imgAttachment.setVisibility(View.GONE);
@@ -125,7 +127,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (msg.hasAttachment()) {
                 if ("image".equals(msg.getAttachmentType())) {
                     imgAttachment.setVisibility(View.VISIBLE);
-                    imgAttachment.setImageURI(msg.getAttachmentUri());
+                    if (msg.getAttachmentUri() != null) imgAttachment.setImageURI(msg.getAttachmentUri());
+                    else RemoteImageLoader.load(imgAttachment, msg.getRemoteAttachmentUrl(), R.drawable.partner1);
                     txtAttachmentName.setVisibility(View.GONE);
                 } else {
                     imgAttachment.setVisibility(View.GONE);

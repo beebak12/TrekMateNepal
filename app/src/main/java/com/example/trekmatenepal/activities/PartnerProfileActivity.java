@@ -75,9 +75,9 @@ public class PartnerProfileActivity extends AppCompatActivity {
         tvPartnerName.setText(partner.getName());
         tvRating.setText(String.format("%s %s", partner.getRating(), partner.getReviews()));
         tvLocation.setText(partner.getBaseLocation());
-        tvExperienceValue.setText(String.valueOf(partner.getYearsOfExperience()));
-        tvSpotsValue.setText(String.valueOf(partner.getSpotsAvailable()));
-        tvCostValue.setText(String.format("%.1f", partner.getCostPerDay()));
+        tvExperienceValue.setText(partner.getAge().isEmpty() ? "—" : partner.getAge());
+        tvSpotsValue.setText(partner.getTreks().isEmpty() ? "—" : partner.getTreks());
+        tvCostValue.setText(partner.getGroupSize().isEmpty() ? "—" : partner.getGroupSize());
         tvBio.setText(partner.getAbout());
 
         // Safety check for profile image

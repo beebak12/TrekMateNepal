@@ -12,10 +12,13 @@ public class UpdateProfileRequest {
     @SerializedName("bio") private final String bio;
     @SerializedName("city") private final String city;
     @SerializedName("country") private final String country;
+    @SerializedName("hobbies") private final String hobbies;
+    @SerializedName("treks_completed") private final int treksCompleted;
 
     public UpdateProfileRequest(String fullName, String username, String email,
                                 String phone, String dob, String gender,
-                                String bio, String city, String country) {
+                                String bio, String city, String country,
+                                String hobbies, int treksCompleted) {
         this.fullName = fullName;
         this.username = username;
         this.email = email;
@@ -25,5 +28,7 @@ public class UpdateProfileRequest {
         this.bio = bio;
         this.city = city;
         this.country = country;
+        this.hobbies = hobbies;
+        this.treksCompleted = treksCompleted;
     }
 }

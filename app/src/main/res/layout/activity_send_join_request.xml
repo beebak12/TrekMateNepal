@@ -63,6 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:background="@color/lightpurple"
                     android:padding="16dp"
                     android:gravity="center_vertical">
 
@@ -97,7 +98,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:text="Sherpa Adventures"
-                            android:textColor="@color/secondary_gray"
+                            android:textColor="@color/dark_black"
                             android:textSize="12sp" />
 
                     </LinearLayout>
@@ -194,7 +195,7 @@
                         android:layout_height="24dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/ic_calender"
-                        android:tint="@color/purple_primary" />
+                         />
 
                 </LinearLayout>
 

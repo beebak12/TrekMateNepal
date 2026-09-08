@@ -451,6 +451,27 @@
 
             </LinearLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Hobbies"
+                android:textColor="#4A4A4A"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/etHobbies"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/edit_text_bg"
+                android:hint="Photography, hiking, camping"
+                android:inputType="textCapSentences"
+                android:paddingHorizontal="12dp"
+                android:textColor="#444444"
+                android:textSize="12sp" />
+
         </LinearLayout>
 
 

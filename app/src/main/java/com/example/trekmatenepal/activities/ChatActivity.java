@@ -26,6 +26,7 @@ import com.example.trekmatenepal.R;
 import com.example.trekmatenepal.adapters.ChatAdapter;
 import com.example.trekmatenepal.models.ChatMessageModel;
 import com.example.trekmatenepal.models.PartnerModel;
+import com.example.trekmatenepal.data.ChatBackendRepository;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -50,6 +51,9 @@ public class ChatActivity extends AppCompatActivity {
     private final SimpleDateFormat timeFmt = new SimpleDateFormat("hh:mm a", Locale.getDefault());
 
     private Uri    stagedAttachmentUri;
+    private int conversationId;
+    private int partnerUserId;
+    private int groupId;
     private String stagedAttachmentName;
     private String stagedAttachmentType;
 
@@ -87,9 +91,23 @@ public class ChatActivity extends AppCompatActivity {
 
         initViews();
         loadPartnerData();
-        loadSampleMessages();
+        partnerUserId = getIntent().getIntExtra("partnerUserId", 0);
+        String partnerIdText = getIntent().getStringExtra("partnerUserId");
+        if (partnerUserId == 0 && partnerIdText != null) try { partnerUserId = Integer.parseInt(partnerIdText); } catch (Exception ignored) { }
+        conversationId = getIntent().getIntExtra("conversationId", 0);
+        String groupIdText = getIntent().getStringExtra("groupId");
+        if (groupIdText != null) try { groupId = Integer.parseInt(groupIdText); } catch (Exception ignored) { }
+        if (groupId > 0) loadServerGroupMessages();
+        else if (conversationId > 0) loadServerMessages();
+        else loadSampleMessages();
         setupRecycler();
         setupClickListeners();
+        if (groupId == 0 && conversationId == 0 && partnerUserId > 0) {
+            ChatBackendRepository.openConversation(this, partnerUserId, new ChatBackendRepository.ConversationCallback() {
+                @Override public void success(int id) { runOnUiThread(() -> { conversationId = id; loadServerMessages(); }); }
+                @Override public void error(String message) { }
+            });
+        }
     }
 
     private void initViews() {
@@ -152,6 +170,20 @@ public class ChatActivity extends AppCompatActivity {
         btnCamera.setOnClickListener(v -> checkCameraPermission());
         btnSend.setOnClickListener(v -> sendMessage());
         btnRemovePreview.setOnClickListener(v -> clearStagedAttachment());
+    }
+
+    private void loadServerMessages() {
+        ChatBackendRepository.loadMessages(this, conversationId, new ChatBackendRepository.MessagesCallback() {
+            @Override public void success(ArrayList<ChatMessageModel> result) { runOnUiThread(() -> { messages.clear(); messages.addAll(result); adapter.notifyDataSetChanged(); scrollToBottom(); }); }
+            @Override public void error(String message) { }
+        });
+    }
+
+    private void loadServerGroupMessages() {
+        ChatBackendRepository.loadGroupMessages(this, groupId, new ChatBackendRepository.MessagesCallback() {
+            @Override public void success(ArrayList<ChatMessageModel> result) { runOnUiThread(() -> { messages.clear(); messages.addAll(result); adapter.notifyDataSetChanged(); scrollToBottom(); }); }
+            @Override public void error(String message) { }
+        });
     }
 
     private void stageAttachment(Uri uri, String name, String type) {
@@ -242,6 +274,7 @@ public class ChatActivity extends AppCompatActivity {
     private void sendMessage() {
         String text = etMessage.getText().toString().trim();
         if (text.isEmpty() && stagedAttachmentUri == null && stagedAttachmentName == null) return;
+        Uri attachmentToUpload = stagedAttachmentUri;
 
         String time = timeFmt.format(new Date());
         ChatMessageModel newMessage;
@@ -256,6 +289,14 @@ public class ChatActivity extends AppCompatActivity {
         etMessage.setText("");
         clearStagedAttachment();
         scrollToBottom();
+        if (groupId > 0) {
+            if (attachmentToUpload != null) {
+                ChatBackendRepository.uploadGroupAttachment(this, groupId, attachmentToUpload, text, new ChatBackendRepository.GroupCallback() {
+                    @Override public void success(int id) { }
+                    @Override public void error(String message) { }
+                });
+            } else ChatBackendRepository.sendGroupMessage(this, groupId, text);
+        } else ChatBackendRepository.sendMessage(this, conversationId, partnerUserId, text);
     }
 
     private void scrollToBottom() {

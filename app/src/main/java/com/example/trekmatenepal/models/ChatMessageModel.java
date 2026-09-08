@@ -18,6 +18,7 @@ public class ChatMessageModel {
     private Uri    attachmentUri;
     private String attachmentName;
     private String attachmentType; // "image", "video", "file"
+    private String remoteAttachmentUrl;
 
     public ChatMessageModel(String message, String time, int type) {
         this.message = message;
@@ -41,5 +42,11 @@ public class ChatMessageModel {
     public Uri getAttachmentUri() { return attachmentUri; }
     public String getAttachmentName() { return attachmentName; }
     public String getAttachmentType() { return attachmentType; }
-    public boolean hasAttachment() { return attachmentUri != null; }
+    public String getRemoteAttachmentUrl() { return remoteAttachmentUrl; }
+    public void setRemoteAttachment(String url, String name, String type) {
+        this.remoteAttachmentUrl = url;
+        this.attachmentName = name;
+        this.attachmentType = type;
+    }
+    public boolean hasAttachment() { return attachmentUri != null || (remoteAttachmentUrl != null && !remoteAttachmentUrl.isEmpty()); }
 }

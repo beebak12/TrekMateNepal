@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.trekmatenepal.R;
 import com.example.trekmatenepal.data.NotificationRepository;
 import com.example.trekmatenepal.data.PostRepository;
+import com.example.trekmatenepal.data.PartnerPostBackendRepository;
 import com.example.trekmatenepal.data.SessionUser;
 import com.example.trekmatenepal.models.JoinRequestModel;
 import com.example.trekmatenepal.models.PostModel;
@@ -72,6 +73,7 @@ public class PostDetailActivity extends AppCompatActivity {
             Intent intent = new Intent(this, ChatActivity.class);
             intent.putExtra("partnerName", post.getAuthor());
             intent.putExtra("partnerImage", post.getImageRes());
+            if (post.getAuthorId() != null && post.getAuthorId().matches("\\d+")) intent.putExtra("partnerUserId", post.getAuthorId());
             startActivity(intent);
         });
     }
@@ -85,6 +87,10 @@ public class PostDetailActivity extends AppCompatActivity {
 
         JoinRequestModel request = new JoinRequestModel(post.getId(), currentUserId, currentUserId);
         PostRepository.addJoinRequest(this, request);
+        PartnerPostBackendRepository.request(this, post.getId(), "Interested in joining this trek", new PartnerPostBackendRepository.CallbackResult() {
+            @Override public void success() { }
+            @Override public void error(String message) { }
+        });
 
         // Notify Admin
         NotificationRepository.notifyJoinRequest(this, post.getAuthorId(), currentUserId, post.getTitle());

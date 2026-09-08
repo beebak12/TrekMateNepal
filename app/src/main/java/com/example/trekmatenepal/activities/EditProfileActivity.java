@@ -1,11 +1,8 @@
 package com.example.trekmatenepal.activities;
 
-import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -52,7 +49,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private ImageView btnBack, btnCamera, imgProfile;
     private Button btnMinus, btnPlus, btnSaveChanges;
-    private EditText etFullName, etUsername, etEmail, etPhone, etLocation, etBio;
+    private EditText etFullName, etUsername, etEmail, etPhone, etLocation, etBio, etHobbies;
     private TextView tvDateOfBirth, tvAge, tvTrekCount;
     private RadioGroup radioGender;
     private RadioButton rbMale, rbFemale, rbOther;
@@ -60,7 +57,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private TextView chipEverest, chipAnnapurna, chipLangtang, chipMustang, chipManaslu, chipOthers;
 
     private int trekCount = 0;
-    private String selectedImagePath = "";
+    private Uri selectedImageUri;
     private ProgressBar progressEditProfile;
     private ApiService apiService;
     private String selectedDobIso = "";
@@ -71,25 +68,29 @@ public class EditProfileActivity extends AppCompatActivity {
     private boolean isMustangSelected = false, isManasluSelected = false, isOthersSelected = false;
 
     // Image Picker Launcher
-    private final ActivityResultLauncher<String> pickImageLauncher = registerForActivityResult(
-            new ActivityResultContracts.GetContent(),
+    private final ActivityResultLauncher<String[]> pickImageLauncher = registerForActivityResult(
+            new ActivityResultContracts.OpenDocument(),
             uri -> {
                 if (uri != null) {
-                    selectedImagePath = uri.toString();
-                    newImageSelected = true;
-                    imgProfile.setImageURI(uri);
-                }
-            }
-    );
-
-    // Permission Launcher
-    private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
-            new ActivityResultContracts.RequestPermission(),
-            isGranted -> {
-                if (isGranted) {
-                    openGallery();
-                } else {
-                    Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                    try {
+                        getContentResolver().takePersistableUriPermission(
+                                uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    } catch (SecurityException ignored) {
+                        // The picker still grants temporary read access for this upload.
+                    }
+                    try {
+                        imgProfile.setImageURI(uri);
+                        if (imgProfile.getDrawable() == null) {
+                            throw new IllegalStateException("Selected image could not be previewed");
+                        }
+                        selectedImageUri = uri;
+                        newImageSelected = true;
+                    } catch (Exception error) {
+                        selectedImageUri = null;
+                        newImageSelected = false;
+                        Toast.makeText(this, "The selected image could not be opened.",
+                                Toast.LENGTH_LONG).show();
+                    }
                 }
             }
     );
@@ -121,6 +122,7 @@ public class EditProfileActivity extends AppCompatActivity {
         etPhone = findViewById(R.id.etPhone);
         etLocation = findViewById(R.id.etLocation);
         etBio = findViewById(R.id.etBio);
+        etHobbies = findViewById(R.id.etHobbies);
 
         tvDateOfBirth = findViewById(R.id.tvDateOfBirth);
         tvAge = findViewById(R.id.tvAge);
@@ -180,6 +182,9 @@ public class EditProfileActivity extends AppCompatActivity {
         etPhone.setText(value(user.getPhone()));
         etLocation.setText(value(user.getCity()));
         etBio.setText(value(user.getBio()));
+        etHobbies.setText(value(user.getHobbies()));
+        trekCount = Math.max(0, user.getTreksCompleted());
+        tvTrekCount.setText(String.valueOf(trekCount));
         selectedDobIso = normalizeIsoDate(user.getDob());
         updateDobDisplay(selectedDobIso);
         if ("MALE".equalsIgnoreCase(user.getGender())) rbMale.setChecked(true);
@@ -193,7 +198,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private void setupListeners() {
         btnBack.setOnClickListener(v -> finish());
 
-        btnCamera.setOnClickListener(v -> checkPermissionAndOpenGallery());
+        btnCamera.setOnClickListener(v -> openGallery());
 
         btnPlus.setOnClickListener(v -> {
             trekCount++;
@@ -220,23 +225,8 @@ public class EditProfileActivity extends AppCompatActivity {
         chipOthers.setOnClickListener(v -> { isOthersSelected = !isOthersSelected; updateAllChips(); });
     }
 
-    private void checkPermissionAndOpenGallery() {
-        String permission;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            permission = Manifest.permission.READ_MEDIA_IMAGES;
-        } else {
-            permission = Manifest.permission.READ_EXTERNAL_STORAGE;
-        }
-
-        if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
-            openGallery();
-        } else {
-            requestPermissionLauncher.launch(permission);
-        }
-    }
-
     private void openGallery() {
-        pickImageLauncher.launch("image/*");
+        pickImageLauncher.launch(new String[]{"image/*"});
     }
 
     private void showDatePicker() {
@@ -298,6 +288,7 @@ public class EditProfileActivity extends AppCompatActivity {
         String phone = etPhone.getText().toString().trim();
         String city = etLocation.getText().toString().trim();
         String bio = etBio.getText().toString().trim();
+        String hobbies = etHobbies.getText().toString().trim();
         if (fullName.isEmpty()) {
             etFullName.setError("Full name is required");
             etFullName.requestFocus();
@@ -334,7 +325,8 @@ public class EditProfileActivity extends AppCompatActivity {
         String gender = selectedId == R.id.rbMale ? "MALE"
                 : selectedId == R.id.rbFemale ? "FEMALE" : "OTHER";
         UpdateProfileRequest request = new UpdateProfileRequest(
-                fullName, username, email, phone, selectedDobIso, gender, bio, city, null);
+                fullName, username, email, phone, selectedDobIso, gender, bio, city, null,
+                hobbies, trekCount);
         setLoading(true, "Saving…");
         apiService.updateProfile("Bearer " + authToken, request).enqueue(new Callback<ProfileResponse>() {
             @Override
@@ -360,15 +352,10 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void uploadSelectedImage() {
-        try (InputStream input = getContentResolver().openInputStream(Uri.parse(selectedImagePath));
-             ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-            if (input == null) throw new IllegalStateException("Unable to read selected image");
-            byte[] buffer = new byte[8192];
-            int read;
-            while ((read = input.read(buffer)) != -1) output.write(buffer, 0, read);
-            String mime = getContentResolver().getType(Uri.parse(selectedImagePath));
-            if (mime == null) mime = "image/jpeg";
-            RequestBody body = RequestBody.create(MediaType.parse(mime), output.toByteArray());
+        try {
+            if (selectedImageUri == null) throw new IllegalStateException("No image selected");
+            byte[] uploadBytes = createUploadImage(selectedImageUri);
+            RequestBody body = RequestBody.create(MediaType.parse("image/jpeg"), uploadBytes);
             MultipartBody.Part part = MultipartBody.Part.createFormData("image", "profile.jpg", body);
             apiService.uploadProfileImage("Bearer " + authToken, part).enqueue(new Callback<ProfileResponse>() {
                 @Override
@@ -393,6 +380,53 @@ public class EditProfileActivity extends AppCompatActivity {
             setLoading(false, null);
             Toast.makeText(this, "Profile details were saved, but the selected photo could not be read.", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private byte[] createUploadImage(Uri uri) throws Exception {
+        BitmapFactory.Options bounds = new BitmapFactory.Options();
+        bounds.inJustDecodeBounds = true;
+        try (InputStream input = getContentResolver().openInputStream(uri)) {
+            if (input == null) throw new IllegalStateException("Unable to read selected image");
+            BitmapFactory.decodeStream(input, null, bounds);
+        }
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 1;
+        while (bounds.outWidth / options.inSampleSize > 2048
+                || bounds.outHeight / options.inSampleSize > 2048) {
+            options.inSampleSize *= 2;
+        }
+
+        Bitmap decoded;
+        try (InputStream input = getContentResolver().openInputStream(uri)) {
+            if (input == null) throw new IllegalStateException("Unable to read selected image");
+            decoded = BitmapFactory.decodeStream(input, null, options);
+        }
+        if (decoded == null) throw new IllegalArgumentException("Unsupported image format");
+
+        int width = decoded.getWidth();
+        int height = decoded.getHeight();
+        float scale = Math.min(1f, 1280f / Math.max(width, height));
+        Bitmap uploadBitmap = scale < 1f
+                ? Bitmap.createScaledBitmap(decoded, Math.round(width * scale),
+                Math.round(height * scale), true) : decoded;
+
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        int quality = 90;
+        do {
+            output.reset();
+            if (!uploadBitmap.compress(Bitmap.CompressFormat.JPEG, quality, output)) {
+                throw new IllegalStateException("Unable to prepare selected image");
+            }
+            quality -= 10;
+        } while (output.size() > 1_800_000 && quality >= 50);
+
+        if (uploadBitmap != decoded) uploadBitmap.recycle();
+        decoded.recycle();
+        if (output.size() > 2_000_000) {
+            throw new IllegalArgumentException("Selected image is too large");
+        }
+        return output.toByteArray();
     }
 
     private void finishSuccessfulSave() {

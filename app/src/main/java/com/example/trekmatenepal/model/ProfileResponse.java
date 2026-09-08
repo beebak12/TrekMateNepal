@@ -50,6 +50,12 @@ public class ProfileResponse {
         @SerializedName("country")
         private String country;
 
+        @SerializedName("hobbies")
+        private String hobbies;
+
+        @SerializedName("treks_completed")
+        private int treksCompleted;
+
         public int getId() { return id; }
         public String getFullName() { return fullName; }
         public String getUsername() { return username; }
@@ -61,5 +67,7 @@ public class ProfileResponse {
         public String getBio() { return bio; }
         public String getCity() { return city; }
         public String getCountry() { return country; }
+        public String getHobbies() { return hobbies; }
+        public int getTreksCompleted() { return treksCompleted; }
     }
 }

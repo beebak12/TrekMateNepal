@@ -19,6 +19,7 @@ import com.example.trekmatenepal.R;
 import com.example.trekmatenepal.activities.GearDetailActivity;
 import com.example.trekmatenepal.data.GearFavouriteRepository;
 import com.example.trekmatenepal.models.RentalGearModel;
+import com.example.trekmatenepal.data.RemoteImageLoader;
 
 import java.util.ArrayList;
 
@@ -131,6 +132,11 @@ public class RentalGearAdapter extends RecyclerView.Adapter<RentalGearAdapter.Vi
                 Log.w(TAG, "Stored gear image is no longer readable; using fallback", error);
             }
             gear.setCustomImageUri(null);
+        }
+
+        if (!gear.getRemoteImageUrl().isEmpty()) {
+            RemoteImageLoader.load(imageView, gear.getRemoteImageUrl(), R.drawable.jacket);
+            return;
         }
 
         int imageRes = gear.getImage();

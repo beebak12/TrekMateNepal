@@ -19,6 +19,7 @@ import com.example.trekmatenepal.R;
 import com.example.trekmatenepal.activities.ChatActivity;
 import com.example.trekmatenepal.adapters.ChatSummaryAdapter;
 import com.example.trekmatenepal.data.ChatRepository;
+import com.example.trekmatenepal.data.ChatBackendRepository;
 import com.example.trekmatenepal.models.ChatSummaryModel;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -44,6 +45,16 @@ public class ChatBottomSheetFragment extends BottomSheetDialogFragment {
         View view = inflater.inflate(R.layout.layout_chat_bottom_sheet, container, false);
 
         ChatRepository.loadChats(getContext());
+        ChatBackendRepository.syncConversations(requireContext(), () -> {
+            if (!isAdded()) return;
+            refreshData();
+            if (adapter != null) updateTabUI();
+        });
+        ChatBackendRepository.syncGroups(requireContext(), () -> {
+            if (!isAdded()) return;
+            refreshData();
+            if (adapter != null) updateTabUI();
+        });
         initViews(view);
         refreshData();
         setupTabs(view);
@@ -132,6 +143,8 @@ public class ChatBottomSheetFragment extends BottomSheetDialogFragment {
                 Intent intent = new Intent(getContext(), ChatActivity.class);
                 intent.putExtra("partnerName", chat.getName());
                 intent.putExtra("partnerImage", chat.getImageRes());
+                if (!chat.isGroup() && chat.getAdminId() != null) intent.putExtra("partnerUserId", chat.getAdminId());
+                if (!chat.isGroup() && chat.getId() != null && chat.getId().matches("\\d+")) intent.putExtra("conversationId", Integer.parseInt(chat.getId()));
                 intent.putExtra("groupId", chat.isGroup() ? chat.getId() : null);
                 startActivity(intent);
             } catch (Exception e) {

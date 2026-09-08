@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.trekmatenepal.R;
 import com.example.trekmatenepal.adapters.RentalGearAdapter;
 import com.example.trekmatenepal.data.GearFavouriteRepository;
+import com.example.trekmatenepal.data.GearBackendRepository;
 import com.example.trekmatenepal.models.RentalGearModel;
 
 import java.util.ArrayList;
@@ -43,6 +44,18 @@ public class FavouriteGearActivity extends AppCompatActivity {
     private void refresh() {
         favourites.clear();
         favourites.addAll(GearFavouriteRepository.getFavourites(this));
+        if (adapter != null) adapter.notifyDataSetChanged();
+        emptyView.setVisibility(favourites.isEmpty() ? View.VISIBLE : View.GONE);
+        GearBackendRepository.getAll(new GearBackendRepository.ListCallback() {
+            @Override public void success(ArrayList<RentalGearModel> gear) {
+                GearFavouriteRepository.syncFromServer(FavouriteGearActivity.this, gear, () -> runOnUiThread(FavouriteGearActivity.this::refreshLocal));
+            }
+            @Override public void error(String message) { }
+        });
+    }
+
+    private void refreshLocal() {
+        favourites.clear(); favourites.addAll(GearFavouriteRepository.getFavourites(this));
         if (adapter != null) adapter.notifyDataSetChanged();
         emptyView.setVisibility(favourites.isEmpty() ? View.VISIBLE : View.GONE);
     }

@@ -17,6 +17,8 @@ import com.example.trekmatenepal.R;
 import com.example.trekmatenepal.adapters.CategoryAdapter;
 import com.example.trekmatenepal.adapters.RentalGearAdapter;
 import com.example.trekmatenepal.data.GearRepository;
+import com.example.trekmatenepal.data.GearBackendRepository;
+import com.example.trekmatenepal.data.GearFavouriteRepository;
 import com.example.trekmatenepal.fragments.ChatBottomSheetFragment;
 import com.example.trekmatenepal.models.CategoryModel;
 import com.example.trekmatenepal.models.RentalGearModel;
@@ -72,10 +74,7 @@ public class GearRentalActivity extends AppCompatActivity {
         super.onResume();
         // Refresh so gear just posted in PostGearActivity shows up immediately.
         if (adapter == null) return;
-        allGearList.clear();
-        addSeedGear();
-        allGearList.addAll(0, GearRepository.getUserGear(this));
-        applyFilters(); // mutates gearList in place + notifies the adapter
+        refreshFromBackend();
     }
 
     private void initializeViews() {
@@ -89,11 +88,23 @@ public class GearRentalActivity extends AppCompatActivity {
 
     // ── Load comprehensive sample gear (replace with API call later) ─────────
     private void loadSampleGear() {
-        allGearList = new ArrayList<>();
-        addSeedGear();
-        // Merge user-posted gear (from PostGearActivity) at the top of the list
-        allGearList.addAll(0, GearRepository.getUserGear(this));
+        allGearList = GearRepository.getAllGear(this);
         gearList = new ArrayList<>(allGearList);
+    }
+
+    private void refreshFromBackend() {
+        GearBackendRepository.getAll(new GearBackendRepository.ListCallback() {
+            @Override public void success(ArrayList<RentalGearModel> gear) {
+                allGearList.clear();
+                if (gear.isEmpty()) allGearList.addAll(GearRepository.getAllGear(GearRentalActivity.this));
+                else allGearList.addAll(gear);
+                GearFavouriteRepository.syncFromServer(GearRentalActivity.this, allGearList, GearRentalActivity.this::applyFilters);
+            }
+            @Override public void error(String message) {
+                if (allGearList.isEmpty()) allGearList.addAll(GearRepository.getAllGear(GearRentalActivity.this));
+                applyFilters();
+            }
+        });
     }
 
     // ── Built-in sample gear (replace with API call later) ───────────────────

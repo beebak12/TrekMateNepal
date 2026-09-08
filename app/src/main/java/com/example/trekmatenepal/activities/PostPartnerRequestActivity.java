@@ -22,6 +22,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trekmatenepal.R;
 import com.example.trekmatenepal.data.PostRepository;
+import com.example.trekmatenepal.data.PartnerPostBackendRepository;
+import com.example.trekmatenepal.data.ChatBackendRepository;
 import com.example.trekmatenepal.data.SessionUser;
 import com.example.trekmatenepal.models.ChatSummaryModel;
 import com.example.trekmatenepal.models.PostModel;
@@ -200,23 +202,35 @@ public class PostPartnerRequestActivity extends AppCompatActivity {
 
             PostRepository.addPost(this, newPost);
 
-            // Automatically create a group chat for this trek
+            int requiredCount;
+            try { requiredCount = Integer.parseInt(partnersNeeded.replace("+", "")); } catch (Exception ignored) { requiredCount = 5; }
+
+            // Keep the group immediately visible offline; the server group is created after the post receives its database id.
             ChatSummaryModel groupChat = new ChatSummaryModel(
-                    newPost.getGroupId(),
-                    groupName,
-                    "Group created. Welcome!",
-                    "Just now",
-                    newPost.getImageRes(),
-                    0,
-                    true
-            );
-            if (newPost.getCustomImageUri() != null) {
-                groupChat.setCustomImageUri(newPost.getCustomImageUri());
-            }
+                    newPost.getGroupId(), groupName, "Group created. Welcome!", "Just now",
+                    newPost.getImageRes(), 0, true);
+            if (newPost.getCustomImageUri() != null) groupChat.setCustomImageUri(newPost.getCustomImageUri());
             groupChat.setAdminId(currentUserId);
             groupChat.addMember(currentUserId);
             com.example.trekmatenepal.data.ChatRepository.loadChats(this);
             com.example.trekmatenepal.data.ChatRepository.addChat(this, groupChat);
+
+            PartnerPostBackendRepository.create(this, newPost, startDate, requiredCount, new PartnerPostBackendRepository.CallbackResult() {
+                @Override public void success() {
+                    if (newPost.getId().matches("\\d+")) {
+                        ChatBackendRepository.createGroup(PostPartnerRequestActivity.this, groupName, Integer.parseInt(newPost.getId()), new ChatBackendRepository.GroupCallback() {
+                            @Override public void success(int groupId) {
+                                String localGroupId = newPost.getGroupId();
+                                newPost.setGroupId(String.valueOf(groupId));
+                                PostRepository.persist(PostPartnerRequestActivity.this);
+                                com.example.trekmatenepal.data.ChatRepository.replaceChatId(PostPartnerRequestActivity.this, localGroupId, String.valueOf(groupId));
+                            }
+                            @Override public void error(String message) { }
+                        });
+                    }
+                }
+                @Override public void error(String message) { Toast.makeText(PostPartnerRequestActivity.this, message, Toast.LENGTH_SHORT).show(); }
+            });
 
             Toast.makeText(this, "Trek request posted successfully!", Toast.LENGTH_SHORT).show();
             finish();

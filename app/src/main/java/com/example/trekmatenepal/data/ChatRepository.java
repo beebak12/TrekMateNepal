@@ -131,4 +131,10 @@ public class ChatRepository {
             }
         }
     }
+
+    public static void replaceChatId(Context context, String oldId, String newId) {
+        for (ChatSummaryModel chat : chats) {
+            if (chat.getId().equals(oldId)) { chat.setId(newId); saveChats(context); return; }
+        }
+    }
 }

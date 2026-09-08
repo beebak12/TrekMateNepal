@@ -67,6 +67,21 @@ public class PostRepository {
         savePosts(context);
     }
 
+    /** Upserts server posts into the offline cache, retaining locally-created posts. */
+    public static void mergePosts(Context context, List<PostModel> remotePosts) {
+        if (remotePosts == null) return;
+        for (PostModel remote : remotePosts) {
+            boolean found = false;
+            for (int i = 0; i < posts.size(); i++) {
+                if (posts.get(i).getId().equals(remote.getId())) { posts.set(i, remote); found = true; break; }
+            }
+            if (!found) posts.add(0, remote);
+        }
+        savePosts(context);
+    }
+
+    public static void persist(Context context) { savePosts(context); }
+
     private static void savePosts(Context context) {
         try {
             JSONArray arr = new JSONArray();

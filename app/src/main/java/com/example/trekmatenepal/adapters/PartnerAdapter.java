@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trekmatenepal.R;
 import com.example.trekmatenepal.models.PartnerModel;
+import com.example.trekmatenepal.activities.PartnerProfileActivity;
+import android.content.Intent;
 
 import java.util.List;
 
@@ -34,6 +36,13 @@ public class PartnerAdapter extends RecyclerView.Adapter<PartnerAdapter.ViewHold
         PartnerModel partner = partnerList.get(position);
         holder.tvPartnerName.setText(partner.getName());
         holder.tvRating.setText(partner.getRating());
+        View.OnClickListener openProfile = view -> {
+            Intent intent = new Intent(view.getContext(), PartnerProfileActivity.class);
+            intent.putExtra("partner", partner);
+            view.getContext().startActivity(intent);
+        };
+        holder.itemView.setOnClickListener(openProfile);
+        holder.btnViewProfile.setOnClickListener(openProfile);
 
         int imageRes = partner.getImage();
         if (isValidDrawable(holder.itemView, imageRes)) {
@@ -61,12 +70,14 @@ public class PartnerAdapter extends RecyclerView.Adapter<PartnerAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivPartnerImage;
         TextView tvPartnerName, tvRating;
+        View btnViewProfile;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ivPartnerImage = itemView.findViewById(R.id.ivPartnerImage);
             tvPartnerName = itemView.findViewById(R.id.tvPartnerName);
             tvRating = itemView.findViewById(R.id.tvRating);
+            btnViewProfile = itemView.findViewById(R.id.btnViewProfile);
         }
     }
 }

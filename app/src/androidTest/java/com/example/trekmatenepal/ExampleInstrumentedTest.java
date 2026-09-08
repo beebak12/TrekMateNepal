@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 
 import com.example.trekmatenepal.data.ChatRepository;
 import com.example.trekmatenepal.data.GearFavouriteRepository;
+import com.example.trekmatenepal.data.GearRepository;
 import com.example.trekmatenepal.data.SessionUser;
 import com.example.trekmatenepal.models.ChatSummaryModel;
 import com.example.trekmatenepal.models.RentalGearModel;
@@ -64,6 +65,26 @@ public class ExampleInstrumentedTest {
         ChatRepository.addGroupMember(context, "test-group", "member-user");
         ChatRepository.loadChats(context);
         assertTrue(hasGroup(ChatRepository.getChatsForCurrentUser(context, true), "test-group"));
+    }
+
+    @Test
+    public void postedGearCanBeAddedUpdatedAndDeleted() {
+        Context context = InstrumentationRegistry.getInstrumentation().getContext();
+        context.getSharedPreferences("TrekMateGear", Context.MODE_PRIVATE).edit().clear().commit();
+        RentalGearModel gear = new RentalGearModel(0, "content://test/gear-image",
+                "Test Boots", "Footwear", "New", "Rs. 800 / week", "800",
+                "Available", "Kathmandu", "Waterproof boots", "42", "Good",
+                "Test Seller", "gear-owner");
+
+        GearRepository.addGear(context, gear);
+        assertEquals(1, GearRepository.getUserGear(context).size());
+        RentalGearModel saved = GearRepository.getUserGear(context).get(0);
+        assertEquals("content://test/gear-image", saved.getCustomImageUri());
+        saved.setAvailability("Booked");
+        assertTrue(GearRepository.updateGear(context, saved));
+        assertEquals("Booked", GearRepository.getUserGear(context).get(0).getAvailability());
+        assertTrue(GearRepository.deleteGear(context, saved.getId()));
+        assertTrue(GearRepository.getUserGear(context).isEmpty());
     }
 
     private boolean hasGroup(java.util.List<ChatSummaryModel> groups, String id) {

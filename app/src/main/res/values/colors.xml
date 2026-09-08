@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
+    <color name="black1">#222222</color>
+    <color name="black">#000000</color>
     <color name="fbblue">#1877F2</color>
     <color name="dark_black">#FF000000</color>
-    <color name="black1">#172033</color>
+    <color name="black2">#172033</color>
     <color name="white">#FFFFFFFF</color>
     <color name="lightpurple">#CCCCFF</color>
 
@@ -29,24 +30,27 @@
 
     <color name="lightGray">#EAEAEA</color>
     <color name="light_gray_border">#E5E5E5</color>
+    <color name="dark_gray">#555555</color>
+    <color name="gray">#777777</color>
+    <color name="gray1">#687080</color>
+    <color name="light_gray1">#F5F5F8</color>
+    <color name="gray2">#6B6B6B</color>
+    <color name="light_gray">#F5F5F5</color>
+
+    <color name="border_gray1">#D9D9E2</color>
+
 
     <color name="darkGray">#666666</color>
     <color name="secondary_gray">#777777</color>
 
-    <color name="green">#34A853</color>
+    <color name="green2">#34A853</color>
     <color name="success_green">#2E7D32</color>
     <color name="input_border">#CFC2FF</color>
 
-    <color name="red">#D32F2F</color>
+    <color name="red1">#D32F2F</color>
     <color name="logout_red">#D32F2F</color>
     <color name="logout_red_light">#FFEBEE</color>
-
-    <color name="gray1">#687080</color>
-    <color name="light_gray1">#F5F5F8</color>
-    <color name="gray">#6B6B6B</color>
-    <color name="light_gray">#F5F5F5</color>
-
-    <color name="border_gray1">#D9D9E2</color>
+    <color name="red">#E53935</color>
 
 
     <color name="yellow">#FFEB3B</color>
@@ -54,12 +58,12 @@
     <color name="cardColor">#FFFFFF</color>
     <color name="dim_overlay">#88000000</color>
     <color name="gold">#FFB71B</color>
-
+    <color name="green">#2EAD67</color>
     <color name="green1">#34A853</color>
     <color name="light_green">#E8F5E9</color>
     <color name="orange1">#FF9800</color>
-
-    <color name="orange">#D98A24</color>
+    <color name="orange">#F5A623</color>
+    <color name="orange2">#D98A24</color>
     <color name="hintColor">#9E9E9E</color>
     <color name="searchBg">#F1F3F6</color>
     <color name="vividred">#CC050E15</color>
@@ -68,6 +72,7 @@
 
     <color name="darkGreen">#22863A</color>
     <color name="lightBackground">#F7FAF7</color>
+    <color name="background_light">#F8F7FB</color>
     <color name="editBorder">#D8D8D8</color>
 
     <color name="textBlack">#222222</color>
@@ -81,4 +86,13 @@
     <color name="forgot_success">#2E9D44</color>
     <color name="forgot_secondary_text">#737783</color>
     <color name="forgot_text">#202124</color>
+
+    <color name="text_primary">#222222</color>
+    <color name="text_secondary">#777777</color>
+
+    <color name="success">#4CAF50</color>
+    <color name="notification_blue">#3F51B5</color>
+    <color name="notification_orange">#FF9800</color>
+    <color name="notification_background">#F8F7FB</color>
+    <color name="nav_gray">#9A9A9A</color>
 </resources>

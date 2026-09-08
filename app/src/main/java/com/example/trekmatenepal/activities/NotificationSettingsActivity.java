@@ -34,7 +34,7 @@ public class NotificationSettingsActivity extends AppCompatActivity {
     }
 
     private void setupOptions() {
-        setupSwitchRow(R.id.optPushNotify, R.drawable.ic_notification, "Push Notifications", "Receive notifications about your activities", settings.isPushNotifications(), (v, isChecked) -> {
+        setupSwitchRow(R.id.optPushNotify, R.drawable.ic_notifications, "Push Notifications", "Receive notifications about your activities", settings.isPushNotifications(), (v, isChecked) -> {
             settings.setPushNotifications(isChecked);
             repository.saveSettings(settings);
         });
@@ -49,7 +49,7 @@ public class NotificationSettingsActivity extends AppCompatActivity {
             repository.saveSettings(settings);
         });
 
-        setupSwitchRow(R.id.optBookingUpdates, R.drawable.ic_calendar_purple, "Booking Updates", "Get updates about trek and gear bookings", settings.isBookingUpdates(), (v, isChecked) -> {
+        setupSwitchRow(R.id.optBookingUpdates, R.drawable.ic_calendar, "Booking Updates", "Get updates about trek and gear bookings", settings.isBookingUpdates(), (v, isChecked) -> {
             settings.setBookingUpdates(isChecked);
             repository.saveSettings(settings);
         });

@@ -30,7 +30,7 @@ public class SettingsActivity extends AppCompatActivity {
         setupRow(R.id.optLoginSecurity, R.drawable.ic_check_circle, "Login & Security", "Manage your security", LoginSecurityActivity.class);
 
         // Notifications
-        setupRow(R.id.optNotificationPrefs, R.drawable.ic_notification, "Notification Preferences", "Manage your notifications", NotificationSettingsActivity.class);
+        setupRow(R.id.optNotificationPrefs, R.drawable.ic_notifications, "Notification Preferences", "Manage your notifications", NotificationSettingsActivity.class);
 
         // Privacy
         setupRow(R.id.optPrivacySettings, R.drawable.ic_person, "Privacy Settings", "Control your privacy", PrivacySettingsActivity.class);

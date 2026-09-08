@@ -2,130 +2,191 @@ package com.example.trekmatenepal.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trekmatenepal.R;
-import com.example.trekmatenepal.adapters.GuidePackageAdapter;
-import com.example.trekmatenepal.models.GuidePackageModel;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.trekmatenepal.adapters.PackageAdapter;
+import com.example.trekmatenepal.models.Package;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class GuidePackagesActivity extends AppCompatActivity implements GuidePackageAdapter.OnPackageClickListener {
+public class GuidePackagesActivity extends AppCompatActivity {
 
-    private ImageView btnBack;
     private RecyclerView recyclerPackages;
-    private List<GuidePackageModel> packageList;
-    private GuidePackageAdapter adapter;
-    private BottomNavigationView bottomNavigationGuide;
-    private FloatingActionButton fabAddPackage;
+
+    private TextView tabAll;
+    private TextView tabActive;
+    private TextView tabInactive;
+
+    private ImageView btnBack, btnAddPackage;
+
+    private ArrayList<Package> allPackages;
+    private ArrayList<Package> filteredPackages;
+
+    private PackageAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_guide_packages);
 
-        initializeViews();
-        setupBottomNavigation();
-        loadMockData();
-        setupRecyclerView();
-
-        btnBack.setOnClickListener(v -> finish());
-        fabAddPackage.setOnClickListener(v -> {
-            try {
-                startActivity(new Intent(this, GuideAddPackageActivity.class));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-    private void initializeViews() {
-        btnBack = findViewById(R.id.btnBack);
+        // Find views
         recyclerPackages = findViewById(R.id.recyclerPackages);
-        bottomNavigationGuide = findViewById(R.id.bottomNavigationGuide);
-        fabAddPackage = findViewById(R.id.fabAddPackage);
+
+        tabAll = findViewById(R.id.tabAll);
+        tabActive = findViewById(R.id.tabActive);
+        tabInactive = findViewById(R.id.tabInactive);
+
+        btnBack = findViewById(R.id.btnBack);
+        btnAddPackage = findViewById(R.id.btnAddPackage);
+
+        // Create lists
+        allPackages = new ArrayList<>();
+        filteredPackages = new ArrayList<>();
+
+        // Load package data
+        loadPackages();
+
+        // Initially show all packages
+        filteredPackages.addAll(allPackages);
+
+        // Set adapter
+        adapter = new PackageAdapter(filteredPackages);
+
+        if (recyclerPackages != null) {
+            recyclerPackages.setLayoutManager(
+                    new LinearLayoutManager(this)
+            );
+            recyclerPackages.setAdapter(adapter);
+        }
+
+        // Back button
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> {
+                finish();
+            });
+        }
+
+        // Add Package button
+        if (btnAddPackage != null) {
+            btnAddPackage.setOnClickListener(v -> {
+                Intent intent = new Intent(this, AddPackageActivity.class);
+                startActivity(intent);
+            });
+        } else {
+            // Log or show toast to debug why it is null
+            Toast.makeText(this, "Add Package button not found", Toast.LENGTH_SHORT).show();
+        }
+
+        // Tab click listeners
+        if (tabAll != null) tabAll.setOnClickListener(v -> showAllPackages());
+        if (tabActive != null) tabActive.setOnClickListener(v -> showActivePackages());
+        if (tabInactive != null) tabInactive.setOnClickListener(v -> showInactivePackages());
+
+        // Select All tab when page opens
+        if (tabAll != null) selectTab(tabAll);
     }
 
-    private void setupBottomNavigation() {
-        if (bottomNavigationGuide == null) return; // Null check for included layout views
-        
-        bottomNavigationGuide.setSelectedItemId(R.id.guide_nav_packages);
-        bottomNavigationGuide.setOnItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.guide_nav_home) {
-                try {
-                    startActivity(new Intent(this, GuideDashboardActivity.class));
-                    finish();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return true;
-            } else if (id == R.id.guide_nav_requests) {
-                try {
-                    startActivity(new Intent(this, GuideBookingRequestsActivity.class));
-                    finish();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return true;
-            } else if (id == R.id.guide_nav_packages) {
-                return true;
-            } else if (id == R.id.guide_nav_profile) {
-                try {
-                    startActivity(new Intent(this, GuideProfileActivity.class));
-                    finish();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return true;
+    private void loadPackages() {
+
+        allPackages.add(new Package(
+                R.drawable.everest,
+                "Everest Base Camp Trek",
+                "Solukhumbu, Nepal",
+                "14 Days",
+                "Experience an unforgettable journey to the base of Mount Everest through beautiful Himalayan landscapes.",
+                "ACTIVE"
+        ));
+
+        allPackages.add(new Package(
+                R.drawable.annapurna,
+                "Annapurna Circuit Trek",
+                "Annapurna Region, Nepal",
+                "12 Days",
+                "Explore diverse landscapes, traditional villages and spectacular mountain views around the Annapurna region.",
+                "ACTIVE"
+        ));
+
+        allPackages.add(new Package(
+                R.drawable.langtang,
+                "Langtang Valley Trek",
+                "Langtang, Nepal",
+                "8 Days",
+                "Discover beautiful valleys, mountain scenery and traditional Tamang culture on this scenic trek.",
+                "ACTIVE"
+        ));
+
+        allPackages.add(new Package(
+                R.drawable.mardihimal,
+                "Mardi Himal Trek",
+                "Kaski, Nepal",
+                "7 Days",
+                "Enjoy a short and beautiful Himalayan adventure with stunning views of Mardi Himal and the Annapurna range.",
+                "INACTIVE"
+        ));
+
+        allPackages.add(new Package(
+                R.drawable.mountain_bg,
+                "Upper Mustang Trek",
+                "Mustang, Nepal",
+                "15 Days",
+                "Explore the unique landscapes, ancient monasteries and fascinating culture of the Upper Mustang region.",
+                "INACTIVE"
+        ));
+    }
+
+    private void showAllPackages() {
+        filteredPackages.clear();
+        filteredPackages.addAll(allPackages);
+        adapter.notifyDataSetChanged();
+        selectTab(tabAll);
+    }
+
+    private void showActivePackages() {
+        filteredPackages.clear();
+        for (Package packageItem : allPackages) {
+            if (packageItem.getStatus().equalsIgnoreCase("ACTIVE")) {
+                filteredPackages.add(packageItem);
             }
-            return false;
-        });
+        }
+        adapter.notifyDataSetChanged();
+        selectTab(tabActive);
     }
 
-    private void loadMockData() {
-        packageList = new ArrayList<>();
-        packageList.add(new GuidePackageModel("Everest Base Camp Guide Package", "Solukhumbu", "12 Days", "Difficult", "Rs. 30,000", "Active", R.drawable.everest));
-        packageList.add(new GuidePackageModel("Annapurna Circuit Guide Package", "Manang/Mustang", "10 Days", "Moderate", "Rs. 25,000", "Active", R.drawable.annapurna));
+    private void showInactivePackages() {
+        filteredPackages.clear();
+        for (Package packageItem : allPackages) {
+            if (packageItem.getStatus().equalsIgnoreCase("INACTIVE")) {
+                filteredPackages.add(packageItem);
+            }
+        }
+        adapter.notifyDataSetChanged();
+        selectTab(tabInactive);
     }
 
-    private void setupRecyclerView() {
-        adapter = new GuidePackageAdapter(packageList, this);
-        recyclerPackages.setLayoutManager(new LinearLayoutManager(this));
-        recyclerPackages.setAdapter(adapter);
-    }
+    private void selectTab(TextView selectedTab) {
+        if (tabAll == null || tabActive == null || tabInactive == null) return;
 
-    @Override
-    public void onEdit(GuidePackageModel pkg) {
-        startActivity(new Intent(this, GuideEditPackageActivity.class));
-    }
+        int normalColor = android.graphics.Color.rgb(117, 117, 117);
+        int activeColor = android.graphics.Color.rgb(106, 27, 154);
 
-    @Override
-    public void onView(GuidePackageModel pkg) {
-        Toast.makeText(this, "Viewing " + pkg.getName(), Toast.LENGTH_SHORT).show();
-    }
+        tabAll.setTextColor(normalColor);
+        tabActive.setTextColor(normalColor);
+        tabInactive.setTextColor(normalColor);
 
-    @Override
-    public void onDelete(GuidePackageModel pkg) {
-        new AlertDialog.Builder(this)
-                .setTitle("Delete Package")
-                .setMessage("Are you sure you want to delete this package?")
-                .setPositiveButton("Delete", (dialog, which) -> {
-                    packageList.remove(pkg);
-                    adapter.notifyDataSetChanged();
-                    Toast.makeText(this, "Package Deleted", Toast.LENGTH_SHORT).show();
-                })
-                .setNegativeButton("Cancel", null)
-                .show();
+        selectedTab.setTextColor(activeColor);
+
+        tabAll.setTypeface(null, android.graphics.Typeface.NORMAL);
+        tabActive.setTypeface(null, android.graphics.Typeface.NORMAL);
+        tabInactive.setTypeface(null, android.graphics.Typeface.NORMAL);
+
+        selectedTab.setTypeface(null, android.graphics.Typeface.BOLD);
     }
 }

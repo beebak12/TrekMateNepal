@@ -193,7 +193,7 @@
             android:layout_height="28dp"
             android:layout_gravity="center"
             android:elevation="7dp"
-            android:src="@drawable/ic_chat_fab"
+            android:src="@drawable/ic_chat"
             android:contentDescription="Chat" />
 
         <TextView

@@ -78,6 +78,7 @@
             android:name=".activities.ProfileActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+        
         <activity
             android:name=".activities.EditProfileActivity"
             android:exported="true" />
@@ -204,8 +205,8 @@
         <!-- ── Guide Side Activities ── -->
         <activity
             android:name=".activities.GuideDashboardActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
+            android:exported="false" />
+
         <activity
             android:name=".activities.GuideBookingRequestsActivity"
             android:exported="false"
@@ -315,6 +316,10 @@
 
         <!-- ── Chat module ── -->
         <activity
+            android:name=".activities.ChatListActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".activities.ChatActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
@@ -400,6 +405,11 @@
             android:name=".activities.AboutActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.AddPackageActivity"
+            android:exported="false" />
+
+
 
     </application>
 

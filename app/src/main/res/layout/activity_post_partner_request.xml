@@ -39,7 +39,7 @@
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:contentDescription="Notifications"
-            android:src="@drawable/ic_notification"
+            android:src="@drawable/ic_notifications"
             app:tint="@color/white" />
 
     </LinearLayout>
@@ -206,7 +206,7 @@
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@drawable/ic_calendar_purple" />
+                                android:src="@drawable/ic_calendar" />
 
                             <TextView
                                 android:id="@+id/tvStartDate"
@@ -246,7 +246,7 @@
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@drawable/ic_calendar_purple" />
+                                android:src="@drawable/ic_calendar" />
 
                             <TextView
                                 android:id="@+id/tvEndDate"

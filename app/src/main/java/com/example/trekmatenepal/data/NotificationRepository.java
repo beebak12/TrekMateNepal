@@ -19,11 +19,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * NotificationRepository — stores in-app notifications addressed to a user or
- * seller id, persisted as a JSON array in SharedPreferences.
- *
- * Every gear rental writes two notifications per item: one to the seller who
- * owns the gear, and one to the trekker who booked it.
+ * NotificationRepository — stores in-app notifications.
  */
 public final class NotificationRepository {
 
@@ -37,8 +33,6 @@ public final class NotificationRepository {
 
     private NotificationRepository() { }
 
-    // ── Read ─────────────────────────────────────────────────────────────────
-    /** Notifications addressed to the given user / seller id, newest first. */
     public static ArrayList<NotificationModel> getFor(Context ctx, String recipientId) {
         ArrayList<NotificationModel> out = new ArrayList<>();
         if (recipientId == null) return out;
@@ -68,7 +62,8 @@ public final class NotificationRepository {
                         o.optString("timeLabel"),
                         o.optLong("timestamp", 0L),
                         o.optString("bookingId"),
-                        o.optString("type", "rental")));
+                        o.optString("type", "rental"),
+                        o.optBoolean("isRead", false)));
             }
         } catch (Exception e) {
             Log.e(TAG, "Failed to read notifications", e);
@@ -76,8 +71,6 @@ public final class NotificationRepository {
         return list;
     }
 
-    // ── Write ────────────────────────────────────────────────────────────────
-    /** Adds one notification for one recipient id. */
     public static void notifyUser(Context ctx, String recipientId, String title,
                                   String message, String bookingId, String type) {
         if (recipientId == null || recipientId.trim().isEmpty()) return;
@@ -95,9 +88,9 @@ public final class NotificationRepository {
             o.put("timestamp", now);
             o.put("bookingId", bookingId != null ? bookingId : "");
             o.put("type", type != null ? type : "rental");
+            o.put("isRead", false);
             arr.put(o);
 
-            // Keep the store bounded — drop the oldest entries.
             while (arr.length() > MAX_STORED) arr.remove(0);
 
             prefs.edit().putString(KEY_ALL, arr.toString()).apply();
@@ -106,16 +99,11 @@ public final class NotificationRepository {
         }
     }
 
-    /**
-     * Fans a confirmed rental out to everyone involved: each gear's seller id
-     * gets a "your gear was rented" notice, and the renter gets a confirmation.
-     */
     public static void notifyRentalConfirmed(Context ctx, List<CartItemModel> items,
                                              String bookingId, String renterId,
                                              int totalAmount) {
         if (items == null || items.isEmpty()) return;
 
-        // ── Each seller / owner id ───────────────────────────────────────────
         for (CartItemModel item : items) {
             String qtyLabel = item.getQuantity() + " × " + item.getGearName();
             notifyUser(ctx,
@@ -128,7 +116,6 @@ public final class NotificationRepository {
                     "rental");
         }
 
-        // ── The trekker who booked ───────────────────────────────────────────
         StringBuilder names = new StringBuilder();
         for (int i = 0; i < items.size(); i++) {
             if (i > 0) names.append(i == items.size() - 1 ? " and " : ", ");
@@ -144,7 +131,6 @@ public final class NotificationRepository {
                 "rental");
     }
 
-    /** Confirms to a seller that their newly posted gear is live. */
     public static void notifyGearListed(Context ctx, String sellerId, String gearName) {
         notifyUser(ctx, sellerId,
                 "Your gear is now listed",
@@ -152,7 +138,6 @@ public final class NotificationRepository {
                 "", "listing");
     }
 
-    /** Notifies the post admin about a new join request. */
     public static void notifyJoinRequest(Context ctx, String adminId, String requesterName, String postTitle) {
         notifyUser(ctx, adminId,
                 "New Trek Join Request",
@@ -160,7 +145,6 @@ public final class NotificationRepository {
                 "", "partner");
     }
 
-    /** Removes every notification addressed to one recipient id, leaving others intact. */
     public static void clearFor(Context ctx, String recipientId) {
         if (recipientId == null) return;
 

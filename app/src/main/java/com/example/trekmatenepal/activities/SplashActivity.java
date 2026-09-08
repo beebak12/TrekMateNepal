@@ -88,20 +88,30 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
 
-        // Continue to Startscreen after 3 seconds
+        // Continue after 2 seconds
         new Handler().postDelayed(() -> {
+            Class<?> nextActivity;
+            
+            String token = com.example.trekmatenepal.data.SessionUser.getToken(this);
+            String role = getSharedPreferences("TrekMatePrefs", MODE_PRIVATE).getString("user_role", "");
 
-            Intent intent =
-                    new Intent(
-                            SplashActivity.this,
-                            StartscreenActivity.class
-                    );
+            if (token != null && !token.isEmpty()) {
+                if ("GUIDE".equalsIgnoreCase(role)) {
+                    nextActivity = GuideDashboardActivity.class;
+                } else {
+                    nextActivity = DashboardActivity.class;
+                }
+            } else if ("GUIDE".equalsIgnoreCase(role)) {
+                // Handle local guide testing mode
+                nextActivity = GuideDashboardActivity.class;
+            } else {
+                nextActivity = StartscreenActivity.class;
+            }
 
+            Intent intent = new Intent(SplashActivity.this, nextActivity);
             startActivity(intent);
-
             finish();
-
-        }, 3000);
+        }, 2000);
     }
 }
 

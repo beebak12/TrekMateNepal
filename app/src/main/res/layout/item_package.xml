@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="145dp"
+    android:layout_marginBottom="14dp"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="3dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:background="#FFFFFF">
+
+        <!-- LEFT SIDE IMAGE -->
+        <ImageView
+            android:id="@+id/imgPackage"
+            android:layout_width="115dp"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/trek_placeholder"
+            android:contentDescription="Trek image" />
+
+        <!-- RIGHT SIDE CONTENT -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:orientation="vertical">
+
+            <!-- Package Name -->
+            <TextView
+                android:id="@+id/txtPackageName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Everest Base Camp Trek"
+                android:textColor="#222222"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:ellipsize="end" />
+
+            <!-- Location -->
+            <TextView
+                android:id="@+id/txtLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="📍 Solukhumbu, Nepal"
+                android:textColor="#666666"
+                android:textSize="12sp"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <!-- Duration -->
+            <TextView
+                android:id="@+id/txtDuration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="📅 14 Days"
+                android:textColor="#666666"
+                android:textSize="12sp" />
+
+            <!-- Description -->
+            <TextView
+                android:id="@+id/txtDescription"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="5dp"
+                android:text="Experience an unforgettable journey through beautiful Himalayan landscapes."
+                android:textColor="#777777"
+                android:textSize="11sp"
+                android:maxLines="2"
+                android:ellipsize="end" />
+
+            <!-- Status -->
+            <TextView
+                android:id="@+id/txtStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="9dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="9dp"
+                android:paddingBottom="4dp"
+                android:text="ACTIVE"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_active" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

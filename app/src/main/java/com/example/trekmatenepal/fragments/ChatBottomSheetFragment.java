@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,10 +18,7 @@ import com.example.trekmatenepal.R;
 import com.example.trekmatenepal.activities.ChatActivity;
 import com.example.trekmatenepal.adapters.ChatSummaryAdapter;
 import com.example.trekmatenepal.data.ChatRepository;
-import com.example.trekmatenepal.data.ChatBackendRepository;
 import com.example.trekmatenepal.models.ChatSummaryModel;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
@@ -45,16 +41,6 @@ public class ChatBottomSheetFragment extends BottomSheetDialogFragment {
         View view = inflater.inflate(R.layout.layout_chat_bottom_sheet, container, false);
 
         ChatRepository.loadChats(getContext());
-        ChatBackendRepository.syncConversations(requireContext(), () -> {
-            if (!isAdded()) return;
-            refreshData();
-            if (adapter != null) updateTabUI();
-        });
-        ChatBackendRepository.syncGroups(requireContext(), () -> {
-            if (!isAdded()) return;
-            refreshData();
-            if (adapter != null) updateTabUI();
-        });
         initViews(view);
         refreshData();
         setupTabs(view);
@@ -62,27 +48,6 @@ public class ChatBottomSheetFragment extends BottomSheetDialogFragment {
         setupSearch(view);
 
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (!(getDialog() instanceof BottomSheetDialog)) return;
-        BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
-        FrameLayout sheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
-        if (sheet == null) return;
-
-        ViewGroup.LayoutParams params = sheet.getLayoutParams();
-        params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-        sheet.setLayoutParams(params);
-
-        BottomSheetBehavior<FrameLayout> behavior = BottomSheetBehavior.from(sheet);
-        behavior.setFitToContents(false);
-        behavior.setExpandedOffset(0);
-        behavior.setHalfExpandedRatio(0.52f);
-        behavior.setHideable(true);
-        behavior.setDraggable(true);
-        behavior.setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
     }
 
     private void initViews(View view) {
@@ -94,8 +59,8 @@ public class ChatBottomSheetFragment extends BottomSheetDialogFragment {
     }
 
     private void refreshData() {
-        chatList = ChatRepository.getChatsForCurrentUser(requireContext(), false);
-        groupList = ChatRepository.getChatsForCurrentUser(requireContext(), true);
+        chatList = ChatRepository.getChats(false);
+        groupList = ChatRepository.getChats(true);
     }
 
     private void setupTabs(View view) {
@@ -141,11 +106,8 @@ public class ChatBottomSheetFragment extends BottomSheetDialogFragment {
                 
                 dismiss();
                 Intent intent = new Intent(getContext(), ChatActivity.class);
-                intent.putExtra("partnerName", chat.getName());
-                intent.putExtra("partnerImage", chat.getImageRes());
-                if (!chat.isGroup() && chat.getAdminId() != null) intent.putExtra("partnerUserId", chat.getAdminId());
-                if (!chat.isGroup() && chat.getId() != null && chat.getId().matches("\\d+")) intent.putExtra("conversationId", Integer.parseInt(chat.getId()));
-                intent.putExtra("groupId", chat.isGroup() ? chat.getId() : null);
+                intent.putExtra("conversation_id", Integer.parseInt(chat.getId()));
+                intent.putExtra("other_user_name", chat.getName());
                 startActivity(intent);
             } catch (Exception e) {
                 e.printStackTrace();

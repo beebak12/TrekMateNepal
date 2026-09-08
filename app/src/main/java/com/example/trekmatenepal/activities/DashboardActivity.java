@@ -257,6 +257,10 @@ public class DashboardActivity extends AppCompatActivity {
                 if (drawerLayout != null) drawerLayout.openDrawer(GravityCompat.END);
                 return true;
             }
+            else if (id == R.id.nav_chat) {
+                startActivity(new Intent(this, ChatListActivity.class));
+                return true;
+            }
             return true;
         });
     }
@@ -280,7 +284,7 @@ public class DashboardActivity extends AppCompatActivity {
         setupMenuOption(R.id.optionSettings, R.drawable.ic_settings_purple, "Settings", "App and account settings", SettingsActivity.class);
 
         // Activity Options
-        setupMenuOption(R.id.optionMyBookings, R.drawable.ic_calendar_purple, "My Bookings", "Your trek, gear & guide bookings", MyBookingsActivity.class);
+        setupMenuOption(R.id.optionMyBookings, R.drawable.ic_calendar, "My Bookings", "Your trek, gear & guide bookings", MyBookingsActivity.class);
         setupMenuOption(R.id.optionMyGears, R.drawable.ic_gear_purple, "My Gears", "Gear you have rented", MyGearsActivity.class);
         setupMenuOption(R.id.optionMyPostedGears, R.drawable.ic_tag_purple, "My Posted Gears", "Gear you posted for rental", MyPostedGearsActivity.class);
         setupMenuOption(R.id.optionFavouriteGear, R.drawable.ic_favorite, "Favourite Gear", "Gear items you saved", FavouriteGearActivity.class);
@@ -365,11 +369,7 @@ public class DashboardActivity extends AppCompatActivity {
         });
         
         notificationBtn.setOnClickListener(v -> {
-            try {
-                startActivity(new Intent(DashboardActivity.this, NotificationActivity.class));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            startActivity(new Intent(DashboardActivity.this, NotificationActivity.class));
         });
         
         profileImage.setOnClickListener(v -> {

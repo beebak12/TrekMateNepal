@@ -1,67 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
-    app:cardCornerRadius="14dp"
+    android:minHeight="82dp"
+    android:layout_marginBottom="9dp"
+    android:padding="10dp"
+    android:background="@drawable/bg_notification_item">
 
-    app:cardElevation="2dp">
+    <!-- Icon -->
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/lightpurple"
-        android:padding="14dp">
+        android:id="@+id/iconContainer"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:gravity="center"
+        android:background="@drawable/bg_notification_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imgIcon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/bg_circle_purple"
-            android:contentDescription="Notification"
-            android:padding="9dp"
-            android:src="@drawable/ic_notification"
-            />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/txtTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Your gear was rented"
-                android:textColor="@color/purple_primary"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/txtMessage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:lineSpacingExtra="2dp"
-                android:text="2 × Down Jacket was booked."
-                android:textColor="@color/purple_primary"
-                android:textSize="13sp" />
-
-            <TextView
-                android:id="@+id/txtTime"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="27 Aug 2026, 04:12 PM"
-                android:textColor="@color/purple_primary"
-                android:textSize="11sp" />
-
-        </LinearLayout>
+            android:id="@+id/notificationIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_notifications"
+            app:tint="@color/purple" />
 
     </LinearLayout>
 
-</com.google.android.material.card.MaterialCardView>
+
+    <!-- Title -->
+
+    <TextView
+        android:id="@+id/tvNotificationItemTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="New Booking Request"
+        android:textColor="@color/text_primary"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:ellipsize="end"
+        app:layout_constraintStart_toEndOf="@id/iconContainer"
+        app:layout_constraintTop_toTopOf="@id/iconContainer"
+        app:layout_constraintEnd_toStartOf="@id/unreadDot"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="8dp" />
+
+
+    <!-- Message -->
+
+    <TextView
+        android:id="@+id/tvNotificationItemMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="John Anderson requested to book Everest Base Camp Trek"
+        android:textColor="@color/text_secondary"
+        android:textSize="9.5sp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        app:layout_constraintStart_toStartOf="@id/tvNotificationItemTitle"
+        app:layout_constraintTop_toBottomOf="@id/tvNotificationItemTitle"
+        app:layout_constraintEnd_toEndOf="@id/tvNotificationItemTitle"
+        android:layout_marginTop="2dp" />
+
+
+    <!-- Time -->
+
+    <TextView
+        android:id="@+id/tvNotificationItemTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10:30 AM"
+        android:textColor="@color/text_secondary"
+        android:textSize="8.5sp"
+        app:layout_constraintStart_toStartOf="@id/tvNotificationItemTitle"
+        app:layout_constraintTop_toBottomOf="@id/tvNotificationItemMessage"
+        android:layout_marginTop="2dp" />
+
+
+    <!-- Unread Dot -->
+
+    <View
+        android:id="@+id/unreadDot"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:background="@drawable/bg_unread_dot"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iconContainer"
+        android:layout_marginEnd="2dp"
+        android:layout_marginTop="5dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
